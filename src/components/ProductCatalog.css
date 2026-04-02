@@ -1,0 +1,262 @@
+.product-catalog {
+  padding: 120px 2rem;
+  background: linear-gradient(180deg, #0f172a 0%, #1a1f3a 100%);
+  color: white;
+  position: relative;
+}
+
+.product-catalog::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.3), transparent);
+}
+
+.product-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.product-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: slideInDown 0.6s ease;
+}
+
+.section-badge {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #22d3ee;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  font-family: "Barlow Condensed", sans-serif;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.category-filter {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.filter-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: #22d3ee;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  color: #0f172a;
+  border-color: #22d3ee;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.5);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(34, 211, 238, 0.15);
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1f3a 0%, #0f172a 100%);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+.product-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  color: #0f172a;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.view-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+.product-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.product-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.product-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #22d3ee;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.product-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #22d3ee;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.product-btn:hover {
+  background: rgba(34, 211, 238, 0.4);
+  border-color: #22d3ee;
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .product-catalog {
+    padding: 80px 1.5rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .category-filter {
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}

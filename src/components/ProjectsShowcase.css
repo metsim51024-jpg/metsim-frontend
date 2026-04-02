@@ -1,0 +1,465 @@
+.projects-showcase {
+  padding: 120px 2rem;
+  background: linear-gradient(180deg, #0f172a 0%, #1a1f3a 100%);
+  color: white;
+  position: relative;
+}
+
+.projects-showcase::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.3), transparent);
+}
+
+.projects-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.projects-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  animation: slideInDown 0.6s ease;
+}
+
+.section-badge {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #22d3ee;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  font-family: "Barlow Condensed", sans-serif;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-card:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.5);
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px rgba(34, 211, 238, 0.15);
+}
+
+.project-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1f3a 0%, #0f172a 100%);
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.08);
+}
+
+/* ✅ BOTONES AZULES - SOLO CLICK, SIN TEXTO */
+.image-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(34, 211, 238, 0.2);
+  border: 2px solid #22d3ee;
+  color: #22d3ee;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+}
+
+.image-nav-btn:hover {
+  background: rgba(34, 211, 238, 0.4);
+  transform: translateY(-50%) scale(1.15);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.image-nav-btn.prev {
+  left: 15px;
+}
+
+.image-nav-btn.next {
+  right: 15px;
+}
+
+.image-counter {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  color: #22d3ee;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.play-button {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 35px rgba(34, 211, 238, 0.5);
+}
+
+.play-button:hover {
+  transform: scale(1.15);
+  box-shadow: 0 15px 45px rgba(34, 211, 238, 0.6);
+}
+
+.project-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 2.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+.project-content {
+  padding: 2.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-family: "Barlow Condensed", sans-serif;
+  color: #fff;
+}
+
+.project-description {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.project-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.1));
+  color: #22d3ee;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  transition: all 0.3s ease;
+}
+
+.feature-tag:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(6, 182, 212, 0.15));
+  transform: translateX(4px);
+}
+
+.watch-video-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  color: #0f172a;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "Barlow Condensed", sans-serif;
+  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+.watch-video-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(34, 211, 238, 0.4);
+}
+
+/* Video Modal */
+.video-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.video-modal {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+}
+
+.modal-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  color: #22d3ee;
+  transform: rotate(90deg);
+}
+
+.modal-video {
+  width: 100%;
+  height: auto;
+  max-height: 85vh;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(34, 211, 238, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-showcase {
+    padding: 80px 1.5rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .project-image-wrapper {
+    height: 250px;
+  }
+
+  .project-content {
+    padding: 1.5rem;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+  }
+
+  .image-nav-btn {
+    width: 45px;
+    height: 45px;
+  }
+
+  .image-nav-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .project-icon {
+    font-size: 2rem;
+    padding: 0.75rem;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 10px;
+  }
+
+  .image-counter {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-showcase {
+    padding: 60px 1rem;
+  }
+
+  .projects-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .section-description {
+    font-size: 0.95rem;
+  }
+
+  .projects-grid {
+    gap: 1.5rem;
+  }
+
+  .project-image-wrapper {
+    height: 200px;
+  }
+
+  .project-content {
+    padding: 1rem;
+  }
+
+  .project-title {
+    font-size: 1rem;
+  }
+
+  .project-description {
+    font-size: 0.85rem;
+  }
+
+  .feature-tag {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .image-counter {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .image-nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .watch-video-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+}

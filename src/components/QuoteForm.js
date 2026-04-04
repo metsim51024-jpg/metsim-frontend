@@ -28,6 +28,7 @@ const QuoteForm = () => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    console.log("Archivos seleccionados:", files);
     setFormData({
       ...formData,
       attachments: files
@@ -39,26 +40,46 @@ const QuoteForm = () => {
     setIsSubmitting(true);
 
     try {
+      // Validar email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.client_email)) {
+        toast.error("Email inválido");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validar teléfono
+      if (formData.client_phone.length < 8) {
+        toast.error("Teléfono inválido");
+        setIsSubmitting(false);
+        return;
+      }
+
       const formDataToSend = new FormData();
       formDataToSend.append("description", formData.description);
       formDataToSend.append("client_name", formData.client_name);
       formDataToSend.append("client_email", formData.client_email);
       formDataToSend.append("client_phone", formData.client_phone);
 
-      // Agregar archivos
-      formData.attachments.forEach((file) => {
-        formDataToSend.append("files", file);
-      });
+      // Agregar archivos si existen
+      if (formData.attachments.length > 0) {
+        formData.attachments.forEach((file) => {
+          formDataToSend.append("files", file);
+        });
+      }
 
+      console.log("Enviando a:", `${API}/quotes`);
+      
       const response = await axios.post(`${API}/quotes`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data"
-        }
+        },
+        timeout: 30000
       });
 
-      if (response.status === 200) {
+      if (response.status === 201 || response.status === 200) {
         setSubmitted(true);
-        toast.success("¡Solicitud enviada correctamente!");
+        toast.success("¡Presupuesto solicitado correctamente!");
 
         setTimeout(() => {
           setFormData({
@@ -72,8 +93,18 @@ const QuoteForm = () => {
         }, 3000);
       }
     } catch (error) {
-      console.error("Error submitting quote:", error);
-      toast.error("Error al enviar la solicitud.");
+      console.error("Error completo:", error);
+      
+      if (error.response) {
+        console.error("Error del servidor:", error.response.data);
+        toast.error(`Error: ${error.response.data.message || error.response.statusText}`);
+      } else if (error.request) {
+        console.error("No hay respuesta del servidor");
+        toast.error("No se pudo conectar con el servidor. Verifica tu conexión.");
+      } else {
+        console.error("Error:", error.message);
+        toast.error("Error al enviar la solicitud.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -95,7 +126,7 @@ const QuoteForm = () => {
           {!submitted ? (
             <form onSubmit={handleSubmit} className="quote-form">
               <div className="form-group large">
-                <label htmlFor="description">Descripción del Proyecto</label>
+                <label htmlFor="description">Descripción del Proyecto *</label>
                 <textarea
                   id="description"
                   name="description"
@@ -103,14 +134,14 @@ const QuoteForm = () => {
                   onChange={handleChange}
                   required
                   rows="6"
-                  placeholder="Describe las especificaciones, materiales, dimensiones y cualquier detalle relevante de tu proyecto..."
+                  placeholder="Describe las especificaciones, materiales, dimensiones..."
                   className="form-textarea"
                 />
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="client_name">Nombre Completo</label>
+                  <label htmlFor="client_name">Nombre Completo *</label>
                   <input
                     type="text"
                     id="client_name"
@@ -124,7 +155,7 @@ const QuoteForm = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="client_email">Email</label>
+                  <label htmlFor="client_email">Email *</label>
                   <input
                     type="email"
                     id="client_email"
@@ -139,7 +170,7 @@ const QuoteForm = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="client_phone">Teléfono de Contacto</label>
+                <label htmlFor="client_phone">Teléfono de Contacto *</label>
                 <input
                   type="tel"
                   id="client_phone"
@@ -156,7 +187,7 @@ const QuoteForm = () => {
               <div className="form-group">
                 <label htmlFor="attachments" className="file-upload-label">
                   <Upload size={20} />
-                  Adjuntar Archivos (DWG, PDF, Imágenes)
+                  Adjuntar Archivos (Opcional)
                 </label>
                 <input
                   type="file"
@@ -164,7 +195,7 @@ const QuoteForm = () => {
                   name="attachments"
                   onChange={handleFileChange}
                   multiple
-                  accept=".dwg,.pdf,.jpg,.jpeg,.png,.gif"
+                  accept=".dwg,.pdf,.jpg,.jpeg,.png,.gif,.dxf"
                   className="file-input"
                 />
                 {formData.attachments.length > 0 && (
@@ -172,7 +203,7 @@ const QuoteForm = () => {
                     <p className="files-label">Archivos adjuntos:</p>
                     {formData.attachments.map((file, idx) => (
                       <span key={idx} className="file-tag">
-                        📎 {file.name}
+                        📎 {file.name} ({(file.size / 1024 / 1024).toFixed(2)}MB)
                       </span>
                     ))}
                   </div>
@@ -199,7 +230,7 @@ const QuoteForm = () => {
               </div>
               <h3>¡Presupuesto Solicitado!</h3>
               <p>
-                Hemos recibido tu solicitud con los archivos adjuntos. Nuestro equipo analizará los detalles y se pondrá en contacto contigo pronto.
+                Hemos recibido tu solicitud. Nuestro equipo analizará los detalles y se pondrá en contacto contigo pronto.
               </p>
               <div className="success-details">
                 <p><strong>Email:</strong> {formData.client_email}</p>

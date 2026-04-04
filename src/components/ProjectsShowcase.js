@@ -16,8 +16,6 @@ function ProjectsShowcase() {
         "https://i.ibb.co/pvKY7yMg/INSTALACION-INDUSTRIAL-14.jpg",
         "https://i.ibb.co/j9qHrfNF/INSTALACION-INDUSTRIAL-15.jpg",
         "https://i.ibb.co/GfBLPGsT/INSTALACION-INDUSTRIAL-16.jpg",
-        "https://i.ibb.co/NbMsD9k/INSTALACION-INDUSTRIAL-5.jpg",
-        "https://i.ibb.co/MkbwfmWM/INSTALACION-INDUSTRIAL-9.jpg"
       ],
       video: "https://res.cloudinary.com/dk6wclcew/video/upload/v1774546766/INSTALACION_INDUSTRIAL_VIDEO_c4aduh.mov",
       icon: "⚙️",
@@ -62,20 +60,10 @@ function ProjectsShowcase() {
       video: null,
       icon: "🔄",
       features: ["Rotación eficiente", "Bajo mantenimiento", "Alta capacidad"]
-    },
-    {
-      id: 5,
-      title: "Instalación de Paneles Solares",
-      description: "Sistemas de energía solar con instalación profesional y garantía completa",
-      images: [
-        "https://via.placeholder.com/600x400/0f172a/22d3ee?text=Paneles+Solares"
-      ],
-      video: "https://res.cloudinary.com/dk6wclcew/video/upload/v1774546760/montaje_de_paneles_solares_glavca.mp4",
-      icon: "☀️",
-      features: ["Energía renovable", "Ahorro de costos", "Instalación garantizada"]
     }
   ];
 
+  // SOLO click en flechas - SIN MOUSE MOVE
   const handleNextImage = (projectId) => {
     const project = projects.find(p => p.id === projectId);
     const currentIndex = currentImageIndex[projectId] || 0;
@@ -97,14 +85,16 @@ function ProjectsShowcase() {
   return (
     <section className="projects-showcase" id="proyectos">
       <div className="projects-container">
+        {/* Header */}
         <div className="projects-header">
           <span className="section-badge">[ PORTAFOLIO ]</span>
           <h2 className="section-title">Nuestros Proyectos</h2>
           <p className="section-description">
-            Conoce los servicios especializados que ofrecemos a la industria.
+            Conoce los servicios especializados que ofrecemos a la industria. Usa las flechas para cambiar de imagen.
           </p>
         </div>
 
+        {/* Projects Grid */}
         <div className="projects-grid">
           {projects.map((project) => {
             const currentImageIdx = currentImageIndex[project.id] || 0;
@@ -122,6 +112,7 @@ function ProjectsShowcase() {
                     }}
                   />
 
+                  {/* Navigation Buttons - SOLO CLICK */}
                   {project.images.length > 1 && (
                     <>
                       <button
@@ -146,6 +137,7 @@ function ProjectsShowcase() {
                     </>
                   )}
 
+                  {/* Play Button para video */}
                   <div className="project-overlay">
                     {project.video && (
                       <button
@@ -160,6 +152,7 @@ function ProjectsShowcase() {
                   <div className="project-icon">{project.icon}</div>
                 </div>
 
+                {/* Content */}
                 <div className="project-content">
                   <h3 className="project-title">{project.title}</h3>
                   <p className="project-description">{project.description}</p>
@@ -188,6 +181,7 @@ function ProjectsShowcase() {
         </div>
       </div>
 
+      {/* Video Modal */}
       {selectedVideo && (
         <div
           className="video-modal-overlay"

@@ -7,11 +7,9 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    window.addEventListener("scroll", () => {
       setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    });
   }, []);
 
   const navItems = [
@@ -19,22 +17,25 @@ function Navbar() {
     { label: "NOSOTROS", href: "#nosotros" },
     { label: "SERVICIOS", href: "#servicios" },
     { label: "PROYECTOS", href: "#proyectos" },
-    { label: "EQUIPOS", href: "#equipos" },
     { label: "CONTACTO", href: "#contacto" }
   ];
 
   return (
     <nav className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
       <div className="navbar-container">
-        {/* Logo */}
-        <div className="navbar-logo">
+        {/* Logo - SOLUCIONADO */}
+        <a href="#inicio" className="navbar-logo">
           <img
             src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
-            alt="METSIM"
+            alt="METSIM Logo"
             className="logo-img"
+            onError={(e) => {
+              console.error("Error cargando logo:", e);
+              e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%2322d3ee'/%3E%3C/svg%3E";
+            }}
           />
           <span className="logo-text">METSIM</span>
-        </div>
+        </a>
 
         {/* Desktop Menu */}
         <div className="navbar-menu desktop-only">

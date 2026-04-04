@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Send, Phone, Mail, MapPin } from "lucide-react";
-import { COMPANY_CONFIG } from "../config/company";
 import "./Contact.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
 export default function Contact() {
@@ -29,17 +28,39 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      await axios.post(`${API}/quotes`, formData);
-      toast.success("¡Mensaje enviado correctamente!");
-      setFormData({
-        client_name: "",
-        client_email: "",
-        client_phone: "",
-        description: ""
+      // Validar email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.client_email)) {
+        toast.error("Email inválido");
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Enviando contacto a:", `${API}/quotes`);
+
+      const response = await axios.post(`${API}/quotes`, {
+        description: formData.description,
+        client_name: formData.client_name,
+        client_email: formData.client_email,
+        client_phone: formData.client_phone
       });
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success("¡Mensaje enviado correctamente!");
+        setFormData({
+          client_name: "",
+          client_email: "",
+          client_phone: "",
+          description: ""
+        });
+      }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Error al enviar el mensaje");
+      if (error.response) {
+        toast.error(`Error: ${error.response.data.message || "Error al enviar"}`);
+      } else {
+        toast.error("Error al conectar con el servidor");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -49,19 +70,19 @@ export default function Contact() {
     {
       icon: <Phone size={24} />,
       label: "Teléfono",
-      value: COMPANY_CONFIG.phone,
-      link: `tel:${COMPANY_CONFIG.whatsapp}`
+      value: "+595 (994) 685-767",
+      link: "tel:+595994685767"
     },
     {
       icon: <Mail size={24} />,
       label: "Email",
-      value: COMPANY_CONFIG.email,
-      link: `mailto:${COMPANY_CONFIG.email}`
+      value: "presupuestos@metsim.com.py",
+      link: "mailto:presupuestos@metsim.com.py"
     },
     {
       icon: <MapPin size={24} />,
       label: "Ubicación",
-      value: COMPANY_CONFIG.address,
+      value: "Avda. Carlos Morphi casi Concepción",
       link: "#"
     }
   ];
@@ -94,19 +115,19 @@ export default function Contact() {
 
           <div className="contact-hours">
             <h4>Horarios de Atención</h4>
-            <p>Lunes a Viernes: {COMPANY_CONFIG.hours.weekday}</p>
-            <p>Sábado: {COMPANY_CONFIG.hours.saturday}</p>
-            <p className="closed">Domingo: {COMPANY_CONFIG.hours.sunday}</p>
+            <p>Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+            <p>Sábado: 9:00 AM - 1:00 PM</p>
+            <p className="closed">Domingo: Cerrado</p>
           </div>
         </div>
 
         {/* Right: Form */}
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
-            <label htmlFor="client_name">Nombre Completo</label>
+            <label htmlFor="nombre">Nombre Completo *</label>
             <input
               type="text"
-              id="client_name"
+              id="nombre"
               name="client_name"
               value={formData.client_name}
               onChange={handleChange}
@@ -118,10 +139,10 @@ export default function Contact() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="client_email">Email</label>
+              <label htmlFor="email">Email *</label>
               <input
                 type="email"
-                id="client_email"
+                id="email"
                 name="client_email"
                 value={formData.client_email}
                 onChange={handleChange}
@@ -132,10 +153,10 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="client_phone">Teléfono</label>
+              <label htmlFor="telefono">Teléfono *</label>
               <input
                 type="tel"
-                id="client_phone"
+                id="telefono"
                 name="client_phone"
                 value={formData.client_phone}
                 onChange={handleChange}
@@ -147,9 +168,9 @@ export default function Contact() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Mensaje</label>
+            <label htmlFor="mensaje">Mensaje *</label>
             <textarea
-              id="description"
+              id="mensaje"
               name="description"
               value={formData.description}
               onChange={handleChange}

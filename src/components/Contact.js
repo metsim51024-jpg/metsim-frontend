@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Send, Phone, Mail, MapPin } from "lucide-react";
+import { COMPANY_CONFIG } from "../config/company";
 import "./Contact.css";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const API = `${BACKEND_URL}/api`;
 
 export default function Contact() {
   const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    telefono: "",
-    mensaje: ""
+    client_name: "",
+    client_email: "",
+    client_phone: "",
+    description: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -25,13 +29,13 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      await axios.post("http://localhost:5000/api/pedidos", formData);
+      await axios.post(`${API}/quotes`, formData);
       toast.success("¡Mensaje enviado correctamente!");
       setFormData({
-        nombre: "",
-        email: "",
-        telefono: "",
-        mensaje: ""
+        client_name: "",
+        client_email: "",
+        client_phone: "",
+        description: ""
       });
     } catch (error) {
       console.error("Error:", error);
@@ -45,19 +49,19 @@ export default function Contact() {
     {
       icon: <Phone size={24} />,
       label: "Teléfono",
-      value: "+595 (994) 685-767",
-      link: "tel:+595994685767"
+      value: COMPANY_CONFIG.phone,
+      link: `tel:${COMPANY_CONFIG.whatsapp}`
     },
     {
       icon: <Mail size={24} />,
       label: "Email",
-      value: "presupuestos@metsim.com.py",
-      link: "mailto:presupuestos@metsim.com.py"
+      value: COMPANY_CONFIG.email,
+      link: `mailto:${COMPANY_CONFIG.email}`
     },
     {
       icon: <MapPin size={24} />,
       label: "Ubicación",
-      value: "Avda. Carlos Morphi casi Concepción",
+      value: COMPANY_CONFIG.address,
       link: "#"
     }
   ];
@@ -90,21 +94,21 @@ export default function Contact() {
 
           <div className="contact-hours">
             <h4>Horarios de Atención</h4>
-            <p>Lunes a Viernes: 8:00 AM - 6:00 PM</p>
-            <p>Sábado: 9:00 AM - 1:00 PM</p>
-            <p className="closed">Domingo: Cerrado</p>
+            <p>Lunes a Viernes: {COMPANY_CONFIG.hours.weekday}</p>
+            <p>Sábado: {COMPANY_CONFIG.hours.saturday}</p>
+            <p className="closed">Domingo: {COMPANY_CONFIG.hours.sunday}</p>
           </div>
         </div>
 
         {/* Right: Form */}
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
-            <label htmlFor="nombre">Nombre Completo</label>
+            <label htmlFor="client_name">Nombre Completo</label>
             <input
               type="text"
-              id="nombre"
-              name="nombre"
-              value={formData.nombre}
+              id="client_name"
+              name="client_name"
+              value={formData.client_name}
               onChange={handleChange}
               required
               placeholder="Tu nombre"
@@ -114,12 +118,12 @@ export default function Contact() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="client_email">Email</label>
               <input
                 type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                id="client_email"
+                name="client_email"
+                value={formData.client_email}
                 onChange={handleChange}
                 required
                 placeholder="tu@email.com"
@@ -128,12 +132,12 @@ export default function Contact() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="telefono">Teléfono</label>
+              <label htmlFor="client_phone">Teléfono</label>
               <input
                 type="tel"
-                id="telefono"
-                name="telefono"
-                value={formData.telefono}
+                id="client_phone"
+                name="client_phone"
+                value={formData.client_phone}
                 onChange={handleChange}
                 required
                 placeholder="+595 11 1234-5678"
@@ -143,11 +147,11 @@ export default function Contact() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="mensaje">Mensaje</label>
+            <label htmlFor="description">Mensaje</label>
             <textarea
-              id="mensaje"
-              name="mensaje"
-              value={formData.mensaje}
+              id="description"
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               required
               rows="5"

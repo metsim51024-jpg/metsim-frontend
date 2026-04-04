@@ -7,13 +7,13 @@ import {
   Share2,
   Users,
   Instagram,
-  ArrowRight
+  ArrowRight,
+  Facebook
 } from "lucide-react";
+import { COMPANY_CONFIG } from "../config/company";
 import "./Footer.css";
 
 const Footer = () => {
-  const whatsappNumber = "+595994685767";
-
   const footerLinks = {
     Productos: [
       "Brazos para Iluminación",
@@ -44,30 +44,39 @@ const Footer = () => {
           <div className="footer-column footer-brand">
             <div className="footer-logo">
               <img
-               src="i.ibb.co/fYjtsMdc/LOGO-FONDO-NEGRO.png"
+                src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
                 alt="METSIM"
                 className="footer-logo-img"
-              /> 
+              />
               <span className="footer-logo-text">METSIM</span>
             </div>
 
             <p className="footer-description">
-              Soluciones metalúrgicas de excelencia para la industria paraguaya. fabricamos piezas y estructuras que resisten el tiempo.
+              Soluciones metalúrgicas de excelencia para la industria paraguaya. Fabricamos piezas y estructuras que resisten el tiempo.
             </p>
 
             {/* Social Links */}
             <div className="footer-socials">
-              <a href="#" className="social-link" title="Compartir">
-                <Share2 size={20} />
+              <a 
+                href={COMPANY_CONFIG.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-link"
+                title="Facebook"
+              >
+                <Facebook size={20} />
               </a>
-              <a href="#" className="social-link" title="LinkedIn">
-                <Users size={20} />
-              </a>
-              <a href="#" className="social-link" title="Instagram">
+              <a 
+                href={COMPANY_CONFIG.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-link"
+                title="Instagram"
+              >
                 <Instagram size={20} />
               </a>
               <a
-                href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}`}
+                href={`https://wa.me/${COMPANY_CONFIG.whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
@@ -104,7 +113,7 @@ const Footer = () => {
               <div>
                 <p className="contact-label">Ubicación</p>
                 <p className="contact-value">
-                  Avda. Carlos Morphi casi Concepción, Asunción, Paraguay
+                  {COMPANY_CONFIG.address}
                 </p>
               </div>
             </div>
@@ -113,8 +122,8 @@ const Footer = () => {
               <Phone size={20} />
               <div>
                 <p className="contact-label">Teléfono</p>
-                <a href="tel:+595994685767" className="contact-value">
-                  +595 (994) 685-767
+                <a href={`tel:${COMPANY_CONFIG.whatsapp}`} className="contact-value">
+                  {COMPANY_CONFIG.phone}
                 </a>
               </div>
             </div>
@@ -123,14 +132,14 @@ const Footer = () => {
               <Mail size={20} />
               <div>
                 <p className="contact-label">Email</p>
-                <a href="mailto:presupuestos@metsim.com.py" className="contact-value">
-                  presupuestos@metsim.com.py
+                <a href={`mailto:${COMPANY_CONFIG.email}`} className="contact-value">
+                  {COMPANY_CONFIG.email}
                 </a>
               </div>
             </div>
 
             <a
-              href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}`}
+              href={`https://wa.me/${COMPANY_CONFIG.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               className="whatsapp-btn"
@@ -147,8 +156,7 @@ const Footer = () => {
         <div className="footer-container">
           <div className="footer-bottom-content">
             <p className="footer-copyright">
-              &copy; {new Date().getFullYear()} METSIM Solutions. Todos los derechos
-              reservados.
+              &copy; {new Date().getFullYear()} {COMPANY_CONFIG.name}. Todos los derechos reservados.
             </p>
 
             <div className="footer-values">

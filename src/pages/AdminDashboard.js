@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import "../styles/AdminDashboard.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
 const AdminDashboard = () => {

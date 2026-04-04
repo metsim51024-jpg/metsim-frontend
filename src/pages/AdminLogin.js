@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Lock, User } from "lucide-react";
 import "../styles/AdminLogin.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
 const AdminLogin = () => {

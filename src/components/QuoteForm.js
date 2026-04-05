@@ -6,7 +6,7 @@ import { FileText, CheckCircle, Upload } from "lucide-react";
 import "./QuoteForm.css";
 
 const BACKEND_URL = "https://metsim-backend.onrender.com";
-const API = `${BACKEND_URL}/api`;
+const API_URL = `${BACKEND_URL}/api`;
 
 const QuoteForm = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +29,10 @@ const QuoteForm = () => {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    
-    // Validar tamaño total (máx 50MB)
     const totalSize = selectedFiles.reduce((acc, file) => acc + file.size, 0);
+    
     if (totalSize > 50 * 1024 * 1024) {
-      toast.error("El tamaño total de archivos no debe exceder 50MB");
+      toast.error("Máximo 50MB de archivos");
       return;
     }
 
@@ -45,15 +44,10 @@ const QuoteForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validaciones
     if (!formData.client_name.trim()) {
-      toast.error("El nombre es requerido");
-      return;
-    }
-
-    if (!formData.client_email.trim()) {
-      toast.error("El email es requerido");
+      toast.error("Nombre requerido");
       return;
     }
 
@@ -64,70 +58,76 @@ const QuoteForm = () => {
     }
 
     if (!formData.client_phone.trim()) {
-      toast.error("El teléfono es requerido");
+      toast.error("Teléfono requerido");
       return;
     }
 
     if (!formData.description.trim()) {
-      toast.error("La descripción es requerida");
+      toast.error("Descripción requerida");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Crear FormData
       const formDataToSend = new FormData();
-      formDataToSend.append("client_name", formData.client_name);
-      formDataToSend.append("client_email", formData.client_email);
-      formDataToSend.append("client_phone", formData.client_phone);
-      formDataToSend.append("description", formData.description);
+      formDataToSend.append("client_name", formData.client_name.trim());
+      formDataToSend.append("client_email", formData.client_email.trim());
+      formDataToSend.append("client_phone", formData.client_phone.trim());
+      formDataToSend.append("description", formData.description.trim());
 
       // Agregar archivos
       formData.files.forEach((file) => {
         formDataToSend.append("files", file);
       });
 
-      console.log("📤 Enviando cotización a:", `${API}/quotes`);
+      const API_ENDPOINT = `${API_URL}/quotes`;
+      console.log("📤 Enviando a:", API_ENDPOINT);
 
-      const response = await axios.post(`${API}/quotes`, formDataToSend, {
+      const response = await axios.post(API_ENDPOINT, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
-        timeout: 60000
+        timeout: 60000 // 60 segundos
       });
 
-      console.log("✅ Respuesta del servidor:", response.data);
+      console.log("✅ Respuesta exitosa:", response.data);
 
-      if (response.status === 201 || response.status === 200) {
-        setSubmitted(true);
-        toast.success("¡Cotización enviada correctamente!");
+      setSubmitted(true);
+      toast.success("¡Cotización enviada exitosamente!");
 
-        // Limpiar formulario después de 2 segundos
-        setTimeout(() => {
-          setFormData({
-            description: "",
-            client_name: "",
-            client_email: "",
-            client_phone: "",
-            files: []
-          });
-          setSubmitted(false);
-        }, 2000);
-      }
+      setTimeout(() => {
+        setFormData({
+          description: "",
+          client_name: "",
+          client_email: "",
+          client_phone: "",
+          files: []
+        });
+        setSubmitted(false);
+      }, 3000);
+
     } catch (error) {
-      console.error("❌ Error completo:", error);
+      console.error("❌ Error completo:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        code: error.code
+      });
 
-      if (error.response) {
-        console.error("Error del servidor:", error.response.data);
-        const errorMsg = error.response.data?.message || error.response.data?.detail || "Error del servidor";
-        toast.error(`Error: ${errorMsg}`);
-      } else if (error.request) {
-        console.error("Sin respuesta del servidor");
-        toast.error("No se pudo conectar al servidor. Intenta nuevamente.");
+      // Diferentes tipos de errores
+      if (error.code === 'ECONNABORTED') {
+        toast.error("⏱️ Tiempo de espera agotado (60s). Intenta nuevamente.");
+      } else if (error.response?.status === 503) {
+        toast.error("⚠️ Base de datos no disponible. Por favor intenta en 1 minuto.");
+      } else if (error.response?.status === 504) {
+        toast.error("⏱️ Servidor tardó demasiado respondiendo. Intenta nuevamente.");
+      } else if (error.response?.data?.message) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else if (error.message === 'Network Error') {
+        toast.error("❌ Error de conexión. Verifica tu internet.");
       } else {
-        console.error("Error:", error.message);
-        toast.error("Error al enviar la cotización");
+        toast.error(`Error: ${error.message}`);
       }
     } finally {
       setIsSubmitting(false);
@@ -143,7 +143,7 @@ const QuoteForm = () => {
             <span className="section-badge">[ PRESUPUESTO ]</span>
             <h2 className="section-title">Solicita tu Presupuesto</h2>
             <p className="section-description">
-              Describe tu proyecto. Nuestros expertos te enviarán un presupuesto sin costo ni compromiso.
+              Describe tu proyecto. Nuestros expertos te enviarán un presupuesto sin costo.
             </p>
           </div>
 
@@ -158,7 +158,7 @@ const QuoteForm = () => {
                   onChange={handleChange}
                   required
                   rows="6"
-                  placeholder="Describe las especificaciones, materiales, dimensiones..."
+                  placeholder="Describe especificaciones, materiales, dimensiones..."
                   className="form-textarea"
                 />
               </div>
@@ -207,11 +207,11 @@ const QuoteForm = () => {
                 />
               </div>
 
-              {/* SUBIDA DE ARCHIVOS */}
+              {/* ARCHIVOS */}
               <div className="form-group">
                 <label htmlFor="files" className="file-upload-label">
                   <Upload size={20} />
-                  Adjuntar Archivos (Opcional - Máx 50MB)
+                  Adjuntar Archivos (Opcional)
                 </label>
                 <input
                   type="file"
@@ -219,15 +219,15 @@ const QuoteForm = () => {
                   name="files"
                   onChange={handleFileChange}
                   multiple
-                  accept=".pdf,.jpg,.jpeg,.png,.dwg,.dxf,.doc,.docx"
+                  accept=".pdf,.jpg,.jpeg,.png,.dwg,.doc,.docx"
                   className="file-input"
                 />
                 {formData.files.length > 0 && (
                   <div className="attached-files">
-                    <p className="files-label">📎 Archivos adjuntos:</p>
+                    <p className="files-label">📎 Archivos:</p>
                     {formData.files.map((file, idx) => (
                       <span key={idx} className="file-tag">
-                        {file.name} ({(file.size / 1024).toFixed(2)}KB)
+                        {file.name}
                       </span>
                     ))}
                   </div>
@@ -244,7 +244,7 @@ const QuoteForm = () => {
               </button>
 
               <p className="form-note">
-                ⏱️ Respuesta en menos de 24 horas hábiles
+                ⏱️ Respuesta en menos de 24 horas
               </p>
             </form>
           ) : (
@@ -254,7 +254,7 @@ const QuoteForm = () => {
               </div>
               <h3>¡Presupuesto Solicitado!</h3>
               <p>
-                Hemos recibido tu solicitud. Nuestro equipo se contactará contigo pronto.
+                Hemos recibido tu solicitud. Nuestro equipo se contactará pronto.
               </p>
               <div className="success-details">
                 <p><strong>Email:</strong> {formData.client_email}</p>
@@ -275,19 +275,19 @@ const QuoteForm = () => {
           <div className="benefits-card">
             <div className="benefit-icon">💰</div>
             <h4>Sin Costo</h4>
-            <p>Presupuestos gratuitos y sin compromiso</p>
+            <p>Presupuestos gratuitos</p>
           </div>
 
           <div className="benefits-card">
             <div className="benefit-icon">🎯</div>
             <h4>Exactitud</h4>
-            <p>Cotizaciones detalladas completas</p>
+            <p>Cotizaciones detalladas</p>
           </div>
 
           <div className="benefits-card">
             <div className="benefit-icon">👥</div>
             <h4>Expertos</h4>
-            <p>Equipo especializado en metalurgia</p>
+            <p>Equipo especializado</p>
           </div>
         </div>
       </div>

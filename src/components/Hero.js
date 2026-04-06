@@ -61,7 +61,7 @@ function Hero() {
               <div className="stat-label">Simulación Estructural</div>
             </div>
             <div className="stat">
-              <div className="stat-number">50+</div>
+              <div className="stat-number">30+</div>
               <div className="stat-label">Proyectos Bien Planificados</div>
             </div>
             <div className="stat">

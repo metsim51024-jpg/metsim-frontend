@@ -88,14 +88,15 @@ const QuoteForm = () => {
         headers: {
           "Content-Type": "multipart/form-data"
         },
-        timeout: 60000 // 60 segundos
+        timeout: 30000 // Reducido a 30 segundos (respuesta rápida)
       });
 
       console.log("✅ Respuesta exitosa:", response.data);
 
       setSubmitted(true);
-      toast.success("¡Cotización enviada exitosamente!");
+      toast.success("¡Presupuesto enviado exitosamente! Revisa tu correo.");
 
+      // Limpiar después de 3 segundos
       setTimeout(() => {
         setFormData({
           description: "",
@@ -108,26 +109,16 @@ const QuoteForm = () => {
       }, 3000);
 
     } catch (error) {
-      console.error("❌ Error completo:", {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        code: error.code
-      });
+      console.error("❌ Error:", error.message);
 
-      // Diferentes tipos de errores
       if (error.code === 'ECONNABORTED') {
-        toast.error("⏱️ Tiempo de espera agotado (60s). Intenta nuevamente.");
+        toast.error("⏱️ Tiempo de espera agotado. Intenta nuevamente.");
       } else if (error.response?.status === 503) {
-        toast.error("⚠️ Base de datos no disponible. Por favor intenta en 1 minuto.");
-      } else if (error.response?.status === 504) {
-        toast.error("⏱️ Servidor tardó demasiado respondiendo. Intenta nuevamente.");
+        toast.error("⚠️ Servidor no disponible. Intenta en 1 minuto.");
       } else if (error.response?.data?.message) {
         toast.error(`Error: ${error.response.data.message}`);
-      } else if (error.message === 'Network Error') {
-        toast.error("❌ Error de conexión. Verifica tu internet.");
       } else {
-        toast.error(`Error: ${error.message}`);
+        toast.error("Error al enviar. Intenta nuevamente.");
       }
     } finally {
       setIsSubmitting(false);
@@ -224,7 +215,7 @@ const QuoteForm = () => {
                 />
                 {formData.files.length > 0 && (
                   <div className="attached-files">
-                    <p className="files-label">📎 Archivos:</p>
+                    <p className="files-label">📎 Archivos ({formData.files.length}):</p>
                     {formData.files.map((file, idx) => (
                       <span key={idx} className="file-tag">
                         {file.name}
@@ -252,13 +243,17 @@ const QuoteForm = () => {
               <div className="success-icon">
                 <CheckCircle size={48} />
               </div>
-              <h3>¡Presupuesto Solicitado!</h3>
+              <h3>¡Presupuesto Enviado!</h3>
               <p>
-                Hemos recibido tu solicitud. Nuestro equipo se contactará pronto.
+                ✅ Hemos recibido tu solicitud correctamente.<br/>
+                📧 Revisa tu correo en <strong>{formData.client_email}</strong><br/>
+                📱 También puedes contactarnos por WhatsApp si necesitas respuesta urgente.
               </p>
               <div className="success-details">
+                <p><strong>Nombre:</strong> {formData.client_name}</p>
                 <p><strong>Email:</strong> {formData.client_email}</p>
                 <p><strong>Teléfono:</strong> {formData.client_phone}</p>
+                <p><strong>Archivos:</strong> {formData.files.length} adjuntos</p>
               </div>
             </div>
           )}

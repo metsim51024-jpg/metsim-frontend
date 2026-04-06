@@ -3,15 +3,15 @@
 export const COMPANY_CONFIG = {
   name: "METSIM Solutions",
   email: "presupuestos@metsim.com.py",
-  phone: "+595 994 685-767",
+  phone: "+595 972 834-336",
   whatsapp: "+595994685767",
-  address: "Avda. Carlos Morphi casi Concepción, Asunción, Paraguay",
-  instagram: "https://www.instagram.com/metsim.solutions/",
+  address: "Avda. Carlos Morphi casi Concepción, Paraguay",
+  instagram: "https://www.instagram.com/metsim_solutions/",
   facebook: "https://www.facebook.com/metsim.solutions/",
   whatsappNumber: "595994685767", // Sin formato
   hours: {
-    weekday: "8:00 AM - 6:00 PM",
-    saturday: "9:00 AM - 1:00 PM",
+    weekday: "7:30 AM - 5:00 PM",
+    saturday: "8:00 AM - 12:00 PM",
     sunday: "Cerrado"
   }
 };

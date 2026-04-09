@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import Reimport React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Send, Phone, Mail, MapPin } from "lucide-react";
@@ -15,6 +15,7 @@ export default function Contact() {
     description: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -36,30 +37,50 @@ export default function Contact() {
         return;
       }
 
-      console.log("Enviando contacto a:", `${API}/quotes`);
+      console.log("📤 Enviando contacto a:", `${API}/quotes`);
 
       const response = await axios.post(`${API}/quotes`, {
         description: formData.description,
         client_name: formData.client_name,
         client_email: formData.client_email,
         client_phone: formData.client_phone
+      }, {
+        timeout: 30000
       });
 
-      if (response.status === 201 || response.status === 200) {
-        toast.success("¡Mensaje enviado correctamente!");
-        setFormData({
-          client_name: "",
-          client_email: "",
-          client_phone: "",
-          description: ""
-        });
-      }
+      console.log("✅ Respuesta recibida:", response.status, response.data);
+
+      // Mostrar éxito
+      setSubmitted(true);
+      toast.success("¡Mensaje enviado correctamente! Revisa tu correo.");
+      
+      // Limpiar formulario
+      setFormData({
+        client_name: "",
+        client_email: "",
+        client_phone: "",
+        description: ""
+      });
+
+      // Resetear después de 3 segundos
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 3000);
+
     } catch (error) {
-      console.error("Error:", error);
-      if (error.response) {
-        toast.error(`Error: ${error.response.data.message || "Error al enviar"}`);
+      console.error("❌ Error completo:", error);
+      
+      // Manejo de errores mejorado
+      if (error.code === 'ECONNABORTED') {
+        toast.error("⏱️ Tiempo de espera agotado. Intenta nuevamente.");
+      } else if (error.response?.status === 503) {
+        toast.error("⚠️ Servidor no disponible. Intenta en 1 minuto.");
+      } else if (error.response?.data?.message) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else if (error.response?.status >= 500) {
+        toast.error("Error en el servidor. Por favor intenta más tarde.");
       } else {
-        toast.error("Error al conectar con el servidor");
+        toast.error("Error al enviar. Verifica tu conexión e intenta nuevamente.");
       }
     } finally {
       setIsSubmitting(false);
@@ -70,8 +91,8 @@ export default function Contact() {
     {
       icon: <Phone size={24} />,
       label: "Teléfono",
-      value: "+595 (972) 834-336",
-      link: "tel:+595972834336"
+      value: "+595 (994) 685-767",
+      link: "tel:+595994685767"
     },
     {
       icon: <Mail size={24} />,
@@ -122,74 +143,90 @@ export default function Contact() {
         </div>
 
         {/* Right: Form */}
-        <form onSubmit={handleSubmit} className="contact-form">
-          <div className="form-group">
-            <label htmlFor="nombre">Nombre Completo *</label>
-            <input
-              type="text"
-              id="nombre"
-              name="client_name"
-              value={formData.client_name}
-              onChange={handleChange}
-              required
-              placeholder="Tu nombre"
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-row">
+        {!submitted ? (
+          <form onSubmit={handleSubmit} className="contact-form">
             <div className="form-group">
-              <label htmlFor="email">Email *</label>
+              <label htmlFor="nombre">Nombre Completo *</label>
               <input
-                type="email"
-                id="email"
-                name="client_email"
-                value={formData.client_email}
+                type="text"
+                id="nombre"
+                name="client_name"
+                value={formData.client_name}
                 onChange={handleChange}
                 required
-                placeholder="tu@email.com"
+                placeholder="Tu nombre"
                 className="form-input"
               />
             </div>
 
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="client_email"
+                  value={formData.client_email}
+                  onChange={handleChange}
+                  required
+                  placeholder="tu@email.com"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="telefono">Teléfono *</label>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="client_phone"
+                  value={formData.client_phone}
+                  onChange={handleChange}
+                  required
+                  placeholder="+595 11 1234-5678"
+                  className="form-input"
+                />
+              </div>
+            </div>
+
             <div className="form-group">
-              <label htmlFor="telefono">Teléfono *</label>
-              <input
-                type="tel"
-                id="telefono"
-                name="client_phone"
-                value={formData.client_phone}
+              <label htmlFor="mensaje">Mensaje *</label>
+              <textarea
+                id="mensaje"
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
                 required
-                placeholder="+595 11 1234-5678"
-                className="form-input"
-              />
+                rows="5"
+                placeholder="Cuéntanos cómo podemos ayudarte..."
+                className="form-textarea"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="submit-btn"
+            >
+              {isSubmitting ? "ENVIANDO..." : "ENVIAR MENSAJE"}
+              {!isSubmitting && <Send size={20} />}
+            </button>
+          </form>
+        ) : (
+          <div className="contact-form success-message">
+            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+              <div style={{ fontSize: '48px', marginBottom: '20px' }}>✅</div>
+              <h3 style={{ color: '#4CAF50', marginBottom: '10px' }}>¡Mensaje Enviado Correctamente!</h3>
+              <p style={{ color: '#666', marginBottom: '15px' }}>
+                Hemos recibido tu mensaje y nos pondremos en contacto pronto.<br/>
+                Revisa tu correo: <strong>{formData.client_email}</strong>
+              </p>
+              <p style={{ color: '#999', fontSize: '14px' }}>
+                Esperamos tu respuesta en menos de 24 horas.
+              </p>
             </div>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="mensaje">Mensaje *</label>
-            <textarea
-              id="mensaje"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows="5"
-              placeholder="Cuéntanos cómo podemos ayudarte..."
-              className="form-textarea"
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="submit-btn"
-          >
-            {isSubmitting ? "ENVIANDO..." : "ENVIAR MENSAJE"}
-            {!isSubmitting && <Send size={20} />}
-          </button>
-        </form>
+        )}
       </div>
     </section>
   );

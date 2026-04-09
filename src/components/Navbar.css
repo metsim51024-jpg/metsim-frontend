@@ -34,6 +34,7 @@
   text-decoration: none;
   flex-shrink: 0;
   min-width: fit-content;
+  transition: all 0.3s ease;
 }
 
 .navbar-logo:hover {
@@ -41,16 +42,22 @@
 }
 
 .logo-img {
-  height: 45px;
+  height: 50px;
   width: auto;
-  min-width: 45px;
+  min-width: 50px;
   object-fit: contain;
   display: block;
   background: transparent;
   border: none;
   border-radius: 0;
   box-shadow: none;
-  filter: none;
+  filter: drop-shadow(0 4px 12px rgba(34, 211, 238, 0.2));
+  transition: all 0.3s ease;
+}
+
+.navbar-logo:hover .logo-img {
+  filter: drop-shadow(0 6px 20px rgba(34, 211, 238, 0.4));
+  transform: scale(1.05);
 }
 
 .logo-text {
@@ -201,8 +208,8 @@
   }
 
   .logo-img {
-    height: 40px;
-    min-width: 40px;
+    height: 45px;
+    min-width: 45px;
   }
 
   .logo-text {
@@ -224,8 +231,8 @@
   }
 
   .logo-img {
-    height: 36px;
-    min-width: 36px;
+    height: 40px;
+    min-width: 40px;
   }
 
   .logo-text {

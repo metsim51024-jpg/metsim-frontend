@@ -71,13 +71,17 @@ function Hero() {
           </div>
         </div>
 
-        {/* LOGO METSIM - ADAPTADO */}
+        {/* LOGO METSIM - NUEVO */}
         <div className="hero-visual">
           <div className="hero-image-container">
             <img
-              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775055928/LOGO_FONDO_NEGRO_uu3uf5.png"
+              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
               alt="Logo METSIM Solutions"
               className="hero-image logo-image"
+              onError={(e) => {
+                console.error("Error cargando logo hero:", e);
+                e.target.style.opacity = "0.5";
+              }}
             />
             <div className="hero-image-glow"></div>
           </div>

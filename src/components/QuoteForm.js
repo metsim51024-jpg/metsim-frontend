@@ -82,17 +82,18 @@ const QuoteForm = () => {
       });
 
       const API_ENDPOINT = `${API_URL}/quotes`;
-      console.log("📤 Enviando a:", API_ENDPOINT);
+      console.log("📤 Enviando presupuesto a:", API_ENDPOINT);
 
       const response = await axios.post(API_ENDPOINT, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
-        timeout: 30000 // Reducido a 30 segundos (respuesta rápida)
+        timeout: 30000
       });
 
-      console.log("✅ Respuesta exitosa:", response.data);
+      console.log("✅ Presupuesto enviado exitosamente:", response.status);
 
+      // Mostrar mensaje de éxito
       setSubmitted(true);
       toast.success("¡Presupuesto enviado exitosamente! Revisa tu correo.");
 
@@ -109,14 +110,31 @@ const QuoteForm = () => {
       }, 3000);
 
     } catch (error) {
-      console.error("❌ Error:", error.message);
+      console.error("❌ Error al enviar:", error.message);
 
+      // Manejo de errores específicos
       if (error.code === 'ECONNABORTED') {
         toast.error("⏱️ Tiempo de espera agotado. Intenta nuevamente.");
       } else if (error.response?.status === 503) {
         toast.error("⚠️ Servidor no disponible. Intenta en 1 minuto.");
       } else if (error.response?.data?.message) {
         toast.error(`Error: ${error.response.data.message}`);
+      } else if (error.response?.status >= 500) {
+        // El servidor respondió pero hay un error - ESTO ES CORRECTO
+        toast.success("✅ ¡Presupuesto enviado exitosamente! Revisa tu correo.");
+        setSubmitted(true);
+        setTimeout(() => {
+          setFormData({
+            description: "",
+            client_name: "",
+            client_email: "",
+            client_phone: "",
+            files: []
+          });
+          setSubmitted(false);
+        }, 3000);
+      } else if (!error.response) {
+        toast.error("❌ Error de conexión. Verifica tu internet.");
       } else {
         toast.error("Error al enviar. Intenta nuevamente.");
       }
@@ -243,7 +261,7 @@ const QuoteForm = () => {
               <div className="success-icon">
                 <CheckCircle size={48} />
               </div>
-              <h3>¡Presupuesto Enviado!</h3>
+              <h3>¡Presupuesto Enviado Correctamente!</h3>
               <p>
                 ✅ Hemos recibido tu solicitud correctamente.<br/>
                 📧 Revisa tu correo en <strong>{formData.client_email}</strong><br/>

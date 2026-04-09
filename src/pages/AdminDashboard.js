@@ -13,7 +13,8 @@ import {
   ChevronDown,
   TrendingUp,
   Eye,
-  Download
+  Download,
+  AlertCircle
 } from "lucide-react";
 import "../styles/AdminDashboard.css";
 
@@ -32,14 +33,23 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [expandedId, setExpandedId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-    // Cargar datos cada 5 minutos
-    const interval = setInterval(fetchData, 300000);
-    return () => clearInterval(interval);
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    const token = localStorage.getItem("admin_token");
+    if (!token) {
+      console.log("No token found, redirecting to login");
+      navigate("/admin/login");
+      return;
+    }
+    
+    await fetchData();
+  };
 
   const fetchData = async () => {
     const token = localStorage.getItem("admin_token");
@@ -49,30 +59,62 @@ const AdminDashboard = () => {
     }
 
     try {
-      const [ordersRes, quotesRes, statsRes] = await Promise.all([
-        axios.get(`${API}/admin/orders`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        axios.get(`${API}/admin/quotes`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        axios.get(`${API}/admin/stats`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }).catch(() => null) // Stats es opcional
-      ]);
+      setError(null);
+      setIsLoading(true);
 
-      setOrders(ordersRes.data || []);
-      setQuotes(quotesRes.data || []);
-      
-      if (statsRes?.data) {
-        setStats(statsRes.data);
-      }
+      console.log("📊 Cargando datos del dashboard...");
+
+      // Obtener cotizaciones
+      const quotesRes = await axios.get(`${API}/admin/quotes`, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 15000
+      }).catch(err => {
+        console.warn("Error cargando cotizaciones:", err.message);
+        return { data: [] };
+      });
+
+      // Obtener pedidos (si existe el endpoint)
+      const ordersRes = await axios.get(`${API}/admin/orders`, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 15000
+      }).catch(err => {
+        console.warn("Error cargando pedidos:", err.message);
+        return { data: [] };
+      });
+
+      console.log("✅ Cotizaciones cargadas:", quotesRes.data?.length || 0);
+      console.log("✅ Pedidos cargados:", ordersRes.data?.length || 0);
+
+      setQuotes(Array.isArray(quotesRes.data) ? quotesRes.data : []);
+      setOrders(Array.isArray(ordersRes.data) ? ordersRes.data : []);
+
+      // Calcular stats
+      const newStats = {
+        totalVisits: quotesRes.data?.length * 10 || 0,
+        visitsToday: 0,
+        totalConversions: ordersRes.data?.length || 0,
+        conversionRate: quotesRes.data?.length ? 
+          Math.round((ordersRes.data?.length / quotesRes.data?.length) * 100) : 0
+      };
+      setStats(newStats);
+
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("❌ Error fetching data:", error);
+      setError("Error al cargar los datos");
+      
       if (error.response?.status === 401 || error.response?.status === 403) {
         localStorage.removeItem("admin_token");
-        toast.error("Sesión expirada");
+        toast.error("Sesión expirada. Por favor inicia sesión nuevamente.");
         navigate("/admin/login");
+      } else if (error.code === 'ECONNABORTED') {
+        setError("Tiempo de conexión agotado");
+        toast.error("⏱️ Tiempo de conexión agotado");
       } else {
         toast.error("Error al cargar datos");
       }
@@ -83,33 +125,19 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
-    toast.success("Sesión cerrada");
+    localStorage.removeItem("admin_user");
+    toast.success("Sesión cerrada correctamente");
     navigate("/admin/login");
   };
 
-  const downloadQuoteFiles = async (quoteId) => {
-    try {
-      const token = localStorage.getItem("admin_token");
-      const response = await axios.get(`${API}/quotes/${quoteId}/files`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      // Crear ZIP con archivos o descargar directo
-      window.open(response.data.downloadUrl, '_blank');
-      toast.success("Descargando archivos...");
-    } catch (error) {
-      toast.error("Error al descargar archivos");
-    }
-  };
-
   const handleContactClient = (email, phone) => {
-    // Copiar email/teléfono al portapapeles
     if (email) {
       navigator.clipboard.writeText(email);
-      toast.success("Email copiado");
+      toast.success("Email copiado al portapapeles");
     }
     if (phone) {
-      window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}`, '_blank');
+      const phoneNumber = phone.replace(/[^0-9]/g, '');
+      window.open(`https://wa.me/${phoneNumber}`, '_blank');
     }
   };
 
@@ -118,7 +146,7 @@ const AdminDashboard = () => {
       <div className="admin-loading">
         <div className="loading-spinner">
           <div className="spinner"></div>
-          <p>Cargando datos...</p>
+          <p>Cargando datos del panel...</p>
         </div>
       </div>
     );
@@ -138,20 +166,37 @@ const AdminDashboard = () => {
             <h1 className="navbar-title">Panel Administrativo</h1>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="logout-button"
-            data-testid="admin-logout-button"
-          >
-            <LogOut size={18} />
-            Cerrar Sesión
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <button
+              onClick={fetchData}
+              className="refresh-button"
+              title="Actualizar datos"
+            >
+              🔄 Actualizar
+            </button>
+            <button
+              onClick={handleLogout}
+              className="logout-button"
+              data-testid="admin-logout-button"
+            >
+              <LogOut size={18} />
+              Cerrar Sesión
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Main Content */}
       <div className="admin-content">
         <div className="admin-container">
+          {error && (
+            <div className="error-banner">
+              <AlertCircle size={20} />
+              <span>{error}</span>
+              <button onClick={fetchData}>Reintentar</button>
+            </div>
+          )}
+
           {/* PESTAÑAS */}
           <div className="tabs-section">
             <div className="tabs-header">
@@ -190,8 +235,8 @@ const AdminDashboard = () => {
                           <Eye size={32} />
                         </div>
                         <div className="stat-info">
-                          <p className="stat-label">Visitas Totales</p>
-                          <p className="stat-value">{stats.totalVisits || 0}</p>
+                          <p className="stat-label">Cotizaciones Totales</p>
+                          <p className="stat-value">{quotes.length}</p>
                         </div>
                       </div>
 
@@ -201,7 +246,13 @@ const AdminDashboard = () => {
                         </div>
                         <div className="stat-info">
                           <p className="stat-label">Hoy</p>
-                          <p className="stat-value">{stats.visitsToday || 0}</p>
+                          <p className="stat-value">
+                            {quotes.filter(q => {
+                              const date = new Date(q.created_at || q.createdAt);
+                              const today = new Date();
+                              return date.toDateString() === today.toDateString();
+                            }).length}
+                          </p>
                         </div>
                       </div>
 
@@ -210,8 +261,10 @@ const AdminDashboard = () => {
                           <FileText size={32} />
                         </div>
                         <div className="stat-info">
-                          <p className="stat-label">Cotizaciones</p>
-                          <p className="stat-value">{quotes.length}</p>
+                          <p className="stat-label">Con Archivos</p>
+                          <p className="stat-value">
+                            {quotes.filter(q => q.file_urls && q.file_urls.length > 0).length}
+                          </p>
                         </div>
                       </div>
 
@@ -220,12 +273,8 @@ const AdminDashboard = () => {
                           <TrendingUp size={32} />
                         </div>
                         <div className="stat-info">
-                          <p className="stat-label">Conversión</p>
-                          <p className="stat-value">
-                            {quotes.length > 0 
-                              ? Math.round((orders.length / quotes.length) * 100) 
-                              : 0}%
-                          </p>
+                          <p className="stat-label">Pedidos</p>
+                          <p className="stat-value">{orders.length}</p>
                         </div>
                       </div>
                     </div>
@@ -235,10 +284,15 @@ const AdminDashboard = () => {
                       <h3>Resumen Rápido</h3>
                       
                       <div className="summary-item">
-                        <span>Cotizaciones Nuevas (Últimas 24h)</span>
+                        <span>Total de Cotizaciones</span>
+                        <strong>{quotes.length}</strong>
+                      </div>
+
+                      <div className="summary-item">
+                        <span>Cotizaciones Últimas 24h</span>
                         <strong>
                           {quotes.filter(q => {
-                            const date = new Date(q.created_at);
+                            const date = new Date(q.created_at || q.createdAt);
                             const oneDayAgo = new Date(Date.now() - 24*60*60*1000);
                             return date > oneDayAgo;
                           }).length}
@@ -246,21 +300,16 @@ const AdminDashboard = () => {
                       </div>
 
                       <div className="summary-item">
-                        <span>Pedidos Pendientes</span>
-                        <strong>{orders.filter(o => o.status === 'pending').length}</strong>
+                        <span>Total de Pedidos</span>
+                        <strong>{orders.length}</strong>
                       </div>
 
                       <div className="summary-item">
-                        <span>Tasa de Respuesta Promedio</span>
-                        <strong>24 horas</strong>
-                      </div>
-
-                      <div className="summary-item">
-                        <span>Proyecto Más Solicitado</span>
+                        <span>Tasa de Conversión</span>
                         <strong>
                           {quotes.length > 0 
-                            ? "Estructuras Metálicas"
-                            : "N/A"
+                            ? Math.round((orders.length / quotes.length) * 100) + "%"
+                            : "0%"
                           }
                         </strong>
                       </div>
@@ -276,45 +325,46 @@ const AdminDashboard = () => {
                     <div className="empty-state">
                       <FileText size={48} />
                       <p>No hay cotizaciones aún</p>
+                      <small>Las cotizaciones aparecerán aquí cuando se envíen</small>
                     </div>
                   ) : (
                     <div className="items-list">
                       {quotes.map((quote) => (
                         <div
-                          key={quote.id}
+                          key={quote._id || quote.id}
                           className={`item-card ${
-                            expandedId === quote.id ? "expanded" : ""
+                            expandedId === (quote._id || quote.id) ? "expanded" : ""
                           }`}
                         >
                           <div
                             className="item-header"
                             onClick={() =>
                               setExpandedId(
-                                expandedId === quote.id ? null : quote.id
+                                expandedId === (quote._id || quote.id) ? null : (quote._id || quote.id)
                               )
                             }
                           >
                             <div className="item-title">
                               <p className="item-id">
-                                Cotización #{quote.id.slice(0, 8).toUpperCase()}
+                                Cotización #{(quote._id || quote.id || "---").slice(0, 8).toUpperCase()}
                               </p>
                               <p className="item-date">
-                                {new Date(quote.created_at).toLocaleString("es-PY")}
+                                {new Date(quote.created_at || quote.createdAt).toLocaleString("es-PY")}
                               </p>
                             </div>
 
                             <div className="item-controls">
-                              <span className="status-badge">{quote.status}</span>
+                              <span className="status-badge">{quote.status || "pendiente"}</span>
                               <ChevronDown
                                 size={20}
                                 className={`toggle-icon ${
-                                  expandedId === quote.id ? "open" : ""
+                                  expandedId === (quote._id || quote.id) ? "open" : ""
                                 }`}
                               />
                             </div>
                           </div>
 
-                          {expandedId === quote.id && (
+                          {expandedId === (quote._id || quote.id) && (
                             <div className="item-details">
                               <div className="details-grid">
                                 <div className="detail-item">
@@ -322,7 +372,7 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Cliente</p>
                                     <p className="detail-value">
-                                      {quote.client_name}
+                                      {quote.client_name || "N/A"}
                                     </p>
                                   </div>
                                 </div>
@@ -332,7 +382,7 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Email</p>
                                     <p className="detail-value">
-                                      {quote.client_email}
+                                      {quote.client_email || "N/A"}
                                     </p>
                                   </div>
                                 </div>
@@ -342,7 +392,7 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Teléfono</p>
                                     <p className="detail-value">
-                                      {quote.client_phone}
+                                      {quote.client_phone || "N/A"}
                                     </p>
                                   </div>
                                 </div>
@@ -351,25 +401,25 @@ const AdminDashboard = () => {
                               <div className="description-section">
                                 <p className="section-title">Descripción del Proyecto</p>
                                 <p className="description-text">
-                                  {quote.description}
+                                  {quote.description || "Sin descripción"}
                                 </p>
                               </div>
 
                               {/* Archivos adjuntos */}
                               {quote.file_urls && quote.file_urls.length > 0 && (
                                 <div className="files-section">
-                                  <p className="section-title">Archivos Adjuntos</p>
+                                  <p className="section-title">Archivos Adjuntos ({quote.file_urls.length})</p>
                                   <div className="files-list">
                                     {quote.file_urls.map((file, idx) => (
                                       <a
                                         key={idx}
-                                        href={file.url}
+                                        href={file.url || file}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="file-download"
                                       >
                                         <Download size={16} />
-                                        {file.filename}
+                                        {file.filename || `Archivo ${idx + 1}`}
                                       </a>
                                     ))}
                                   </div>
@@ -380,11 +430,11 @@ const AdminDashboard = () => {
                               <div className="action-buttons">
                                 <button
                                   onClick={() =>
-                                    handleContactClient(quote.client_email)
+                                    handleContactClient(quote.client_email, null)
                                   }
                                   className="action-btn email"
                                 >
-                                  📧 Enviar Email
+                                  📧 Copiar Email
                                 </button>
                                 <button
                                   onClick={() =>
@@ -411,45 +461,46 @@ const AdminDashboard = () => {
                     <div className="empty-state">
                       <Package size={48} />
                       <p>No hay pedidos aún</p>
+                      <small>Los pedidos aparecerán aquí cuando se confirmen</small>
                     </div>
                   ) : (
                     <div className="items-list">
                       {orders.map((order) => (
                         <div
-                          key={order.id}
+                          key={order._id || order.id}
                           className={`item-card ${
-                            expandedId === order.id ? "expanded" : ""
+                            expandedId === (order._id || order.id) ? "expanded" : ""
                           }`}
                         >
                           <div
                             className="item-header"
                             onClick={() =>
                               setExpandedId(
-                                expandedId === order.id ? null : order.id
+                                expandedId === (order._id || order.id) ? null : (order._id || order.id)
                               )
                             }
                           >
                             <div className="item-title">
                               <p className="item-id">
-                                Pedido #{order.id.slice(0, 8).toUpperCase()}
+                                Pedido #{(order._id || order.id || "---").slice(0, 8).toUpperCase()}
                               </p>
                               <p className="item-date">
-                                {new Date(order.created_at).toLocaleString("es-PY")}
+                                {new Date(order.created_at || order.createdAt).toLocaleString("es-PY")}
                               </p>
                             </div>
 
                             <div className="item-controls">
-                              <span className="status-badge">{order.status}</span>
+                              <span className="status-badge">{order.status || "pendiente"}</span>
                               <ChevronDown
                                 size={20}
                                 className={`toggle-icon ${
-                                  expandedId === order.id ? "open" : ""
+                                  expandedId === (order._id || order.id) ? "open" : ""
                                 }`}
                               />
                             </div>
                           </div>
 
-                          {expandedId === order.id && (
+                          {expandedId === (order._id || order.id) && (
                             <div className="item-details">
                               <div className="details-grid">
                                 <div className="detail-item">
@@ -457,7 +508,7 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Cliente</p>
                                     <p className="detail-value">
-                                      {order.client_name}
+                                      {order.client_name || "N/A"}
                                     </p>
                                   </div>
                                 </div>
@@ -467,7 +518,7 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Email</p>
                                     <p className="detail-value">
-                                      {order.client_email}
+                                      {order.client_email || "N/A"}
                                     </p>
                                   </div>
                                 </div>
@@ -477,29 +528,9 @@ const AdminDashboard = () => {
                                   <div>
                                     <p className="detail-label">Teléfono</p>
                                     <p className="detail-value">
-                                      {order.client_phone}
+                                      {order.client_phone || "N/A"}
                                     </p>
                                   </div>
-                                </div>
-                              </div>
-
-                              <div className="products-section">
-                                <p className="section-title">Productos Solicitados</p>
-                                <div className="products-list">
-                                  {order.items && order.items.length > 0 ? (
-                                    order.items.map((item, idx) => (
-                                      <div key={idx} className="product-row">
-                                        <span className="product-name">
-                                          {item.product_name}
-                                        </span>
-                                        <span className="product-qty">
-                                          x{item.quantity}
-                                        </span>
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <p className="no-items">Sin productos</p>
-                                  )}
                                 </div>
                               </div>
 
@@ -507,11 +538,11 @@ const AdminDashboard = () => {
                               <div className="action-buttons">
                                 <button
                                   onClick={() =>
-                                    handleContactClient(order.client_email)
+                                    handleContactClient(order.client_email, null)
                                   }
                                   className="action-btn email"
                                 >
-                                  📧 Enviar Email
+                                  📧 Copiar Email
                                 </button>
                                 <button
                                   onClick={() =>

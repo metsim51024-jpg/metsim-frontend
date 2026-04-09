@@ -22,25 +22,66 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar campos
+    if (!formData.username.trim()) {
+      toast.error("Usuario requerido");
+      return;
+    }
+    if (!formData.password.trim()) {
+      toast.error("Contraseña requerida");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${API}/admin/login`, formData);
+      console.log("🔐 Intentando login a:", `${API}/admin/login`);
       
-      if (response.data.access_token) {
-        localStorage.setItem("admin_token", response.data.access_token);
-        toast.success("¡Bienvenido!");
-        navigate("/admin/dashboard");
+      const response = await axios.post(`${API}/admin/login`, 
+        {
+          username: formData.username.trim(),
+          password: formData.password.trim()
+        },
+        {
+          timeout: 10000,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      
+      console.log("✅ Respuesta de login:", response.status);
+      
+      if (response.data && (response.data.access_token || response.data.token)) {
+        const token = response.data.access_token || response.data.token;
+        localStorage.setItem("admin_token", token);
+        localStorage.setItem("admin_user", formData.username);
+        
+        toast.success("¡Bienvenido al panel administrativo!");
+        
+        // Pequeño delay para que el toast se vea
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 500);
+      } else {
+        toast.error("Respuesta inválida del servidor");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("❌ Error completo:", error);
       
-      if (error.response?.status === 401) {
-        toast.error("Credenciales incorrectas");
+      if (error.code === 'ECONNABORTED') {
+        toast.error("⏱️ Tiempo de conexión agotado. Intenta nuevamente.");
+      } else if (error.response?.status === 401) {
+        toast.error("❌ Usuario o contraseña incorrectos");
       } else if (error.response?.status === 400) {
-        toast.error("Usuario o contraseña inválidos");
+        toast.error("❌ Datos inválidos. Verifica usuario y contraseña");
+      } else if (error.response?.status === 500) {
+        toast.error("❌ Error del servidor. Intenta más tarde");
+      } else if (!error.response) {
+        toast.error("❌ No se puede conectar con el servidor. Verifica la URL del backend");
       } else {
-        toast.error("Error al conectar con el servidor");
+        toast.error("❌ Error al conectar con el servidor");
       }
     } finally {
       setIsLoading(false);
@@ -53,7 +94,7 @@ const AdminLogin = () => {
         <div className="login-card">
           <div className="login-header">
             <img
-              src="https://i.ibb.co/fYjtsMdc/LOGO-FONDO-NEGRO.png"
+              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
               alt="METSIM"
               className="login-logo"
             />
@@ -76,6 +117,7 @@ const AdminLogin = () => {
                   placeholder="Ingresa tu usuario"
                   className="form-input"
                   data-testid="admin-username-input"
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -94,6 +136,7 @@ const AdminLogin = () => {
                   placeholder="Ingresa tu contraseña"
                   className="form-input"
                   data-testid="admin-password-input"
+                  autoComplete="current-password"
                 />
               </div>
             </div>
@@ -111,6 +154,12 @@ const AdminLogin = () => {
               ¿Problemas para acceder? Contacta al administrador
             </p>
           </form>
+
+          <div className="login-info">
+            <p style={{ fontSize: '12px', color: '#999', textAlign: 'center', marginTop: '20px' }}>
+              Usuario: <strong>admin</strong>
+            </p>
+          </div>
         </div>
 
         <button

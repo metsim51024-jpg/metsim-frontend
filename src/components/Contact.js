@@ -70,8 +70,8 @@ export default function Contact() {
     {
       icon: <Phone size={24} />,
       label: "Teléfono",
-      value: "+595 (994) 685-767",
-      link: "tel:+595994685767"
+      value: "+595 (972) 834-336",
+      link: "tel:+595972834336"
     },
     {
       icon: <Mail size={24} />,

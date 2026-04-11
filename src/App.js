@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import Contact from "./components/Contact";      // ← AGREGADA
+import QuoteForm from "./components/QuoteForm";  // ← AGREGADA
 import WhatsAppButton from "./components/WhatsAppButton";
 import { Toaster } from "sonner";
 import "./App.css";
@@ -30,6 +32,8 @@ function App() {
       <WhatsAppButton />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/contacto" element={<Contact />} />
+        <Route path="/cotizacion" element={<QuoteForm />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route 
           path="/admin/dashboard" 

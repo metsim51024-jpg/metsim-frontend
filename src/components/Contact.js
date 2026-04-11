@@ -1,4 +1,4 @@
-import Reimport React, { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Send, Phone, Mail, MapPin } from "lucide-react";

@@ -1,43 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <!-- ===== SEO BÁSICO ===== -->
+    <title>METSIM Solutions | Ingeniería y Tecnología en Paraguay</title>
+    <meta name="description" content="METSIM Solutions ofrece servicios de ingeniería, automatización y tecnología en Paraguay. Consulte proyectos, solicite cotización y contáctenos hoy." />
+    <meta name="keywords" content="ingeniería Paraguay, automatización, tecnología, METSIM, Asunción, proyectos industriales, cotización" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1a1d27" />
+    <link rel="canonical" href="https://www.metsim.com.py/" />
+
+    <!-- ===== OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ===== -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.metsim.com.py/" />
+    <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" />
+    <meta property="og:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay. Solicite su cotización gratuita." />
+    <meta property="og:image" content="https://www.metsim.com.py/logo512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:locale" content="es_PY" />
+    <meta property="og:site_name" content="METSIM Solutions" />
+
+    <!-- ===== TWITTER CARD ===== -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="METSIM Solutions | Ingeniería en Paraguay" />
+    <meta name="twitter:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay." />
+    <meta name="twitter:image" content="https://www.metsim.com.py/logo512.png" />
+
+    <!-- ===== SCHEMA JSON-LD: LocalBusiness ===== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "METSIM Solutions",
+      "url": "https://www.metsim.com.py",
+      "logo": "https://www.metsim.com.py/logo512.png",
+      "telephone": "+595972834336",
+      "email": "presupuestos@metsim.com.py",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Avda. Carlos Morphi casi Concepción",
+        "addressLocality": "Asunción",
+        "addressCountry": "PY"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+          "opens": "07:30",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "08:00",
+          "closes": "12:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.instagram.com/metsim_solutions/",
+        "https://www.facebook.com/metsim.solutions/"
+      ]
+    }
+    </script>
+
+    <!-- ===== FAVICONS ===== -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Necesitás habilitar JavaScript para usar esta aplicación.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

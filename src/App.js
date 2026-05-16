@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
-import Contact from "./components/Contact";      // ← AGREGADA
-import QuoteForm from "./components/QuoteForm";  // ← AGREGADA
+import Contact from "./components/Contact";
+import QuoteForm from "./components/QuoteForm";
 import WhatsAppButton from "./components/WhatsAppButton";
 import { Toaster } from "sonner";
 import "./App.css";
@@ -22,6 +23,7 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
+    <HelmetProvider>
     <Router>
       <Toaster
         position="top-right"
@@ -47,6 +49,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
+    </HelmetProvider>
   );
 }
 

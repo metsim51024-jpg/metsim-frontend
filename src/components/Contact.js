@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { toast } from "sonner";
 import { Send, Phone, Mail, MapPin } from "lucide-react";
@@ -109,6 +110,15 @@ export default function Contact() {
   ];
 
   return (
+    <>
+      <Helmet>
+        <title>Contacto | METSIM Solutions Paraguay</title>
+        <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Llame al +595 972 834-336 o escriba por WhatsApp para consultas de ingeniería y tecnología." />
+        <link rel="canonical" href="https://www.metsim.com.py/contacto" />
+        <meta property="og:url" content="https://www.metsim.com.py/contacto" />
+        <meta property="og:title" content="Contacto | METSIM Solutions" />
+        <meta property="og:description" content="Contáctenos para consultas de ingeniería en Paraguay." />
+      </Helmet>
     <section id="contacto" className="contact">
       <div className="contact-container">
         {/* Left: Contact Info */}
@@ -229,5 +239,6 @@ export default function Contact() {
         )}
       </div>
     </section>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 // src/components/QuoteForm.js
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { toast } from "sonner";
 import { FileText, CheckCircle, Upload } from "lucide-react";
@@ -144,6 +145,15 @@ const QuoteForm = () => {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Solicitar Cotización | METSIM Solutions Paraguay</title>
+        <meta name="description" content="Solicite su cotización gratuita en METSIM Solutions. Proyectos de ingeniería, automatización y tecnología en Paraguay. Respuesta en menos de 24 horas." />
+        <link rel="canonical" href="https://www.metsim.com.py/cotizacion" />
+        <meta property="og:url" content="https://www.metsim.com.py/cotizacion" />
+        <meta property="og:title" content="Solicitar Cotización | METSIM Solutions" />
+        <meta property="og:description" content="Solicite cotización de ingeniería gratuita en Paraguay." />
+      </Helmet>
     <section id="quotes" className="quote-section">
       <div className="quote-container">
         {/* FORMULARIO */}
@@ -305,6 +315,7 @@ const QuoteForm = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import ProductPage from "./pages/ProductPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Contact from "./components/Contact";
@@ -34,6 +36,8 @@ function App() {
       <WhatsAppButton />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/productos" element={<Catalog />} />
+        <Route path="/productos/:slug" element={<ProductPage />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/cotizacion" element={<QuoteForm />} />
         <Route path="/admin/login" element={<AdminLogin />} />

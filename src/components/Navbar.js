@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import "./Navbar.css";
 
@@ -17,6 +18,7 @@ function Navbar() {
     { label: "NOSOTROS", href: "#nosotros" },
     { label: "SERVICIOS", href: "#servicios" },
     { label: "PROYECTOS", href: "#proyectos" },
+    { label: "PRODUCTOS", href: "/productos", isRoute: true },
     { label: "CONTACTO", href: "#contacto" }
   ];
 
@@ -39,11 +41,17 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="navbar-menu desktop-only">
-          {navItems.map((item) => (
-            <a key={item.label} href={item.href} className="nav-link">
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) =>
+            item.isRoute ? (
+              <Link key={item.label} to={item.href} className="nav-link nav-link-highlight">
+                {item.label}
+              </Link>
+            ) : (
+              <a key={item.label} href={item.href} className="nav-link">
+                {item.label}
+              </a>
+            )
+          )}
         </div>
 
         {/* CTA Button */}
@@ -66,16 +74,27 @@ function Navbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="mobile-menu active">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="mobile-nav-link"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) =>
+              item.isRoute ? (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="mobile-nav-link"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="mobile-nav-link"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </a>
+              )
+            )}
             <a href="#quotes" className="mobile-cta-button">
               <ShoppingCart size={18} />
               COTIZAR

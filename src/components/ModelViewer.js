@@ -1,14 +1,31 @@
 // src/components/ModelViewer.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./ModelViewer.css";
 
 function ModelViewer({ models = [], alt, poster, pdfSrc }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [viewMode, setViewMode] = useState("3d"); // "3d" | "pdf"
+  const [loading, setLoading] = useState(true);
+  const viewerRef = useRef(null);
 
   useEffect(() => {
     import("@google/model-viewer");
   }, []);
+
+  // Reset loading state and wire up load/error events via ref
+  useEffect(() => {
+    setLoading(true);
+    const el = viewerRef.current;
+    if (!el) return;
+    const onLoad = () => setLoading(false);
+    const onError = () => setLoading(false);
+    el.addEventListener("load", onLoad);
+    el.addEventListener("error", onError);
+    return () => {
+      el.removeEventListener("load", onLoad);
+      el.removeEventListener("error", onError);
+    };
+  }, [activeIndex]);
 
   const hasModels = models.length > 0;
   const hasPdf = Boolean(pdfSrc);
@@ -68,17 +85,31 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
       {/* Content area */}
       {viewMode === "3d" && currentModel && (
         <div className="model-viewer-wrapper">
+          {loading && (
+            <div className="mv-loading">
+              <div className="mv-spinner" />
+              <span>Cargando modelo 3D…</span>
+            </div>
+          )}
           <model-viewer
+            ref={viewerRef}
             src={currentModel.src}
             alt={alt || currentModel.label}
-            poster={poster}
             auto-rotate
             camera-controls
-            shadow-intensity="1"
-            shadow-softness="0.5"
-            environment-image="neutral"
-            exposure="1"
-            style={{ width: "100%", height: "500px", background: "transparent" }}
+            shadow-intensity="0.8"
+            shadow-softness="1"
+            environment-image="legacy"
+            skybox-image="legacy"
+            exposure="2.5"
+            tone-mapping="commerce"
+            style={{
+              width: "100%",
+              height: "500px",
+              background: "#0a0e1a",
+              opacity: loading ? 0 : 1,
+              transition: "opacity 0.4s ease",
+            }}
           />
           <div className="model-controls-hint">
             <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>

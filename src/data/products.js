@@ -5,25 +5,27 @@ export const products = [
     id: "columnas-metalicas",
     name: "Columnas Metálicas",
     shortDescription:
-      "Fabricación de columnas metálicas para alumbrado público, señalización vial y aplicaciones industriales según normas internacionales.",
+      "Columnas metálicas telescópicas y octogonales de 7 a 16 metros para alumbrado público, señalización vial y aplicaciones industriales según normas internacionales.",
     description:
-      "METSIM Solutions fabrica columnas metálicas de alta resistencia diseñadas para alumbrado público, señalización vial y soporte industrial. Cada columna es calculada estructuralmente con software de simulación avanzado (SolidWorks), garantizando cumplimiento con normas IEC y locales. Ofrecemos columnas troncocónicas, cilíndricas y de diseño personalizado en acero galvanizado o pintado.",
+      "METSIM Solutions fabrica columnas metálicas telescópicas y octogonales de 7, 9, 10, 12, 14 y 16 metros de altura, diseñadas para alumbrado público, señalización vial y soporte industrial. Cada columna es calculada estructuralmente con software de simulación avanzado (SolidWorks), garantizando cumplimiento con normas IEC, ITAIPÚ y ANDE. Ofrecemos columnas troncocónicas, cilíndricas y octogonales en acero galvanizado o con recubrimiento epoxi.",
     category: "Alumbrado y Señalización",
     badge: "Norma IEC",
     icon: "🏗️",
     keywords: [
       "columnas metálicas Paraguay",
       "postes metálicos Asunción",
+      "columnas telescópicas Paraguay",
+      "columnas octogonales Paraguay",
       "columnas para alumbrado público",
       "columnas de acero Paraguay",
-      "postes de iluminación",
+      "postes de iluminación 7 9 10 12 14 16 metros",
     ],
     metaDescription:
-      "Fabricación de columnas metálicas en Paraguay. METSIM Solutions produce columnas para alumbrado público, señalización y uso industrial con cálculo estructural y normas IEC.",
+      "Fabricación de columnas metálicas telescópicas y octogonales de 7 a 16m en Paraguay. METSIM Solutions produce columnas para alumbrado público, señalización y uso industrial con cálculo estructural y normas IEC.",
     specs: [
       { label: "Material", value: "Acero SAE 1020 / Acero galvanizado" },
-      { label: "Altura disponible", value: "4m – 16m" },
-      { label: "Tipo", value: "Troncocónica, cilíndrica, poligonal" },
+      { label: "Altura disponible", value: "7m, 9m, 10m, 12m, 14m, 16m" },
+      { label: "Tipo", value: "Telescópica / Octogonal / Troncocónica" },
       { label: "Acabado", value: "Galvanizado en caliente / Pintura epoxi" },
       { label: "Norma", value: "IEC 60598 / ITAIPÚ / ANDE" },
       { label: "Cálculo", value: "Simulación estructural SolidWorks" },
@@ -35,7 +37,9 @@ export const products = [
       "Estadios y espacios deportivos",
       "Redes eléctricas de distribución",
     ],
-    modelSrc: null,
+    models: [
+      { src: "/models/columna-metalica.glb", label: "Columna Metálica" },
+    ],
     modelPoster: null,
   },
   {
@@ -59,7 +63,7 @@ export const products = [
       "Brazos de alumbrado público en Paraguay. METSIM fabrica brazos metálicos para postes de luz según norma, en simple y doble brazo, con todos los accesorios de montaje incluidos.",
     specs: [
       { label: "Material", value: "Acero estructural / Aluminio" },
-      { label: "Longitud", value: "0.5m – 3m (personalizable)" },
+      { label: "Longitud", value: "2m – 3m (personalizable)" },
       { label: "Tipo", value: "Simple brazo / Doble brazo / Ornamental" },
       { label: "Acabado", value: "Galvanizado / Pintura polvo" },
       { label: "Compatibilidad", value: "Luminarias LED, sodio, vapor de mercurio" },
@@ -72,16 +76,20 @@ export const products = [
       "Proyectos MOPC / Municipalidades",
       "Zonas industriales y logísticas",
     ],
-    modelSrc: null,
+    models: [
+      { src: "/models/brazo-alumbrado - 2m.glb", label: "Brazo 2m" },
+      { src: "/models/brazo-alumbrado - 3m.glb", label: "Brazo 3m" },
+      { src: "/models/Petalo de 3 hojas.glb", label: "Pétalo 3 Hojas" },
+    ],
     modelPoster: null,
   },
   {
     id: "estructuras-metalicas",
     name: "Estructuras Metálicas",
     shortDescription:
-      "Diseño y fabricación de estructuras metálicas industriales: galpones, naves industriales, marcos y cobertizos.",
+      "Diseño y fabricación de estructuras metálicas industriales: galpones, naves industriales, entrepisos metálicos y cobertizos.",
     description:
-      "METSIM diseña y fabrica estructuras metálicas para la industria de la construcción en Paraguay. Desde galpones industriales hasta edificios metálicos completos, cada proyecto incluye cálculo estructural, planos de fabricación y montaje. Trabajamos con acero A36 y A572, con uniones soldadas y bulonadas según norma AISC.",
+      "METSIM diseña y fabrica estructuras metálicas para la industria de la construcción en Paraguay. Desde galpones industriales hasta edificios metálicos completos y entrepisos estructurales, cada proyecto incluye cálculo estructural, planos de fabricación y montaje. Trabajamos con acero A36 y A572, con uniones soldadas y bulonadas según norma AISC.",
     category: "Construcción Industrial",
     badge: "Norma AISC",
     icon: "🏭",
@@ -91,9 +99,10 @@ export const products = [
       "naves industriales acero",
       "construcción metálica Paraguay",
       "galpones prefabricados Paraguay",
+      "entrepiso metálico Paraguay",
     ],
     metaDescription:
-      "Estructuras metálicas en Paraguay. METSIM diseña y fabrica galpones, naves industriales y estructuras de acero con cálculo estructural, planos y montaje incluido.",
+      "Estructuras metálicas en Paraguay. METSIM diseña y fabrica galpones, naves industriales, entrepisos y estructuras de acero con cálculo estructural, planos y montaje incluido.",
     specs: [
       { label: "Material", value: "Acero A36 / A572 Gr50" },
       { label: "Norma de diseño", value: "AISC 360 / CIRSOC" },
@@ -105,11 +114,15 @@ export const products = [
     applications: [
       "Galpones industriales y logísticos",
       "Naves de producción y almacenaje",
+      "Entrepisos metálicos estructurales",
       "Cobertizos y estacionamientos",
       "Estructuras para agroindustria",
       "Edificios comerciales e institucionales",
     ],
-    modelSrc: null,
+    models: [
+      { src: "/models/Nave-Industrial.glb", label: "Nave Industrial" },
+      { src: "/models/estructura-metalica entrepiso.glb", label: "Entrepiso Metálico" },
+    ],
     modelPoster: null,
   },
   {
@@ -146,7 +159,7 @@ export const products = [
       "Industria alimentaria y farmacéutica",
       "Plantas de tratamiento de agua",
     ],
-    modelSrc: null,
+    models: [],
     modelPoster: null,
   },
   {
@@ -183,7 +196,89 @@ export const products = [
       "Tratamiento de biomasa agrícola",
       "Industria cementera y cerámica",
     ],
-    modelSrc: null,
+    models: [
+      { src: "/models/tamiz-rotativo.glb", label: "Tamiz Rotativo" },
+    ],
+    modelPoster: null,
+  },
+  {
+    id: "soporte-panel-solar",
+    name: "Soporte de Panel Solar y Batería",
+    shortDescription:
+      "Estructuras metálicas para soporte de paneles solares y baterías, diseñadas para instalaciones de iluminación autónoma y sistemas de energía solar.",
+    description:
+      "METSIM fabrica soportes metálicos estructurales para paneles solares y baterías, utilizados en sistemas de iluminación solar autónoma, telecomunicaciones y generación de energía off-grid. Diseñados con acero galvanizado de alta resistencia y calculados para soportar cargas de viento según normativa local. Compatible con paneles solares de hasta 400W y baterías de ciclo profundo.",
+    category: "Energía Solar",
+    badge: "Sistema autónomo",
+    icon: "☀️",
+    keywords: [
+      "soporte panel solar Paraguay",
+      "estructura panel solar metálica",
+      "soporte batería solar Paraguay",
+      "iluminación solar Paraguay",
+      "energía solar off-grid Paraguay",
+    ],
+    metaDescription:
+      "Soportes metálicos para paneles solares y baterías en Paraguay. METSIM fabrica estructuras galvanizadas para sistemas de iluminación solar autónoma y energía off-grid.",
+    specs: [
+      { label: "Material", value: "Acero galvanizado en caliente" },
+      { label: "Compatibilidad", value: "Paneles hasta 400W / Baterías ciclo profundo" },
+      { label: "Acabado", value: "Galvanizado / Pintura anticorrosiva" },
+      { label: "Inclinación panel", value: "Ajustable según latitud" },
+      { label: "Cálculo", value: "Estructural para carga de viento" },
+      { label: "Entrega", value: "Incluye accesorios de montaje" },
+    ],
+    applications: [
+      "Iluminación solar autónoma en rutas",
+      "Sistemas de telecomunicaciones off-grid",
+      "Alumbrado de zonas rurales sin red eléctrica",
+      "Cámaras de seguridad solar",
+      "Señalización vial solar",
+    ],
+    models: [
+      { src: "/models/Soporte de panel solar+Bateria.glb", label: "Soporte Panel Solar" },
+    ],
+    modelPoster: null,
+  },
+  {
+    id: "flotador-aire-disuelto",
+    name: "Flotador por Aire Disuelto (DAF)",
+    shortDescription:
+      "Sistema DAF para tratamiento de aguas residuales industriales con floculador tubular y mezclador estático integrados.",
+    description:
+      "El Flotador por Aire Disuelto (DAF) de METSIM es un sistema de tratamiento de aguas residuales industriales que separa sólidos suspendidos, grasas y aceites mediante microburbujas de aire. Fabricado en acero al carbono A36 con recubrimiento en pintura epoxi de alta resistencia química. El sistema integra un floculador tubular y un mezclador estático para optimizar el proceso de coagulación-floculación previo a la flotación. Incluye sistema de tamizado previo en acero inoxidable AISI 304.",
+    category: "Tratamiento de Aguas",
+    badge: "Sistema integrado DAF",
+    icon: "💧",
+    keywords: [
+      "flotador aire disuelto Paraguay",
+      "DAF tratamiento aguas residuales",
+      "sistema DAF Paraguay",
+      "tratamiento aguas industriales Paraguay",
+      "flotación aire disuelto",
+      "floculador tubular Paraguay",
+    ],
+    metaDescription:
+      "Sistema Flotador por Aire Disuelto (DAF) en Paraguay. METSIM fabrica equipos DAF para tratamiento de aguas residuales industriales con floculador tubular y mezclador estático integrado.",
+    specs: [
+      { label: "Material principal", value: "Acero al carbono A36" },
+      { label: "Recubrimiento", value: "Pintura epoxi alta resistencia química" },
+      { label: "Sistema de bombeo", value: "Bombas sumergibles para aguas residuales" },
+      { label: "Sistema de aireación", value: "Compresor de aire disuelto" },
+      { label: "Pre-tratamiento", value: "Tamiz en Acero Inoxidable AISI 304, malla 3mm" },
+      { label: "Accesorios incluidos", value: "Floculador tubular + Mezclador estático" },
+    ],
+    applications: [
+      "Tratamiento de efluentes industriales",
+      "Plantas de tratamiento de agua potable",
+      "Industria alimentaria y frigorífica",
+      "Industria textil y papelera",
+      "Efluentes con alta carga de grasas y aceites",
+    ],
+    models: [
+      { src: "/models/flotador por aire disuelto.glb", label: "Vista 3D" },
+    ],
+    pdfSrc: "/docs/DAF PLANOS_VISTAS_REV03.pdf",
     modelPoster: null,
   },
 ];

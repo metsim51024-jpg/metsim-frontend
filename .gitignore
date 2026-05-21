@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Large GLB files (host on CDN)
+public/models/flotador*

@@ -1,15 +1,20 @@
 // src/components/ModelViewer.js
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./ModelViewer.css";
 
-function ModelViewer({ src, alt, poster }) {
-  const viewerRef = useRef(null);
+function ModelViewer({ models = [], alt, poster, pdfSrc }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [viewMode, setViewMode] = useState("3d"); // "3d" | "pdf"
 
   useEffect(() => {
     import("@google/model-viewer");
   }, []);
 
-  if (!src) {
+  const hasModels = models.length > 0;
+  const hasPdf = Boolean(pdfSrc);
+  const currentModel = hasModels ? models[activeIndex] : null;
+
+  if (!hasModels && !hasPdf) {
     return (
       <div className="model-placeholder">
         <div className="model-placeholder-inner">
@@ -27,37 +32,97 @@ function ModelViewer({ src, alt, poster }) {
           </div>
           <h3 className="placeholder-title">Modelo 3D</h3>
           <p className="placeholder-sub">Disponible próximamente</p>
-          <div className="placeholder-steps">
-            <p className="placeholder-steps-title">Para cargar tu modelo SolidWorks:</p>
-            <ol>
-              <li>Exportar desde SolidWorks → <strong>Archivo → Guardar como → GLTF/GLB</strong></li>
-              <li>Subir el archivo <code>.glb</code> a <code>/public/models/</code></li>
-              <li>Actualizar <code>modelSrc</code> en <code>src/data/products.js</code></li>
-            </ol>
-          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="model-viewer-wrapper">
-      <model-viewer
-        ref={viewerRef}
-        src={src}
-        alt={alt}
-        poster={poster}
-        auto-rotate
-        camera-controls
-        shadow-intensity="1"
-        shadow-softness="0.5"
-        environment-image="neutral"
-        exposure="1"
-        style={{ width: "100%", height: "500px", background: "transparent" }}
-      />
-      <div className="model-controls-hint">
-        <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>
+    <div className="mv-container">
+      {/* Top bar: model tabs + PDF toggle */}
+      <div className="mv-topbar">
+        <div className="mv-tabs">
+          {hasModels && models.map((m, i) => (
+            <button
+              key={i}
+              className={`mv-tab ${viewMode === "3d" && activeIndex === i ? "mv-tab-active" : ""}`}
+              onClick={() => { setActiveIndex(i); setViewMode("3d"); }}
+            >
+              <span className="mv-tab-icon">⬡</span>
+              {m.label}
+            </button>
+          ))}
+          {hasPdf && (
+            <button
+              className={`mv-tab mv-tab-pdf ${viewMode === "pdf" ? "mv-tab-active" : ""}`}
+              onClick={() => setViewMode("pdf")}
+              title="Ver planos técnicos"
+            >
+              <span className="mv-tab-icon">📄</span>
+              Planos Técnicos
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Content area */}
+      {viewMode === "3d" && currentModel && (
+        <div className="model-viewer-wrapper">
+          <model-viewer
+            src={currentModel.src}
+            alt={alt || currentModel.label}
+            poster={poster}
+            auto-rotate
+            camera-controls
+            shadow-intensity="1"
+            shadow-softness="0.5"
+            environment-image="neutral"
+            exposure="1"
+            style={{ width: "100%", height: "500px", background: "transparent" }}
+          />
+          <div className="model-controls-hint">
+            <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>
+          </div>
+          {models.length > 1 && (
+            <div className="mv-nav-arrows">
+              <button
+                className="mv-arrow"
+                onClick={() => setActiveIndex((activeIndex - 1 + models.length) % models.length)}
+                title="Modelo anterior"
+              >
+                &#8592;
+              </button>
+              <span className="mv-nav-label">{activeIndex + 1} / {models.length}</span>
+              <button
+                className="mv-arrow"
+                onClick={() => setActiveIndex((activeIndex + 1) % models.length)}
+                title="Modelo siguiente"
+              >
+                &#8594;
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {viewMode === "pdf" && hasPdf && (
+        <div className="mv-pdf-wrapper">
+          <div className="mv-pdf-notice">
+            <span>📄 Planos técnicos — solo visualización</span>
+            {hasModels && (
+              <button className="mv-back-3d" onClick={() => setViewMode("3d")}>
+                ← Volver al 3D
+              </button>
+            )}
+          </div>
+          <iframe
+            src={`${pdfSrc}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+            title="Planos técnicos DAF"
+            className="mv-pdf-frame"
+            sandbox="allow-scripts allow-same-origin"
+          />
+        </div>
+      )}
     </div>
   );
 }

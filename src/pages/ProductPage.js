@@ -89,11 +89,14 @@ const ProductPage = () => {
         <div className="product-body">
           {/* Visor 3D */}
           <section className="product-3d-section">
-            <h2 className="section-heading">Modelo 3D Interactivo</h2>
+            <h2 className="section-heading">
+              {product.pdfSrc ? "Modelo 3D y Planos Técnicos" : "Modelo 3D Interactivo"}
+            </h2>
             <ModelViewer
-              src={product.modelSrc}
+              models={product.models || []}
               alt={`Modelo 3D de ${product.name}`}
               poster={product.modelPoster}
+              pdfSrc={product.pdfSrc}
             />
           </section>
 

@@ -151,17 +151,27 @@ const ProductPage = () => {
             </section>
           </div>
 
-          {/* Galería de fotos */}
-          {product.images && product.images.length > 0 && (
-            <section className="product-gallery-section">
-              <h2 className="section-heading">Proyectos Realizados</h2>
-              <div className="product-gallery">
-                {product.images.map((img, i) => (
-                  <figure key={i} className="gallery-item">
-                    <img src={img.src} alt={img.caption} loading="lazy" />
-                    {img.caption && <figcaption>{img.caption}</figcaption>}
-                  </figure>
-                ))}
+          {/* Software de cálculo estructural */}
+          {product.softwareImage && (
+            <section className="product-software-section">
+              <div className="software-callout">
+                <div className="software-callout-text">
+                  <span className="software-tag">SOFTWARE ESPECIALIZADO</span>
+                  <h3>Diseño y cálculo estructural con SolidWorks</h3>
+                  <p>Cada estructura es modelada y simulada en SolidWorks antes de su fabricación, garantizando resistencia, precisión dimensional y cumplimiento de normas AISC.</p>
+                  <ul className="software-features">
+                    <li>✓ Simulación de cargas estáticas y dinámicas</li>
+                    <li>✓ Análisis de tensiones y deformaciones</li>
+                    <li>✓ Planos de fabricación generados desde el modelo 3D</li>
+                  </ul>
+                </div>
+                <div className="software-callout-image">
+                  <img
+                    src={product.softwareImage.src}
+                    alt={product.softwareImage.alt}
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </section>
           )}

@@ -123,12 +123,10 @@ export const products = [
       { src: "/models/Nave-Industrial.glb", label: "Nave Industrial" },
       { src: "/models/estructura-metalica entrepiso.glb", label: "Entrepiso Metálico" },
     ],
-    images: [
-      {
-        src: "https://res.cloudinary.com/dk6wclcew/image/upload/v1775394343/metsim/quotes/g0f9ki8ouxpvfg7ygr4z.png",
-        caption: "Estructura metálica entrepiso — proyecto realizado por METSIM",
-      },
-    ],
+    softwareImage: {
+      src: "https://res.cloudinary.com/dk6wclcew/image/upload/v1775394343/metsim/quotes/g0f9ki8ouxpvfg7ygr4z.png",
+      alt: "Cálculo estructural con SolidWorks — METSIM Solutions",
+    },
     modelPoster: null,
   },
   {

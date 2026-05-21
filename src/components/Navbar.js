@@ -1,38 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import "./Navbar.css";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      setScrolled(window.scrollY > 50);
-    });
+    const handler = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
   const navItems = [
-    { label: "INICIO", href: "#inicio" },
-    { label: "NOSOTROS", href: "#nosotros" },
-    { label: "SERVICIOS", href: "#servicios" },
-    { label: "PROYECTOS", href: "#proyectos" },
-    { label: "PRODUCTOS", href: "/productos", isRoute: true },
-    { label: "CONTACTO", href: "#contacto" }
+    { label: "INICIO",    hash: "inicio" },
+    { label: "NOSOTROS",  hash: "nosotros" },
+    { label: "SERVICIOS", hash: "servicios" },
+    { label: "PROYECTOS", hash: "proyectos" },
+    { label: "PRODUCTOS", route: "/productos" },
+    { label: "CONTACTO",  hash: "contacto" },
   ];
+
+  const handleHashClick = (e, hash) => {
+    e.preventDefault();
+    setIsOpen(false);
+    if (isHome) {
+      const el = document.getElementById(hash);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/");
+      // Wait for home page to mount, then scroll
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+  };
+
+  const handleCotizarClick = (e) => {
+    e.preventDefault();
+    setIsOpen(false);
+    if (isHome) {
+      const el = document.getElementById("quotes");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/cotizacion");
+    }
+  };
 
   return (
     <nav className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
       <div className="navbar-container">
-        {/* Logo - ACTUALIZADO */}
-        <a href="#inicio" className="navbar-logo">
+        {/* Logo */}
+        <a
+          href="/#inicio"
+          className="navbar-logo"
+          onClick={(e) => handleHashClick(e, "inicio")}
+        >
           <img
             src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
             alt="METSIM Logo"
             className="logo-img"
             onError={(e) => {
-              console.error("Error cargando logo:", e);
               e.target.style.display = "none";
             }}
           />
@@ -42,12 +76,21 @@ function Navbar() {
         {/* Desktop Menu */}
         <div className="navbar-menu desktop-only">
           {navItems.map((item) =>
-            item.isRoute ? (
-              <Link key={item.label} to={item.href} className="nav-link nav-link-highlight">
+            item.route ? (
+              <Link
+                key={item.label}
+                to={item.route}
+                className="nav-link nav-link-highlight"
+              >
                 {item.label}
               </Link>
             ) : (
-              <a key={item.label} href={item.href} className="nav-link">
+              <a
+                key={item.label}
+                href={`/#${item.hash}`}
+                className="nav-link"
+                onClick={(e) => handleHashClick(e, item.hash)}
+              >
                 {item.label}
               </a>
             )
@@ -56,7 +99,7 @@ function Navbar() {
 
         {/* CTA Button */}
         <div className="navbar-cta desktop-only">
-          <a href="#quotes" className="cta-button">
+          <a href="#quotes" className="cta-button" onClick={handleCotizarClick}>
             <ShoppingCart size={18} />
             COTIZAR
           </a>
@@ -75,10 +118,10 @@ function Navbar() {
         {isOpen && (
           <div className="mobile-menu active">
             {navItems.map((item) =>
-              item.isRoute ? (
+              item.route ? (
                 <Link
                   key={item.label}
-                  to={item.href}
+                  to={item.route}
                   className="mobile-nav-link"
                   onClick={() => setIsOpen(false)}
                 >
@@ -87,15 +130,15 @@ function Navbar() {
               ) : (
                 <a
                   key={item.label}
-                  href={item.href}
+                  href={`/#${item.hash}`}
                   className="mobile-nav-link"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => handleHashClick(e, item.hash)}
                 >
                   {item.label}
                 </a>
               )
             )}
-            <a href="#quotes" className="mobile-cta-button">
+            <a href="#quotes" className="mobile-cta-button" onClick={handleCotizarClick}>
               <ShoppingCart size={18} />
               COTIZAR
             </a>

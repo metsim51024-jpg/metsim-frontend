@@ -26,19 +26,22 @@ function Navbar() {
     { label: "CONTACTO",  hash: "contacto" },
   ];
 
+  const scrollToHash = (hash) => {
+    const el = document.getElementById(hash);
+    if (!el) return;
+    const offset = 72; // navbar height
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   const handleHashClick = (e, hash) => {
     e.preventDefault();
     setIsOpen(false);
     if (isHome) {
-      const el = document.getElementById(hash);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      scrollToHash(hash);
     } else {
       navigate("/");
-      // Wait for home page to mount, then scroll
-      setTimeout(() => {
-        const el = document.getElementById(hash);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 300);
+      setTimeout(() => scrollToHash(hash), 320);
     }
   };
 

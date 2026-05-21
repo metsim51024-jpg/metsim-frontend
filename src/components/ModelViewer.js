@@ -4,7 +4,7 @@ import "./ModelViewer.css";
 
 function ModelViewer({ models = [], alt, poster, pdfSrc }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [viewMode, setViewMode] = useState("3d"); // "3d" | "pdf"
+  const [viewMode, setViewMode] = useState("3d");
   const [loading, setLoading] = useState(true);
   const viewerRef = useRef(null);
 
@@ -12,24 +12,30 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
     import("@google/model-viewer");
   }, []);
 
-  // Reset loading state and wire up load/error events via ref
   useEffect(() => {
     setLoading(true);
-    const el = viewerRef.current;
-    if (!el) return;
-    const onLoad = () => setLoading(false);
-    const onError = () => setLoading(false);
-    el.addEventListener("load", onLoad);
-    el.addEventListener("error", onError);
-    return () => {
-      el.removeEventListener("load", onLoad);
-      el.removeEventListener("error", onError);
-    };
+    // Give model-viewer time to register as custom element, then attach listeners
+    const timer = setTimeout(() => {
+      const el = viewerRef.current;
+      if (!el) { setLoading(false); return; }
+      const onLoad  = () => setLoading(false);
+      const onError = () => setLoading(false);
+      el.addEventListener("load",  onLoad);
+      el.addEventListener("error", onError);
+      // Safety fallback: hide spinner after 15s regardless
+      const fallback = setTimeout(() => setLoading(false), 15000);
+      return () => {
+        el.removeEventListener("load",  onLoad);
+        el.removeEventListener("error", onError);
+        clearTimeout(fallback);
+      };
+    }, 100);
+    return () => clearTimeout(timer);
   }, [activeIndex]);
 
   const hasModels = models.length > 0;
-  const hasPdf = Boolean(pdfSrc);
-  const currentModel = hasModels ? models[activeIndex] : null;
+  const hasPdf    = Boolean(pdfSrc);
+  const current   = hasModels ? models[activeIndex] : null;
 
   if (!hasModels && !hasPdf) {
     return (
@@ -56,7 +62,7 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
 
   return (
     <div className="mv-container">
-      {/* Top bar: model tabs + PDF toggle */}
+      {/* Tabs */}
       <div className="mv-topbar">
         <div className="mv-tabs">
           {hasModels && models.map((m, i) => (
@@ -73,7 +79,6 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
             <button
               className={`mv-tab mv-tab-pdf ${viewMode === "pdf" ? "mv-tab-active" : ""}`}
               onClick={() => setViewMode("pdf")}
-              title="Ver planos técnicos"
             >
               <span className="mv-tab-icon">📄</span>
               Planos Técnicos
@@ -82,9 +87,10 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
         </div>
       </div>
 
-      {/* Content area */}
-      {viewMode === "3d" && currentModel && (
+      {/* 3D viewer */}
+      {viewMode === "3d" && current && (
         <div className="model-viewer-wrapper">
+          {/* Spinner as overlay — model-viewer always visible underneath */}
           {loading && (
             <div className="mv-loading">
               <div className="mv-spinner" />
@@ -93,8 +99,8 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
           )}
           <model-viewer
             ref={viewerRef}
-            src={currentModel.src}
-            alt={alt || currentModel.label}
+            src={current.src}
+            alt={alt || current.label}
             auto-rotate
             camera-controls
             shadow-intensity="0.8"
@@ -103,52 +109,33 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
             skybox-image="legacy"
             exposure="2.5"
             tone-mapping="commerce"
-            style={{
-              width: "100%",
-              height: "500px",
-              background: "#0a0e1a",
-              opacity: loading ? 0 : 1,
-              transition: "opacity 0.4s ease",
-            }}
+            style={{ width: "100%", height: "500px", background: "#0a0e1a" }}
           />
           <div className="model-controls-hint">
             <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>
           </div>
           {models.length > 1 && (
             <div className="mv-nav-arrows">
-              <button
-                className="mv-arrow"
-                onClick={() => setActiveIndex((activeIndex - 1 + models.length) % models.length)}
-                title="Modelo anterior"
-              >
-                &#8592;
-              </button>
+              <button className="mv-arrow" onClick={() => setActiveIndex((activeIndex - 1 + models.length) % models.length)}>&#8592;</button>
               <span className="mv-nav-label">{activeIndex + 1} / {models.length}</span>
-              <button
-                className="mv-arrow"
-                onClick={() => setActiveIndex((activeIndex + 1) % models.length)}
-                title="Modelo siguiente"
-              >
-                &#8594;
-              </button>
+              <button className="mv-arrow" onClick={() => setActiveIndex((activeIndex + 1) % models.length)}>&#8594;</button>
             </div>
           )}
         </div>
       )}
 
+      {/* PDF viewer */}
       {viewMode === "pdf" && hasPdf && (
         <div className="mv-pdf-wrapper">
           <div className="mv-pdf-notice">
             <span>📄 Planos técnicos — solo visualización</span>
             {hasModels && (
-              <button className="mv-back-3d" onClick={() => setViewMode("3d")}>
-                ← Volver al 3D
-              </button>
+              <button className="mv-back-3d" onClick={() => setViewMode("3d")}>← Volver al 3D</button>
             )}
           </div>
           <iframe
             src={`${pdfSrc}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-            title="Planos técnicos DAF"
+            title="Planos técnicos"
             className="mv-pdf-frame"
             sandbox="allow-scripts allow-same-origin"
           />

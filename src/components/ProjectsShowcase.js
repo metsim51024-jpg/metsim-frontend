@@ -103,14 +103,17 @@ function ProjectsShowcase() {
             return (
               <div key={project.id} className="project-card">
                 <div className="project-image-wrapper">
-                  <img
-                    src={currentImage}
-                    alt={project.title}
-                    className="project-image"
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300/1a1f3a/22d3ee?text=" + encodeURIComponent(project.title);
-                    }}
-                  />
+                  {project.images.map((img, imgIdx) => (
+                    <img
+                      key={imgIdx}
+                      src={img}
+                      alt={project.title}
+                      className={`project-image${imgIdx === currentImageIdx ? " active" : ""}`}
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/400x300/1a1f3a/22d3ee?text=" + encodeURIComponent(project.title);
+                      }}
+                    />
+                  ))}
 
                   {/* Navigation Buttons - SOLO CLICK */}
                   {project.images.length > 1 && (

@@ -77,9 +77,9 @@ export const products = [
       "Zonas industriales y logísticas",
     ],
     models: [
-      { src: "/models/brazo-alumbrado - 2m.glb", label: "Brazo 2m" },
-      { src: "/models/brazo-alumbrado - 3m.glb", label: "Brazo 3m" },
-      { src: "/models/Petalo de 3 hojas.glb", label: "Pétalo 3 Hojas" },
+      { src: "/models/brazo-alumbrado-2m.glb", label: "Brazo 2m" },
+      { src: "/models/brazo-alumbrado-3m.glb", label: "Brazo 3m" },
+      { src: "/models/petalo-3-hojas.glb", label: "Pétalo 3 Hojas" },
     ],
     modelPoster: null,
   },
@@ -120,8 +120,8 @@ export const products = [
       "Edificios comerciales e institucionales",
     ],
     models: [
-      { src: "/models/Nave-Industrial.glb", label: "Nave Industrial" },
-      { src: "/models/estructura-metalica entrepiso.glb", label: "Entrepiso Metálico" },
+      { src: "/models/nave-industrial.glb", label: "Nave Industrial" },
+      { src: "/models/estructura-metalica-entrepiso.glb", label: "Entrepiso Metálico" },
     ],
     softwareImage: {
       src: "https://res.cloudinary.com/dk6wclcew/image/upload/v1775394343/metsim/quotes/g0f9ki8ouxpvfg7ygr4z.png",
@@ -240,7 +240,7 @@ export const products = [
       "Señalización vial solar",
     ],
     models: [
-      { src: "/models/Soporte de panel solar+Bateria.glb", label: "Soporte Panel Solar" },
+      { src: "/models/soporte-panel-solar.glb", label: "Soporte Panel Solar" },
     ],
     modelPoster: null,
   },

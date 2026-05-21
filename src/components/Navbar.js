@@ -66,7 +66,7 @@ function Navbar() {
           onClick={(e) => handleHashClick(e, "inicio")}
         >
           <img
-            src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
+            src="/logo.png"
             alt="METSIM Logo"
             className="logo-img"
             onError={(e) => {

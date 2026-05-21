@@ -6,7 +6,9 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [viewMode, setViewMode] = useState("3d");
   const [loading, setLoading] = useState(true);
+  const [modelError, setModelError] = useState(false);
   const viewerRef = useRef(null);
+  const cleanupRef = useRef(null);
 
   useEffect(() => {
     import("@google/model-viewer");
@@ -14,23 +16,37 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
 
   useEffect(() => {
     setLoading(true);
-    // Give model-viewer time to register as custom element, then attach listeners
+    setModelError(false);
+
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+
     const timer = setTimeout(() => {
       const el = viewerRef.current;
       if (!el) { setLoading(false); return; }
-      const onLoad  = () => setLoading(false);
-      const onError = () => setLoading(false);
+
+      const onLoad  = () => { setLoading(false); setModelError(false); };
+      const onError = () => { setLoading(false); setModelError(true); };
       el.addEventListener("load",  onLoad);
       el.addEventListener("error", onError);
-      // Safety fallback: hide spinner after 15s regardless
       const fallback = setTimeout(() => setLoading(false), 15000);
-      return () => {
+
+      cleanupRef.current = () => {
         el.removeEventListener("load",  onLoad);
         el.removeEventListener("error", onError);
         clearTimeout(fallback);
       };
     }, 100);
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(timer);
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+      }
+    };
   }, [activeIndex]);
 
   const hasModels = models.length > 0;
@@ -90,11 +106,15 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
       {/* 3D viewer */}
       {viewMode === "3d" && current && (
         <div className="model-viewer-wrapper">
-          {/* Spinner as overlay — model-viewer always visible underneath */}
           {loading && (
             <div className="mv-loading">
               <div className="mv-spinner" />
               <span>Cargando modelo 3D…</span>
+            </div>
+          )}
+          {modelError && !loading && (
+            <div className="mv-error">
+              <span>⚠ No se pudo cargar el modelo 3D</span>
             </div>
           )}
           <model-viewer
@@ -103,12 +123,10 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
             alt={alt || current.label}
             auto-rotate
             camera-controls
-            shadow-intensity="0.8"
+            shadow-intensity="1"
             shadow-softness="1"
-            environment-image="legacy"
-            skybox-image="legacy"
-            exposure="2.5"
-            tone-mapping="commerce"
+            environment-image="neutral"
+            exposure="1.5"
             style={{ width: "100%", height: "500px", background: "#0a0e1a" }}
           />
           <div className="model-controls-hint">

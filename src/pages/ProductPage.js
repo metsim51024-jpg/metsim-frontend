@@ -151,6 +151,21 @@ const ProductPage = () => {
             </section>
           </div>
 
+          {/* Galería de fotos */}
+          {product.images && product.images.length > 0 && (
+            <section className="product-gallery-section">
+              <h2 className="section-heading">Proyectos Realizados</h2>
+              <div className="product-gallery">
+                {product.images.map((img, i) => (
+                  <figure key={i} className="gallery-item">
+                    <img src={img.src} alt={img.caption} loading="lazy" />
+                    {img.caption && <figcaption>{img.caption}</figcaption>}
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Keywords SEO ocultos semánticamente */}
           <section className="product-seo-section">
             <h2 className="section-heading">Preguntas frecuentes</h2>

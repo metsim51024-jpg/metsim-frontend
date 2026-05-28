@@ -14,11 +14,15 @@ const ProductPage = () => {
 
   if (!product) return <Navigate to="/productos" replace />;
 
+  const productImage = product.images?.[0] || "https://www.metsim.com.py/logo512.png";
+  const productUrl = `https://www.metsim.com.py/productos/${product.id}`;
+
   const schemaProduct = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     description: product.metaDescription,
+    image: productImage,
     brand: {
       "@type": "Brand",
       name: "METSIM Solutions",
@@ -30,7 +34,7 @@ const ProductPage = () => {
     },
     offers: {
       "@type": "Offer",
-      url: `https://www.metsim.com.py/productos/${product.id}`,
+      url: productUrl,
       priceCurrency: "PYG",
       availability: "https://schema.org/InStock",
       seller: {
@@ -40,17 +44,36 @@ const ProductPage = () => {
     },
   };
 
+  const schemaBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://www.metsim.com.py" },
+      { "@type": "ListItem", position: 2, name: "Productos", item: "https://www.metsim.com.py/productos" },
+      { "@type": "ListItem", position: 3, name: product.name, item: productUrl },
+    ],
+  };
+
   return (
     <div className="product-page">
       <Helmet>
         <title>{product.name} | METSIM Solutions Paraguay</title>
         <meta name="description" content={product.metaDescription} />
         <meta name="keywords" content={product.keywords.join(", ")} />
-        <link rel="canonical" href={`https://www.metsim.com.py/productos/${product.id}`} />
-        <meta property="og:url" content={`https://www.metsim.com.py/productos/${product.id}`} />
+        <link rel="canonical" href={productUrl} />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={productUrl} />
         <meta property="og:title" content={`${product.name} | METSIM Solutions Paraguay`} />
         <meta property="og:description" content={product.metaDescription} />
+        <meta property="og:image" content={productImage} />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="600" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.name} | METSIM Solutions Paraguay`} />
+        <meta name="twitter:description" content={product.metaDescription} />
+        <meta name="twitter:image" content={productImage} />
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
+        <script type="application/ld+json">{JSON.stringify(schemaBreadcrumb)}</script>
       </Helmet>
 
       <Navbar />

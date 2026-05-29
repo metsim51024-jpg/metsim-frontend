@@ -113,10 +113,17 @@ const ProductPage = () => {
           {/* Visor 3D */}
           <section className="product-3d-section">
             <h2 className="section-heading">
-              {product.pdfSrc ? "Modelo 3D y Planos Técnicos" : "Modelo 3D Interactivo"}
+              {product.pdfSrc
+                ? "Modelo 3D y Planos Técnicos"
+                : product.models?.length > 0 && product.images?.length > 0
+                ? "Modelo 3D y Trabajos Realizados"
+                : product.images?.length > 0 && !product.models?.length
+                ? "Trabajos Realizados"
+                : "Modelo 3D Interactivo"}
             </h2>
             <ModelViewer
               models={product.models || []}
+              images={product.images || []}
               alt={`Modelo 3D de ${product.name}`}
               poster={product.modelPoster}
               pdfSrc={product.pdfSrc}

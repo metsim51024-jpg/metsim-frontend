@@ -14,12 +14,12 @@ const Catalog = () => {
         <title>Catálogo de Productos Metálicos | METSIM Solutions Paraguay</title>
         <meta
           name="description"
-          content="Catálogo de productos metálicos de METSIM Solutions Paraguay: columnas metálicas, brazos de alumbrado, estructuras metálicas, tanques y tamices rotativos. Solicite cotización."
+          content="Catálogo de productos de METSIM Solutions Paraguay: columnas metálicas, brazos de alumbrado, estructuras, tanques, tamices rotativos, flotador DAF, floculador tubular y mezcladores estáticos. Solicite cotización."
         />
         <link rel="canonical" href="https://www.metsim.com.py/productos" />
         <meta property="og:url" content="https://www.metsim.com.py/productos" />
         <meta property="og:title" content="Catálogo de Productos Metálicos | METSIM Solutions Paraguay" />
-        <meta property="og:description" content="Columnas metálicas, brazos de alumbrado, estructuras, tanques y tamices rotativos fabricados en Paraguay." />
+        <meta property="og:description" content="Columnas metálicas, brazos de alumbrado, estructuras, tanques, tamices, flotador DAF, floculador tubular y mezcladores estáticos fabricados en Paraguay." />
       </Helmet>
 
       <Navbar />

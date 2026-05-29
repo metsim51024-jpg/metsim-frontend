@@ -285,6 +285,101 @@ export const products = [
     pdfSrc: "/docs/DAF PLANOS_VISTAS_REV03.pdf",
     modelPoster: null,
   },
+  {
+    id: "floculador-tubular",
+    name: "Floculador Tubular",
+    shortDescription:
+      "Reactor de floculación de flujo forzado para tratamiento de agua potable e industrial. Sin partes móviles, 3 puntos de inyección integrados. Fabricación e instalación a nivel nacional según requerimientos del cliente.",
+    description:
+      "El Floculador Tubular METSIM es un reactor de flujo forzado que homogeneiza y dosifica productos químicos —coagulantes, floculantes, reguladores de pH, oxidantes— directamente en la línea de tratamiento de agua. La energía de mezcla se genera por turbulencias forzadas en los giros, constricciones y ampliaciones de la tubería, sin necesidad de agitadores eléctricos ni partes móviles. Cada unidad integra 3 puntos de inyección para una dosificación química instantánea y precisa. Diseño compacto sin zonas muertas ni retromezclado, con excelentes propiedades de crecimiento uniforme del flóculo. Fabricamos e instalamos en todo el territorio nacional, desde modelos DN63 hasta DN250, adaptados al caudal y requerimientos específicos de cada proyecto. Tiempo de respuesta y cotización en 24 horas.",
+    category: "Tratamiento de Aguas",
+    badge: "Sin partes móviles",
+    icon: "🌀",
+    keywords: [
+      "floculador tubular Paraguay",
+      "floculación agua potable Paraguay",
+      "reactor floculación hidráulica",
+      "equipo tratamiento agua Paraguay",
+      "floculador PVC acero inoxidable",
+      "planta potabilizadora Paraguay",
+    ],
+    metaDescription:
+      "Floculador tubular en Paraguay. METSIM fabrica e instala reactores de floculación de flujo forzado para agua potable e industrial, desde DN63 hasta DN250, sin partes móviles. Cotizá en 24 horas.",
+    specs: [
+      { label: "Material tubería", value: "PVC PN10 resistente a químicos" },
+      { label: "Estructura soporte", value: "Galvanizado o acero inoxidable (según modelo)" },
+      { label: "Puntos de inyección", value: "3 integrados por unidad" },
+      { label: "Pérdida de presión", value: "< 0,2 bar" },
+      { label: "Partes móviles", value: "Ninguna — mantenimiento mínimo" },
+      { label: "Modelos METSIM", value: "DN63 (8–12 m³/h) a DN250 (180–250 m³/h)" },
+      { label: "Dimensiones", value: "Largo aprox. 3.200–4.000 mm (según modelo)" },
+      { label: "Fabricación", value: "A medida según caudal del proyecto" },
+    ],
+    applications: [
+      "Plantas de agua potable",
+      "Aguas industriales y efluentes",
+      "Pre-tratamiento para flotadores DAF",
+      "Pre-tratamiento para decantadores",
+      "Rotura de emulsiones por coagulación",
+      "Dosificación de oxidantes y desinfectantes",
+    ],
+    models: [],
+    images: [
+      { src: "/images/floculadores/floculador-tubular-1.jpeg", label: "Floculador Tubular — METSIM Solutions" },
+      { src: "/images/floculadores/floculador-tubular-2.jpeg", label: "Floculador Tubular — detalle de construcción" },
+      { src: "/images/floculadores/floculador-tubular-3.jpeg", label: "Floculador Tubular — montaje en planta" },
+      { src: "/images/floculadores/floculador-tubular-4.jpeg", label: "Floculador Tubular — instalación completa" },
+    ],
+    modelPoster: null,
+  },
+  {
+    id: "mezclador-estatico",
+    name: "Mezclador Estático",
+    shortDescription:
+      "Mezcladores estáticos inline con elementos helicoidales para mezcla radial y axial de reactivos químicos en tuberías. Sin partes móviles, cero consumo eléctrico. Fabricación e instalación a nivel nacional.",
+    description:
+      "El Mezclador Estático METSIM es un dispositivo inline que genera mezcla continua y homogénea de fluidos mediante láminas guía helicoidales estacionarias. El fluido es cortado y forzado contra las paredes opuestas de la tubería, creando vórtices alternados de rotación inversa que garantizan una mezcla radial y axial completa con baja caída de presión. Sin partes móviles, sin consumo eléctrico —la energía de mezcla proviene únicamente del fluido bombeado. Disponible con elemento fijo o desmontable según la aplicación. Fabricamos e instalamos en todo el territorio nacional en diámetros desde 3/4\" hasta 6\" (DN20 a DN150), en cuerpo de acero inoxidable AISI 304 o PVC sch80, con conexiones bridadas o roscadas. Cotización en 24 horas.",
+    category: "Tratamiento de Aguas",
+    badge: "Cero consumo eléctrico",
+    icon: "🔄",
+    keywords: [
+      "mezclador estático Paraguay",
+      "mezclador inline acero inoxidable",
+      "dosificación química agua Paraguay",
+      "mezclador estático tratamiento agua",
+      "mezcla reactivos sin partes moviles",
+      "mezclador tubería Paraguay",
+    ],
+    metaDescription:
+      "Mezcladores estáticos en Paraguay. METSIM fabrica e instala mezcladores inline en acero inoxidable AISI 304 o PVC para dosificación de reactivos, cloración y control de pH. Sin partes móviles.",
+    specs: [
+      { label: "Material cuerpo", value: "Acero inoxidable AISI 304 / PVC sch80" },
+      { label: "Material elementos", value: "Acero inoxidable AISI 304" },
+      { label: "Diámetros disponibles", value: "3/4\" a 6\" (DN20 a DN150)" },
+      { label: "Cantidad de elementos", value: "6 elementos mezcladores por unidad" },
+      { label: "Conexión", value: "Bridada / Roscada (según diámetro)" },
+      { label: "Caudal referencial", value: "4–9 g/min (3/4\") hasta 260–580 g/min (6\")" },
+      { label: "Partes móviles", value: "Ninguna — virtualmente libre de mantenimiento" },
+      { label: "Elemento desmontable", value: "Disponible según requerimiento" },
+    ],
+    applications: [
+      "Dosificación de coagulantes y floculantes",
+      "Cloración y ozonización en línea",
+      "Dilución de polímeros y aditivos",
+      "Control y corrección de pH",
+      "Pre-mezcla para sistemas DAF",
+      "Industria química, alimentaria y farmacéutica",
+    ],
+    models: [
+      { src: "/models/mezclador-estatico.glb", label: "Vista 3D" },
+    ],
+    images: [
+      { src: "/images/mezcladores/mezclador-estatico-1.jpeg", label: "Mezclador Estático — METSIM Solutions" },
+      { src: "/images/mezcladores/mezclador-estatico-2.jpeg", label: "Mezclador Estático — detalle constructivo" },
+      { src: "/images/mezcladores/mezclador-estatico-3.jpeg", label: "Mezclador Estático — fabricación en planta" },
+    ],
+    modelPoster: null,
+  },
 ];
 
 export const getProductBySlug = (slug) =>

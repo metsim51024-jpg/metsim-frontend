@@ -2,12 +2,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./ModelViewer.css";
 
-function ModelViewer({ models = [], alt, poster, pdfSrc }) {
+function ModelViewer({ models = [], alt, poster, pdfSrc, images = [] }) {
+  const hasModels = models.length > 0;
+  const hasPdf    = Boolean(pdfSrc);
+  const hasImages = images.length > 0;
+
+  const initialMode = hasModels ? "3d" : hasImages ? "image" : "pdf";
+
   const [activeIndex, setActiveIndex] = useState(0);
-  const [viewMode, setViewMode] = useState("3d");
-  const [loading, setLoading] = useState(true);
-  const [modelError, setModelError] = useState(false);
-  const viewerRef = useRef(null);
+  const [viewMode, setViewMode]       = useState(initialMode);
+  const [imageIndex, setImageIndex]   = useState(0);
+  const [loading, setLoading]         = useState(true);
+  const [modelError, setModelError]   = useState(false);
+  const viewerRef  = useRef(null);
   const cleanupRef = useRef(null);
 
   useEffect(() => {
@@ -15,6 +22,7 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
   }, []);
 
   useEffect(() => {
+    if (viewMode !== "3d") return;
     setLoading(true);
     setModelError(false);
 
@@ -47,13 +55,11 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
         cleanupRef.current = null;
       }
     };
-  }, [activeIndex]);
+  }, [activeIndex, viewMode]);
 
-  const hasModels = models.length > 0;
-  const hasPdf    = Boolean(pdfSrc);
-  const current   = hasModels ? models[activeIndex] : null;
+  const current = hasModels ? models[activeIndex] : null;
 
-  if (!hasModels && !hasPdf) {
+  if (!hasModels && !hasPdf && !hasImages) {
     return (
       <div className="model-placeholder">
         <div className="model-placeholder-inner">
@@ -91,6 +97,15 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
               {m.label}
             </button>
           ))}
+          {hasImages && (
+            <button
+              className={`mv-tab mv-tab-gallery ${viewMode === "image" ? "mv-tab-active" : ""}`}
+              onClick={() => setViewMode("image")}
+            >
+              <span className="mv-tab-icon">📷</span>
+              Trabajos Realizados
+            </button>
+          )}
           {hasPdf && (
             <button
               className={`mv-tab mv-tab-pdf ${viewMode === "pdf" ? "mv-tab-active" : ""}`}
@@ -137,6 +152,27 @@ function ModelViewer({ models = [], alt, poster, pdfSrc }) {
               <button className="mv-arrow" onClick={() => setActiveIndex((activeIndex - 1 + models.length) % models.length)}>&#8592;</button>
               <span className="mv-nav-label">{activeIndex + 1} / {models.length}</span>
               <button className="mv-arrow" onClick={() => setActiveIndex((activeIndex + 1) % models.length)}>&#8594;</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Image gallery viewer */}
+      {viewMode === "image" && hasImages && (
+        <div className="mv-image-wrapper">
+          <div className="mv-image-display">
+            <img
+              src={images[imageIndex].src}
+              alt={images[imageIndex].label}
+              className="mv-gallery-img"
+            />
+            <div className="mv-image-label">{images[imageIndex].label}</div>
+          </div>
+          {images.length > 1 && (
+            <div className="mv-nav-arrows">
+              <button className="mv-arrow" onClick={() => setImageIndex((imageIndex - 1 + images.length) % images.length)}>&#8592;</button>
+              <span className="mv-nav-label">{imageIndex + 1} / {images.length}</span>
+              <button className="mv-arrow" onClick={() => setImageIndex((imageIndex + 1) % images.length)}>&#8594;</button>
             </div>
           )}
         </div>

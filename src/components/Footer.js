@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   MessageCircle,
   Mail,
@@ -16,23 +17,23 @@ import "./Footer.css";
 const Footer = () => {
   const footerLinks = {
     Productos: [
-      "Brazos para Iluminación",
-      "Columnas Telescópicas",
-      "Escaleras Metálicas",
-      "Postes de Alumbrado"
+      { label: "Brazos para Iluminación",  to: "/productos/brazos-alumbrado" },
+      { label: "Columnas Telescópicas",     to: "/productos/columnas-metalicas" },
+      { label: "Estructuras Metálicas",     to: "/productos/estructuras-metalicas" },
+      { label: "Flotador DAF",              to: "/productos/flotador-aire-disuelto" },
     ],
     Servicios: [
-      "Estructuras Metálicas",
-      "Tanques Industriales",
-      "Piezas Metálicas",
-      "Instalaciones"
+      { label: "Estructuras Metálicas",     to: "/productos/estructuras-metalicas" },
+      { label: "Tanques Industriales",      to: "/productos/tanques-metalicos" },
+      { label: "Tratamiento de Aguas",      to: "/productos/flotador-aire-disuelto" },
+      { label: "Catálogo completo",         to: "/productos" },
     ],
     Empresa: [
-      "Sobre Nosotros",
-      "Portafolio",
-      "Blog",
-      "Contacto"
-    ]
+      { label: "Sobre Nosotros",            to: "/#nosotros" },
+      { label: "Proyectos",                 to: "/#proyectos" },
+      { label: "Productos",                 to: "/productos" },
+      { label: "Contacto",                  to: "/#contacto" },
+    ],
   };
 
   return (
@@ -44,9 +45,10 @@ const Footer = () => {
           <div className="footer-column footer-brand">
             <div className="footer-logo">
               <img
-                src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
+                src="/logo.png"
                 alt="METSIM"
                 className="footer-logo-img"
+                onError={(e) => { e.target.style.display = "none"; }}
               />
               <span className="footer-logo-text">METSIM</span>
             </div>
@@ -94,10 +96,10 @@ const Footer = () => {
               <ul className="footer-links">
                 {links.map((link, idx) => (
                   <li key={idx}>
-                    <a href="#" className="footer-link">
+                    <Link to={link.to} className="footer-link">
                       <ArrowRight size={16} />
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

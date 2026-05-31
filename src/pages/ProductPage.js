@@ -212,7 +212,7 @@ const ProductPage = () => {
             <div className="faq-list">
               <div className="faq-item">
                 <h3>¿Dónde fabrican {product.name.toLowerCase()} en Paraguay?</h3>
-                <p>METSIM Solutions fabrica {product.name.toLowerCase()} en Paraguay, con planta en Asunción (Avda. Carlos Morphi casi Concepción). Realizamos proyectos en todo el territorio nacional.</p>
+                <p>METSIM Solutions fabrica {product.name.toLowerCase()} en Paraguay, con planta en Cordillera. Realizamos proyectos en todo el territorio nacional.</p>
               </div>
               <div className="faq-item">
                 <h3>¿Cuál es el tiempo de entrega?</h3>

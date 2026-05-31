@@ -23,11 +23,11 @@ export const products = [
     metaDescription:
       "Fabricación de columnas metálicas telescópicas y octogonales de 7 a 16m en Paraguay. METSIM Solutions produce columnas para alumbrado público, señalización y uso industrial con cálculo estructural y normas IEC.",
     specs: [
-      { label: "Material", value: "Acero SAE 1020 / Acero galvanizado" },
+      { label: "Material", value: "Acero A36" },
       { label: "Altura disponible", value: "7m, 9m, 10m, 12m, 14m, 16m" },
       { label: "Tipo", value: "Telescópica / Octogonal / Troncocónica" },
       { label: "Acabado", value: "Galvanizado en caliente / Pintura epoxi" },
-      { label: "Norma", value: "IEC 60598 / ITAIPÚ / ANDE" },
+      { label: "Norma", value: "EETT 03.10.18 y 03.10.19" },
       { label: "Cálculo", value: "Simulación estructural SolidWorks" },
     ],
     applications: [

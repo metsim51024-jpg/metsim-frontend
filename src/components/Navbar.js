@@ -65,16 +65,20 @@ function Navbar() {
           className="navbar-logo"
           onClick={(e) => handleHashClick(e, "inicio")}
         >
-          <div
-            className="logo-img"
-            role="img"
-            aria-label="METSIM Logo"
+          <img
+            src="/logo.png"
+            alt="METSIM Logo"
             style={{
-              backgroundImage: "url('/logo.png')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
+              height: "52px",
+              width: "52px",
+              objectFit: "cover",
+              objectPosition: "center",
+              borderRadius: "50%",
+              border: "1px solid rgba(255,255,255,0.15)",
+              display: "block",
+              flexShrink: 0,
             }}
+            onError={(e) => { e.target.style.display = "none"; }}
           />
           <span className="logo-text">Metsim</span>
         </a>

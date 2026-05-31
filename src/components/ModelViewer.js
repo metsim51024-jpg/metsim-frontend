@@ -138,7 +138,7 @@ function ModelViewer({ models = [], alt, poster, pdfSrc, images = [] }) {
             alt={alt || current.label}
             {...(!current.staticView && { 'auto-rotate': true })}
             {...(!current.staticView && { 'camera-controls': true })}
-            {...(current.staticView && { 'camera-orbit': '25deg 68deg auto' })}
+            {...(current.staticView && { 'camera-orbit': current.cameraOrbit || '25deg 68deg auto' })}
             {...(current.staticView && { 'interaction-prompt': 'none' })}
             {...(current.staticView && { 'disable-zoom': true })}
             shadow-intensity="1"
@@ -192,12 +192,18 @@ function ModelViewer({ models = [], alt, poster, pdfSrc, images = [] }) {
               <button className="mv-back-3d" onClick={() => setViewMode("3d")}>← Volver al 3D</button>
             )}
           </div>
-          <iframe
-            src={`${pdfSrc}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-            title="Planos técnicos"
+          <object
+            data={pdfSrc}
+            type="application/pdf"
             className="mv-pdf-frame"
-            sandbox="allow-scripts allow-same-origin"
-          />
+          >
+            <div className="mv-pdf-fallback">
+              <p>Tu navegador no puede mostrar el PDF directamente.</p>
+              <a href={pdfSrc} target="_blank" rel="noopener noreferrer" className="mv-pdf-open-link">
+                Abrir planos en nueva pestaña →
+              </a>
+            </div>
+          </object>
         </div>
       )}
     </div>

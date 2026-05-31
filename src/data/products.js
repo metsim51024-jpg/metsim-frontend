@@ -280,7 +280,8 @@ export const products = [
       "Efluentes con alta carga de grasas y aceites",
     ],
     models: [
-      { src: "/models/daf-5m3h.glb", label: "Vista 3D", staticView: true },
+      { src: "/models/daf-5m3h.glb", label: "Vista Isométrica", staticView: true, cameraOrbit: "25deg 68deg auto" },
+      { src: "/models/daf-5m3h.glb", label: "Vista Superior",   staticView: true, cameraOrbit: "0deg 8deg auto" },
     ],
     images: [
       { src: "/images/daf/DAF-0.jpg", label: "DAF 5 m³/h — METSIM Solutions" },

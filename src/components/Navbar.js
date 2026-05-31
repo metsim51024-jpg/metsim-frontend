@@ -66,14 +66,12 @@ function Navbar() {
           onClick={(e) => handleHashClick(e, "inicio")}
         >
           <img
-            src="/logo.png?v=4"
+            src="/metsim-isotipo.png"
             alt="METSIM Logo"
             style={{
               height: "52px",
               width: "52px",
-              objectFit: "cover",
-              objectPosition: "center",
-              borderRadius: "50%",
+              objectFit: "contain",
               display: "block",
               flexShrink: 0,
             }}

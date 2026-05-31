@@ -200,7 +200,13 @@ export const products = [
       "Plantas de tratamiento de agua potable",
     ],
     models: [
-      { src: "/models/tamiz-rotativo.glb", label: "Tamiz Rotativo" },
+      { src: "/models/tamiz-rotativo.glb", label: "Vista 3D" },
+    ],
+    images: [
+      { src: "/images/tamiz/tamiz-1.jpg", label: "Tamiz Rotativo — METSIM Solutions" },
+      { src: "/images/tamiz/tamiz-2.jpg", label: "Tamiz Rotativo — detalle constructivo" },
+      { src: "/images/tamiz/tamiz-3.jpg", label: "Tamiz Rotativo — montaje en planta" },
+      { src: "/images/tamiz/tamiz-4.jpg", label: "Tamiz Rotativo — instalación completa" },
     ],
     modelPoster: null,
   },

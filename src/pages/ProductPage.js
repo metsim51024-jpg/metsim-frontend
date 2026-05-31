@@ -2,15 +2,32 @@
 import React from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import {
+  Settings2, Lightbulb, Factory, Droplets, Sun,
+  Wind, RefreshCw, Package, Columns3, Filter,
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ModelViewer from "../components/ModelViewer";
 import { getProductBySlug } from "../data/products";
 import "./ProductPage.css";
 
+const PRODUCT_ICONS = {
+  "columnas-metalicas":      Columns3,
+  "brazos-alumbrado":        Lightbulb,
+  "estructuras-metalicas":   Factory,
+  "tanques-metalicos":       Package,
+  "tamiz-rotativo":          Filter,
+  "soporte-panel-solar":     Sun,
+  "flotador-aire-disuelto":  Droplets,
+  "floculador-tubular":      Wind,
+  "mezclador-estatico":      RefreshCw,
+};
+
 const ProductPage = () => {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
+  const HeroIcon = PRODUCT_ICONS[slug] || Settings2;
 
   if (!product) return <Navigate to="/productos" replace />;
 
@@ -104,8 +121,11 @@ const ProductPage = () => {
             </div>
           </div>
           <div className="product-hero-badge">
-            <span className="hero-icon">{product.icon}</span>
+            <div className="hero-icon-wrapper">
+              <HeroIcon size={52} strokeWidth={1.2} />
+            </div>
             <span className="hero-badge-label">{product.badge}</span>
+            <span className="hero-badge-sub">Fabricación Nacional</span>
           </div>
         </section>
 

@@ -69,15 +69,13 @@ function Navbar() {
             src="/logo.png"
             alt="METSIM Logo"
             style={{
-              height: "54px",
-              width: "54px",
+              height: "52px",
+              width: "52px",
               objectFit: "cover",
               objectPosition: "center",
               borderRadius: "50%",
               display: "block",
               flexShrink: 0,
-              filter: "brightness(1.25) contrast(1.05)",
-              boxShadow: "0 0 0 2px rgba(140,150,165,0.55), 0 0 10px rgba(0,212,255,0.12)",
             }}
             onError={(e) => { e.target.style.display = "none"; }}
           />

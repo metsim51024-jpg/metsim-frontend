@@ -66,7 +66,7 @@ function Navbar() {
           onClick={(e) => handleHashClick(e, "inicio")}
         >
           <img
-            src="/logo.png"
+            src="/logo.png?v=4"
             alt="METSIM Logo"
             style={{
               height: "52px",

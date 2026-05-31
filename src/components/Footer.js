@@ -45,7 +45,7 @@ const Footer = () => {
           <div className="footer-column footer-brand">
             <div className="footer-logo">
               <img
-                src="/logo.png"
+                src="/logo.png?v=4"
                 alt="METSIM"
                 className="footer-logo-img"
                 onError={(e) => { e.target.style.display = "none"; }}

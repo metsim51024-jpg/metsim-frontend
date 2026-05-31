@@ -3,8 +3,8 @@ import React from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  Settings2, Lightbulb, Factory, Droplets, Sun,
-  Wind, RefreshCw, Package, Columns3, Filter,
+  Settings, Lightbulb, Factory, Droplets, Sun,
+  Wind, RefreshCw, Package, Columns, Filter,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -13,7 +13,7 @@ import { getProductBySlug } from "../data/products";
 import "./ProductPage.css";
 
 const PRODUCT_ICONS = {
-  "columnas-metalicas":      Columns3,
+  "columnas-metalicas":      Columns,
   "brazos-alumbrado":        Lightbulb,
   "estructuras-metalicas":   Factory,
   "tanques-metalicos":       Package,
@@ -27,7 +27,7 @@ const PRODUCT_ICONS = {
 const ProductPage = () => {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
-  const HeroIcon = PRODUCT_ICONS[slug] || Settings2;
+  const HeroIcon = PRODUCT_ICONS[slug] || Settings;
 
   if (!product) return <Navigate to="/productos" replace />;
 

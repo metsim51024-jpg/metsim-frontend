@@ -1,0 +1,4 @@
+public/models/flotador*
+build/
+node_modules
+.git

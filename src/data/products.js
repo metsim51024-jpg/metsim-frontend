@@ -280,9 +280,17 @@ export const products = [
       "Efluentes con alta carga de grasas y aceites",
     ],
     models: [
-      { src: "/models/flotador por aire disuelto.glb", label: "Vista 3D" },
+      { src: "/models/daf-5m3h.glb", label: "Vista 3D", staticView: true },
     ],
-    pdfSrc: "/docs/DAF PLANOS_VISTAS_REV03.pdf",
+    images: [
+      { src: "/images/daf/DAF-0.jpg", label: "DAF 5 m³/h — METSIM Solutions" },
+      { src: "/images/daf/DAF-1.jpg", label: "DAF — Sistema completo instalado" },
+      { src: "/images/daf/DAF-2.jpg", label: "DAF — Vista lateral" },
+      { src: "/images/daf/DAF-3.jpg", label: "DAF — Detalle de construcción" },
+      { src: "/images/daf/DAF-4.jpg", label: "DAF — Montaje en planta" },
+      { src: "/images/daf/DAF-5.jpg", label: "DAF — Instalación completa" },
+    ],
+    pdfSrc: "/docs/DAF-Layout5.pdf",
     modelPoster: null,
   },
   {

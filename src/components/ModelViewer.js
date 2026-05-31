@@ -136,17 +136,22 @@ function ModelViewer({ models = [], alt, poster, pdfSrc, images = [] }) {
             ref={viewerRef}
             src={current.src}
             alt={alt || current.label}
-            auto-rotate
-            camera-controls
+            {...(!current.staticView && { 'auto-rotate': true })}
+            {...(!current.staticView && { 'camera-controls': true })}
+            {...(current.staticView && { 'camera-orbit': '25deg 68deg auto' })}
+            {...(current.staticView && { 'interaction-prompt': 'none' })}
+            {...(current.staticView && { 'disable-zoom': true })}
             shadow-intensity="1"
             shadow-softness="1"
             environment-image="neutral"
             exposure="1.5"
             style={{ width: "100%", height: "500px", background: "#0a0e1a" }}
           />
-          <div className="model-controls-hint">
-            <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>
-          </div>
+          {!current.staticView && (
+            <div className="model-controls-hint">
+              <span>🖱️ Arrastrá para rotar · Scroll para zoom</span>
+            </div>
+          )}
           {models.length > 1 && (
             <div className="mv-nav-arrows">
               <button className="mv-arrow" onClick={() => setActiveIndex((activeIndex - 1 + models.length) % models.length)}>&#8592;</button>

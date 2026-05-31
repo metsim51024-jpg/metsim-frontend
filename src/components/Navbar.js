@@ -73,7 +73,7 @@ function Navbar() {
               e.target.style.display = "none";
             }}
           />
-          <span className="logo-text">METSIM</span>
+          <span className="logo-text">Metsim</span>
         </a>
 
         {/* Desktop Menu */}

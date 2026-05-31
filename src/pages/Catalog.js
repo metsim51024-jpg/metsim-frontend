@@ -2,10 +2,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import {
+  Columns, Lightbulb, Factory, Package, Filter,
+  Sun, Droplets, Wind, RefreshCw, Settings,
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { products } from "../data/products";
 import "./Catalog.css";
+
+const CATALOG_ICONS = {
+  "columnas-metalicas":     Columns,
+  "brazos-alumbrado":       Lightbulb,
+  "estructuras-metalicas":  Factory,
+  "tanques-metalicos":      Package,
+  "tamiz-rotativo":         Filter,
+  "soporte-panel-solar":    Sun,
+  "flotador-aire-disuelto": Droplets,
+  "floculador-tubular":     Wind,
+  "mezclador-estatico":     RefreshCw,
+};
 
 const Catalog = () => {
   return (
@@ -46,7 +62,9 @@ const Catalog = () => {
                 to={`/productos/${product.id}`}
                 className="product-card"
               >
-                <div className="product-card-icon">{product.icon}</div>
+                <div className="product-card-icon">
+                  {React.createElement(CATALOG_ICONS[product.id] || Settings, { size: 36, strokeWidth: 1.4 })}
+                </div>
                 <div className="product-card-badge">{product.badge}</div>
                 <h2 className="product-card-name">{product.name}</h2>
                 <p className="product-card-desc">{product.shortDescription}</p>

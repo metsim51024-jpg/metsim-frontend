@@ -109,8 +109,16 @@
 }
 
 .product-card-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.75rem;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 212, 255, 0.07);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 12px;
+  color: #00d4ff;
+  margin-bottom: 1rem;
 }
 
 .product-card-badge {

@@ -152,7 +152,6 @@ function ProjectsShowcase() {
                       </button>
                     )}
                   </div>
-                  <div className="project-icon">{project.icon}</div>
                 </div>
 
                 {/* Content */}
@@ -163,7 +162,7 @@ function ProjectsShowcase() {
                   <div className="project-features">
                     {project.features.map((feature, idx) => (
                       <span key={idx} className="feature-tag">
-                        ✓ {feature}
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{marginRight:'5px',flexShrink:0}}><path d="M1.5 5L4 7.5L8.5 2.5" stroke="#00d4ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>{feature}
                       </span>
                     ))}
                   </div>

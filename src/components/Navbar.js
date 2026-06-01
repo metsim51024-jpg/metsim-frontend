@@ -68,13 +68,7 @@ function Navbar() {
           <img
             src="/metsim-isotipo.png"
             alt="METSIM Logo"
-            style={{
-              height: "52px",
-              width: "52px",
-              objectFit: "contain",
-              display: "block",
-              flexShrink: 0,
-            }}
+            className="navbar-isotipo"
             onError={(e) => { e.target.style.display = "none"; }}
           />
           <span className="logo-text">Metsim</span>

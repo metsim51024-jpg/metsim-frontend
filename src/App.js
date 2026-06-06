@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Contact from "./components/Contact";
 import QuoteForm from "./components/QuoteForm";
 import WhatsAppButton from "./components/WhatsAppButton";
+import VisitTracker from "./components/VisitTracker";
 import { Toaster } from "sonner";
 import "./App.css";
 
@@ -27,6 +28,7 @@ function App() {
   return (
     <HelmetProvider>
     <Router>
+      <VisitTracker />
       <Toaster
         position="top-right"
         richColors

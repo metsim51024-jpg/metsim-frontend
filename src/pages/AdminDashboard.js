@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
@@ -14,42 +14,64 @@ import {
   TrendingUp,
   Eye,
   Download,
-  AlertCircle
+  AlertCircle,
+  MessageSquare,
+  Search,
+  BarChart3
 } from "lucide-react";
 import "../styles/AdminDashboard.css";
 
 const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
+// Estados de cotización: valor backend -> etiqueta y color
+const QUOTE_STATUS = {
+  pending:   { label: "Pendiente",  className: "st-pending" },
+  responded: { label: "Respondido", className: "st-responded" },
+  accepted:  { label: "Ganado",     className: "st-accepted" },
+  rejected:  { label: "Perdido",    className: "st-rejected" }
+};
+
+const CONTACT_STATUS = {
+  nuevo:      { label: "Nuevo",      className: "st-pending" },
+  revisado:   { label: "Revisado",   className: "st-responded" },
+  respondido: { label: "Respondido", className: "st-accepted" },
+  cerrado:    { label: "Cerrado",    className: "st-rejected" }
+};
+
+// Normaliza la respuesta del backend (puede venir como array o {success, data})
+const unwrap = (res) => {
+  const d = res?.data;
+  if (Array.isArray(d)) return d;
+  if (Array.isArray(d?.data)) return d.data;
+  return [];
+};
+
 const AdminDashboard = () => {
-  const [orders, setOrders] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [stats, setStats] = useState({
-    totalVisits: 0,
-    visitsToday: 0,
-    totalConversions: 0,
-    conversionRate: 0
-  });
+  const [contacts, setContacts] = useState([]);
+  const [visits, setVisits] = useState({ total: 0, today: 0, last7days: 0, topPages: [] });
   const [activeTab, setActiveTab] = useState("dashboard");
   const [expandedId, setExpandedId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
     const token = localStorage.getItem("admin_token");
     if (!token) {
-      console.log("No token found, redirecting to login");
       navigate("/admin/login");
       return;
     }
-    
-    await fetchData();
-  };
+    fetchData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const authHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+    "Content-Type": "application/json"
+  });
 
   const fetchData = async () => {
     const token = localStorage.getItem("admin_token");
@@ -62,60 +84,33 @@ const AdminDashboard = () => {
       setError(null);
       setIsLoading(true);
 
-      console.log("📊 Cargando datos del dashboard...");
+      const [quotesRes, contactsRes, visitsRes] = await Promise.all([
+        axios.get(`${API}/admin/quotes`, { headers: authHeaders(), timeout: 20000 })
+          .catch((e) => { console.warn("quotes:", e.message); return { data: [] }; }),
+        axios.get(`${API}/admin/contacts`, { headers: authHeaders(), timeout: 20000 })
+          .catch((e) => { console.warn("contacts:", e.message); return { data: [] }; }),
+        axios.get(`${API}/admin/visits`, { headers: authHeaders(), timeout: 20000 })
+          .catch((e) => { console.warn("visits:", e.message); return { data: { data: {} } }; })
+      ]);
 
-      // Obtener cotizaciones
-      const quotesRes = await axios.get(`${API}/admin/quotes`, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        timeout: 15000
-      }).catch(err => {
-        console.warn("Error cargando cotizaciones:", err.message);
-        return { data: [] };
+      setQuotes(unwrap(quotesRes));
+      setContacts(unwrap(contactsRes));
+
+      const v = visitsRes?.data?.data || {};
+      setVisits({
+        total: v.total || 0,
+        today: v.today || 0,
+        last7days: v.last7days || 0,
+        topPages: v.topPages || []
       });
-
-      // Obtener pedidos (si existe el endpoint)
-      const ordersRes = await axios.get(`${API}/admin/orders`, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        timeout: 15000
-      }).catch(err => {
-        console.warn("Error cargando pedidos:", err.message);
-        return { data: [] };
-      });
-
-      console.log("✅ Cotizaciones cargadas:", quotesRes.data?.length || 0);
-      console.log("✅ Pedidos cargados:", ordersRes.data?.length || 0);
-
-      setQuotes(Array.isArray(quotesRes.data) ? quotesRes.data : []);
-      setOrders(Array.isArray(ordersRes.data) ? ordersRes.data : []);
-
-      // Calcular stats
-      const newStats = {
-        totalVisits: quotesRes.data?.length * 10 || 0,
-        visitsToday: 0,
-        totalConversions: ordersRes.data?.length || 0,
-        conversionRate: quotesRes.data?.length ? 
-          Math.round((ordersRes.data?.length / quotesRes.data?.length) * 100) : 0
-      };
-      setStats(newStats);
-
-    } catch (error) {
-      console.error("❌ Error fetching data:", error);
-      setError("Error al cargar los datos");
-      
-      if (error.response?.status === 401 || error.response?.status === 403) {
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
         localStorage.removeItem("admin_token");
-        toast.error("Sesión expirada. Por favor inicia sesión nuevamente.");
+        toast.error("Sesión expirada. Iniciá sesión nuevamente.");
         navigate("/admin/login");
-      } else if (error.code === 'ECONNABORTED') {
-        setError("Tiempo de conexión agotado");
-        toast.error("⏱️ Tiempo de conexión agotado");
       } else {
+        setError("Error al cargar los datos");
         toast.error("Error al cargar datos");
       }
     } finally {
@@ -123,23 +118,90 @@ const AdminDashboard = () => {
     }
   };
 
+  const updateQuoteStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/admin/quotes/${id}/status`, { status }, { headers: authHeaders() });
+      setQuotes((prev) => prev.map((q) => (q._id === id || q.id === id ? { ...q, status } : q)));
+      toast.success(`Estado: ${QUOTE_STATUS[status]?.label || status}`);
+    } catch (e) {
+      toast.error("No se pudo actualizar el estado");
+    }
+  };
+
+  const updateContactStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/admin/contacts/${id}/status`, { status }, { headers: authHeaders() });
+      setContacts((prev) => prev.map((c) => (c._id === id || c.id === id ? { ...c, status } : c)));
+      toast.success(`Estado: ${CONTACT_STATUS[status]?.label || status}`);
+    } catch (e) {
+      toast.error("No se pudo actualizar el estado");
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_user");
-    toast.success("Sesión cerrada correctamente");
+    toast.success("Sesión cerrada");
     navigate("/admin/login");
   };
 
-  const handleContactClient = (email, phone) => {
+  const contactClient = (email, phone) => {
     if (email) {
       navigator.clipboard.writeText(email);
-      toast.success("Email copiado al portapapeles");
+      toast.success("Email copiado");
     }
     if (phone) {
-      const phoneNumber = phone.replace(/[^0-9]/g, '');
-      window.open(`https://wa.me/${phoneNumber}`, '_blank');
+      window.open(`https://wa.me/${phone.replace(/[^0-9]/g, "")}`, "_blank");
     }
   };
+
+  // Cotizaciones filtradas por búsqueda + estado
+  const filteredQuotes = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    return quotes.filter((q) => {
+      const matchTerm =
+        !term ||
+        (q.client_name || "").toLowerCase().includes(term) ||
+        (q.client_email || "").toLowerCase().includes(term) ||
+        (q.description || "").toLowerCase().includes(term);
+      const matchStatus = statusFilter === "all" || (q.status || "pending") === statusFilter;
+      return matchTerm && matchStatus;
+    });
+  }, [quotes, search, statusFilter]);
+
+  const exportCSV = () => {
+    const rows = filteredQuotes.length ? filteredQuotes : quotes;
+    if (!rows.length) {
+      toast.error("No hay cotizaciones para exportar");
+      return;
+    }
+    const headers = ["Fecha", "Cliente", "Email", "Telefono", "Estado", "Descripcion"];
+    const escape = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
+    const lines = rows.map((q) =>
+      [
+        new Date(q.created_at || q.createdAt).toLocaleString("es-PY"),
+        q.client_name,
+        q.client_email,
+        q.client_phone,
+        QUOTE_STATUS[q.status || "pending"]?.label || q.status,
+        (q.description || "").replace(/\n/g, " ")
+      ].map(escape).join(",")
+    );
+    const csv = "﻿" + [headers.join(","), ...lines].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cotizaciones-metsim-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`${rows.length} cotizaciones exportadas`);
+  };
+
+  const quotesToday = quotes.filter((q) => {
+    const d = new Date(q.created_at || q.createdAt);
+    return d.toDateString() === new Date().toDateString();
+  }).length;
 
   if (isLoading) {
     return (
@@ -158,27 +220,14 @@ const AdminDashboard = () => {
       <nav className="admin-navbar">
         <div className="navbar-content">
           <div className="navbar-logo-section">
-            <img
-              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
-              alt="METSIM"
-              className="navbar-logo"
-            />
+            <img src="/metsim-isotipo.png" alt="METSIM" className="navbar-logo" />
             <h1 className="navbar-title">Panel Administrativo</h1>
           </div>
-
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button
-              onClick={fetchData}
-              className="refresh-button"
-              title="Actualizar datos"
-            >
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <button onClick={fetchData} className="refresh-button" title="Actualizar datos">
               🔄 Actualizar
             </button>
-            <button
-              onClick={handleLogout}
-              className="logout-button"
-              data-testid="admin-logout-button"
-            >
+            <button onClick={handleLogout} className="logout-button" data-testid="admin-logout-button">
               <LogOut size={18} />
               Cerrar Sesión
             </button>
@@ -186,7 +235,6 @@ const AdminDashboard = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
       <div className="admin-content">
         <div className="admin-container">
           {error && (
@@ -197,366 +245,252 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* PESTAÑAS */}
           <div className="tabs-section">
             <div className="tabs-header">
-              <button
-                onClick={() => setActiveTab("dashboard")}
-                className={`tab-button ${activeTab === "dashboard" ? "active" : ""}`}
-              >
-                <TrendingUp size={18} />
-                Dashboard
+              <button onClick={() => setActiveTab("dashboard")} className={`tab-button ${activeTab === "dashboard" ? "active" : ""}`}>
+                <TrendingUp size={18} /> Dashboard
               </button>
-              <button
-                onClick={() => setActiveTab("quotes")}
-                className={`tab-button ${activeTab === "quotes" ? "active" : ""}`}
-              >
-                <FileText size={18} />
-                Cotizaciones ({quotes.length})
+              <button onClick={() => setActiveTab("quotes")} className={`tab-button ${activeTab === "quotes" ? "active" : ""}`}>
+                <FileText size={18} /> Cotizaciones ({quotes.length})
               </button>
-              <button
-                onClick={() => setActiveTab("orders")}
-                className={`tab-button ${activeTab === "orders" ? "active" : ""}`}
-              >
-                <Package size={18} />
-                Pedidos ({orders.length})
+              <button onClick={() => setActiveTab("contacts")} className={`tab-button ${activeTab === "contacts" ? "active" : ""}`}>
+                <MessageSquare size={18} /> Mensajes ({contacts.length})
               </button>
             </div>
 
             <div className="tabs-content">
-              {/* ✅ DASHBOARD CON ESTADÍSTICAS */}
+              {/* ===== DASHBOARD ===== */}
               {activeTab === "dashboard" && (
                 <div className="tab-pane">
-                  <div className="dashboard-grid">
-                    {/* Stats Cards */}
-                    <div className="stats-grid">
-                      <div className="stat-card">
-                        <div className="stat-icon visits">
-                          <Eye size={32} />
-                        </div>
-                        <div className="stat-info">
-                          <p className="stat-label">Cotizaciones Totales</p>
-                          <p className="stat-value">{quotes.length}</p>
-                        </div>
-                      </div>
-
-                      <div className="stat-card">
-                        <div className="stat-icon today">
-                          <Calendar size={32} />
-                        </div>
-                        <div className="stat-info">
-                          <p className="stat-label">Hoy</p>
-                          <p className="stat-value">
-                            {quotes.filter(q => {
-                              const date = new Date(q.created_at || q.createdAt);
-                              const today = new Date();
-                              return date.toDateString() === today.toDateString();
-                            }).length}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="stat-card">
-                        <div className="stat-icon quotes">
-                          <FileText size={32} />
-                        </div>
-                        <div className="stat-info">
-                          <p className="stat-label">Con Archivos</p>
-                          <p className="stat-value">
-                            {quotes.filter(q => q.file_urls && q.file_urls.length > 0).length}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="stat-card">
-                        <div className="stat-icon conversion">
-                          <TrendingUp size={32} />
-                        </div>
-                        <div className="stat-info">
-                          <p className="stat-label">Pedidos</p>
-                          <p className="stat-value">{orders.length}</p>
-                        </div>
+                  <div className="stats-grid">
+                    <div className="stat-card">
+                      <div className="stat-icon visits"><Eye size={32} /></div>
+                      <div className="stat-info">
+                        <p className="stat-label">Visitas Totales</p>
+                        <p className="stat-value">{visits.total}</p>
                       </div>
                     </div>
+                    <div className="stat-card">
+                      <div className="stat-icon today"><Calendar size={32} /></div>
+                      <div className="stat-info">
+                        <p className="stat-label">Visitas Hoy</p>
+                        <p className="stat-value">{visits.today}</p>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-icon quotes"><FileText size={32} /></div>
+                      <div className="stat-info">
+                        <p className="stat-label">Cotizaciones</p>
+                        <p className="stat-value">{quotes.length}</p>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-icon conversion"><TrendingUp size={32} /></div>
+                      <div className="stat-info">
+                        <p className="stat-label">Conversión (visitas→cot.)</p>
+                        <p className="stat-value">
+                          {visits.total > 0 ? Math.round((quotes.length / visits.total) * 100) : 0}%
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                    {/* Resumen Rápido */}
+                  <div className="dashboard-grid">
+                    {/* Páginas más visitadas */}
+                    <div className="summary-section">
+                      <h3><BarChart3 size={18} style={{ verticalAlign: "-3px", marginRight: 6 }} />Páginas más visitadas (real)</h3>
+                      {visits.topPages.length === 0 ? (
+                        <p className="muted-note">Aún no hay visitas registradas. Empezarán a contarse desde ahora.</p>
+                      ) : (
+                        visits.topPages.map((p, i) => (
+                          <div className="summary-item" key={i}>
+                            <span>{p.path}</span>
+                            <strong>{p.count}</strong>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Resumen */}
                     <div className="summary-section">
                       <h3>Resumen Rápido</h3>
-                      
-                      <div className="summary-item">
-                        <span>Total de Cotizaciones</span>
-                        <strong>{quotes.length}</strong>
-                      </div>
-
-                      <div className="summary-item">
-                        <span>Cotizaciones Últimas 24h</span>
-                        <strong>
-                          {quotes.filter(q => {
-                            const date = new Date(q.created_at || q.createdAt);
-                            const oneDayAgo = new Date(Date.now() - 24*60*60*1000);
-                            return date > oneDayAgo;
-                          }).length}
-                        </strong>
-                      </div>
-
-                      <div className="summary-item">
-                        <span>Total de Pedidos</span>
-                        <strong>{orders.length}</strong>
-                      </div>
-
-                      <div className="summary-item">
-                        <span>Tasa de Conversión</span>
-                        <strong>
-                          {quotes.length > 0 
-                            ? Math.round((orders.length / quotes.length) * 100) + "%"
-                            : "0%"
-                          }
-                        </strong>
-                      </div>
+                      <div className="summary-item"><span>Visitas últimos 7 días</span><strong>{visits.last7days}</strong></div>
+                      <div className="summary-item"><span>Cotizaciones hoy</span><strong>{quotesToday}</strong></div>
+                      <div className="summary-item"><span>Cotizaciones ganadas</span><strong>{quotes.filter(q => q.status === "accepted").length}</strong></div>
+                      <div className="summary-item"><span>Mensajes nuevos</span><strong>{contacts.filter(c => (c.status || "nuevo") === "nuevo").length}</strong></div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ✅ COTIZACIONES */}
+              {/* ===== COTIZACIONES ===== */}
               {activeTab === "quotes" && (
                 <div className="tab-pane">
-                  {quotes.length === 0 ? (
+                  {/* Barra de búsqueda + filtros + export */}
+                  <div className="toolbar">
+                    <div className="search-box">
+                      <Search size={16} />
+                      <input
+                        type="text"
+                        placeholder="Buscar por nombre, email o descripción..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                    </div>
+                    <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                      <option value="all">Todos los estados</option>
+                      <option value="pending">Pendiente</option>
+                      <option value="responded">Respondido</option>
+                      <option value="accepted">Ganado</option>
+                      <option value="rejected">Perdido</option>
+                    </select>
+                    <button className="export-btn" onClick={exportCSV}>
+                      <Download size={16} /> Exportar CSV
+                    </button>
+                  </div>
+
+                  {filteredQuotes.length === 0 ? (
                     <div className="empty-state">
                       <FileText size={48} />
-                      <p>No hay cotizaciones aún</p>
-                      <small>Las cotizaciones aparecerán aquí cuando se envíen</small>
+                      <p>{quotes.length === 0 ? "No hay cotizaciones aún" : "Sin resultados para el filtro"}</p>
                     </div>
                   ) : (
                     <div className="items-list">
-                      {quotes.map((quote) => (
-                        <div
-                          key={quote._id || quote.id}
-                          className={`item-card ${
-                            expandedId === (quote._id || quote.id) ? "expanded" : ""
-                          }`}
-                        >
-                          <div
-                            className="item-header"
-                            onClick={() =>
-                              setExpandedId(
-                                expandedId === (quote._id || quote.id) ? null : (quote._id || quote.id)
-                              )
-                            }
-                          >
-                            <div className="item-title">
-                              <p className="item-id">
-                                Cotización #{(quote._id || quote.id || "---").slice(0, 8).toUpperCase()}
-                              </p>
-                              <p className="item-date">
-                                {new Date(quote.created_at || quote.createdAt).toLocaleString("es-PY")}
-                              </p>
+                      {filteredQuotes.map((quote) => {
+                        const id = quote._id || quote.id;
+                        const st = QUOTE_STATUS[quote.status || "pending"] || QUOTE_STATUS.pending;
+                        return (
+                          <div key={id} className={`item-card ${expandedId === id ? "expanded" : ""}`}>
+                            <div className="item-header" onClick={() => setExpandedId(expandedId === id ? null : id)}>
+                              <div className="item-title">
+                                <p className="item-id">{quote.client_name || "Cliente"} · #{(id || "---").slice(-6).toUpperCase()}</p>
+                                <p className="item-date">{new Date(quote.created_at || quote.createdAt).toLocaleString("es-PY")}</p>
+                              </div>
+                              <div className="item-controls">
+                                <span className={`status-badge ${st.className}`}>{st.label}</span>
+                                <ChevronDown size={20} className={`toggle-icon ${expandedId === id ? "open" : ""}`} />
+                              </div>
                             </div>
 
-                            <div className="item-controls">
-                              <span className="status-badge">{quote.status || "pendiente"}</span>
-                              <ChevronDown
-                                size={20}
-                                className={`toggle-icon ${
-                                  expandedId === (quote._id || quote.id) ? "open" : ""
-                                }`}
-                              />
-                            </div>
-                          </div>
-
-                          {expandedId === (quote._id || quote.id) && (
-                            <div className="item-details">
-                              <div className="details-grid">
-                                <div className="detail-item">
-                                  <User size={16} />
-                                  <div>
-                                    <p className="detail-label">Cliente</p>
-                                    <p className="detail-value">
-                                      {quote.client_name || "N/A"}
-                                    </p>
-                                  </div>
+                            {expandedId === id && (
+                              <div className="item-details">
+                                <div className="details-grid">
+                                  <div className="detail-item"><User size={16} /><div><p className="detail-label">Cliente</p><p className="detail-value">{quote.client_name || "N/A"}</p></div></div>
+                                  <div className="detail-item"><Mail size={16} /><div><p className="detail-label">Email</p><p className="detail-value">{quote.client_email || "N/A"}</p></div></div>
+                                  <div className="detail-item"><Phone size={16} /><div><p className="detail-label">Teléfono</p><p className="detail-value">{quote.client_phone || "N/A"}</p></div></div>
                                 </div>
 
-                                <div className="detail-item">
-                                  <Mail size={16} />
-                                  <div>
-                                    <p className="detail-label">Email</p>
-                                    <p className="detail-value">
-                                      {quote.client_email || "N/A"}
-                                    </p>
-                                  </div>
+                                <div className="description-section">
+                                  <p className="section-title">Descripción del Proyecto</p>
+                                  <p className="description-text">{quote.description || "Sin descripción"}</p>
                                 </div>
 
-                                <div className="detail-item">
-                                  <Phone size={16} />
-                                  <div>
-                                    <p className="detail-label">Teléfono</p>
-                                    <p className="detail-value">
-                                      {quote.client_phone || "N/A"}
-                                    </p>
+                                {quote.file_urls && quote.file_urls.length > 0 && (
+                                  <div className="files-section">
+                                    <p className="section-title">Archivos Adjuntos ({quote.file_urls.length})</p>
+                                    <div className="files-list">
+                                      {quote.file_urls.map((file, idx) => (
+                                        <a key={idx} href={file.url || file} target="_blank" rel="noopener noreferrer" className="file-download">
+                                          <Download size={16} /> {file.filename || `Archivo ${idx + 1}`}
+                                        </a>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
+                                )}
 
-                              <div className="description-section">
-                                <p className="section-title">Descripción del Proyecto</p>
-                                <p className="description-text">
-                                  {quote.description || "Sin descripción"}
-                                </p>
-                              </div>
-
-                              {/* Archivos adjuntos */}
-                              {quote.file_urls && quote.file_urls.length > 0 && (
-                                <div className="files-section">
-                                  <p className="section-title">Archivos Adjuntos ({quote.file_urls.length})</p>
-                                  <div className="files-list">
-                                    {quote.file_urls.map((file, idx) => (
-                                      <a
-                                        key={idx}
-                                        href={file.url || file}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="file-download"
+                                {/* Estado (CRM) */}
+                                <div className="status-control">
+                                  <span className="section-title">Cambiar estado:</span>
+                                  <div className="status-options">
+                                    {Object.entries(QUOTE_STATUS).map(([key, val]) => (
+                                      <button
+                                        key={key}
+                                        className={`status-pill ${val.className} ${(quote.status || "pending") === key ? "active" : ""}`}
+                                        onClick={() => updateQuoteStatus(id, key)}
                                       >
-                                        <Download size={16} />
-                                        {file.filename || `Archivo ${idx + 1}`}
-                                      </a>
+                                        {val.label}
+                                      </button>
                                     ))}
                                   </div>
                                 </div>
-                              )}
 
-                              {/* Acciones rápidas */}
-                              <div className="action-buttons">
-                                <button
-                                  onClick={() =>
-                                    handleContactClient(quote.client_email, null)
-                                  }
-                                  className="action-btn email"
-                                >
-                                  📧 Copiar Email
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleContactClient(null, quote.client_phone)
-                                  }
-                                  className="action-btn whatsapp"
-                                >
-                                  💬 WhatsApp
-                                </button>
+                                <div className="action-buttons">
+                                  <button onClick={() => contactClient(quote.client_email, null)} className="action-btn email">📧 Copiar Email</button>
+                                  <button onClick={() => contactClient(null, quote.client_phone)} className="action-btn whatsapp">💬 WhatsApp</button>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               )}
 
-              {/* ✅ PEDIDOS */}
-              {activeTab === "orders" && (
+              {/* ===== MENSAJES DE CONTACTO ===== */}
+              {activeTab === "contacts" && (
                 <div className="tab-pane">
-                  {orders.length === 0 ? (
+                  {contacts.length === 0 ? (
                     <div className="empty-state">
-                      <Package size={48} />
-                      <p>No hay pedidos aún</p>
-                      <small>Los pedidos aparecerán aquí cuando se confirmen</small>
+                      <MessageSquare size={48} />
+                      <p>No hay mensajes aún</p>
+                      <small>Los mensajes del formulario de contacto aparecerán aquí</small>
                     </div>
                   ) : (
                     <div className="items-list">
-                      {orders.map((order) => (
-                        <div
-                          key={order._id || order.id}
-                          className={`item-card ${
-                            expandedId === (order._id || order.id) ? "expanded" : ""
-                          }`}
-                        >
-                          <div
-                            className="item-header"
-                            onClick={() =>
-                              setExpandedId(
-                                expandedId === (order._id || order.id) ? null : (order._id || order.id)
-                              )
-                            }
-                          >
-                            <div className="item-title">
-                              <p className="item-id">
-                                Pedido #{(order._id || order.id || "---").slice(0, 8).toUpperCase()}
-                              </p>
-                              <p className="item-date">
-                                {new Date(order.created_at || order.createdAt).toLocaleString("es-PY")}
-                              </p>
+                      {contacts.map((c) => {
+                        const id = c._id || c.id;
+                        const st = CONTACT_STATUS[c.status || "nuevo"] || CONTACT_STATUS.nuevo;
+                        return (
+                          <div key={id} className={`item-card ${expandedId === id ? "expanded" : ""}`}>
+                            <div className="item-header" onClick={() => setExpandedId(expandedId === id ? null : id)}>
+                              <div className="item-title">
+                                <p className="item-id">{c.client_name || "Contacto"} · #{(id || "---").slice(-6).toUpperCase()}</p>
+                                <p className="item-date">{new Date(c.createdAt || c.created_at).toLocaleString("es-PY")}</p>
+                              </div>
+                              <div className="item-controls">
+                                <span className={`status-badge ${st.className}`}>{st.label}</span>
+                                <ChevronDown size={20} className={`toggle-icon ${expandedId === id ? "open" : ""}`} />
+                              </div>
                             </div>
 
-                            <div className="item-controls">
-                              <span className="status-badge">{order.status || "pendiente"}</span>
-                              <ChevronDown
-                                size={20}
-                                className={`toggle-icon ${
-                                  expandedId === (order._id || order.id) ? "open" : ""
-                                }`}
-                              />
-                            </div>
+                            {expandedId === id && (
+                              <div className="item-details">
+                                <div className="details-grid">
+                                  <div className="detail-item"><User size={16} /><div><p className="detail-label">Nombre</p><p className="detail-value">{c.client_name || "N/A"}</p></div></div>
+                                  <div className="detail-item"><Mail size={16} /><div><p className="detail-label">Email</p><p className="detail-value">{c.client_email || "N/A"}</p></div></div>
+                                  <div className="detail-item"><Phone size={16} /><div><p className="detail-label">Teléfono</p><p className="detail-value">{c.client_phone || "N/A"}</p></div></div>
+                                </div>
+                                <div className="description-section">
+                                  <p className="section-title">Mensaje</p>
+                                  <p className="description-text">{c.description || "Sin mensaje"}</p>
+                                </div>
+
+                                <div className="status-control">
+                                  <span className="section-title">Cambiar estado:</span>
+                                  <div className="status-options">
+                                    {Object.entries(CONTACT_STATUS).map(([key, val]) => (
+                                      <button
+                                        key={key}
+                                        className={`status-pill ${val.className} ${(c.status || "nuevo") === key ? "active" : ""}`}
+                                        onClick={() => updateContactStatus(id, key)}
+                                      >
+                                        {val.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div className="action-buttons">
+                                  <button onClick={() => contactClient(c.client_email, null)} className="action-btn email">📧 Copiar Email</button>
+                                  <button onClick={() => contactClient(null, c.client_phone)} className="action-btn whatsapp">💬 WhatsApp</button>
+                                </div>
+                              </div>
+                            )}
                           </div>
-
-                          {expandedId === (order._id || order.id) && (
-                            <div className="item-details">
-                              <div className="details-grid">
-                                <div className="detail-item">
-                                  <User size={16} />
-                                  <div>
-                                    <p className="detail-label">Cliente</p>
-                                    <p className="detail-value">
-                                      {order.client_name || "N/A"}
-                                    </p>
-                                  </div>
-                                </div>
-
-                                <div className="detail-item">
-                                  <Mail size={16} />
-                                  <div>
-                                    <p className="detail-label">Email</p>
-                                    <p className="detail-value">
-                                      {order.client_email || "N/A"}
-                                    </p>
-                                  </div>
-                                </div>
-
-                                <div className="detail-item">
-                                  <Phone size={16} />
-                                  <div>
-                                    <p className="detail-label">Teléfono</p>
-                                    <p className="detail-value">
-                                      {order.client_phone || "N/A"}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Acciones rápidas */}
-                              <div className="action-buttons">
-                                <button
-                                  onClick={() =>
-                                    handleContactClient(order.client_email, null)
-                                  }
-                                  className="action-btn email"
-                                >
-                                  📧 Copiar Email
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleContactClient(null, order.client_phone)
-                                  }
-                                  className="action-btn whatsapp"
-                                >
-                                  💬 WhatsApp
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

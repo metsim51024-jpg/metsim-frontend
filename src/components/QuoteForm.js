@@ -85,11 +85,10 @@ const QuoteForm = () => {
       const API_ENDPOINT = `${API_URL}/quotes`;
       console.log("📤 Enviando presupuesto a:", API_ENDPOINT);
 
+      // No seteamos Content-Type manualmente: el navegador lo pone con el boundary correcto para FormData.
+      // Timeout amplio porque el backend en Render (plan free) puede tardar ~50s en "despertar".
       const response = await axios.post(API_ENDPOINT, formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-        timeout: 30000
+        timeout: 90000
       });
 
       console.log("✅ Presupuesto enviado exitosamente:", response.status);

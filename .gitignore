@@ -24,3 +24,4 @@ yarn-error.log*
 
 # Large GLB files (host on CDN)
 public/models/flotador*
+.vercel

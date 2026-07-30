@@ -31,20 +31,20 @@ function About() {
             loop
             muted
             playsInline
+            poster="/logo512.png"
             className="about-video"
           >
-            <source 
-              src="https://res.cloudinary.com/dk6wclcew/video/upload/v1775049059/video_metsim_inicio_eig393.mov" 
+            <source
+              src="https://res.cloudinary.com/dk6wclcew/video/upload/v1775049059/video_metsim_inicio_eig393.mov"
               type="video/quicktime"
             />
-            <source 
-              src="https://res.cloudinary.com/dk6wclcew/video/upload/v1775049059/video_metsim_inicio_eig393.mov" 
+            <source
+              src="https://res.cloudinary.com/dk6wclcew/video/upload/v1775049059/video_metsim_inicio_eig393.mov"
               type="video/mp4"
             />
-            {/* Fallback imagen */}
             <img
-              src="https://via.placeholder.com/600x500/0f172a/22d3ee?text=METSIM+Solutions"
-              alt="Equipo de Ingeniería METSIM"
+              src="/logo512.png"
+              alt="METSIM Solutions — Fabricación industrial en Paraguay"
               className="about-img"
             />
           </video>
@@ -56,9 +56,9 @@ function About() {
         {/* Right: Content */}
         <div className="about-content">
           <span className="section-badge">[ QUIÉNES SOMOS ]</span>
-          <h2 className="section-title">METSIM Solutions</h2>
+          <h2 className="section-title">Fabricación Industrial en Paraguay</h2>
           <p className="section-subtitle">
-            Especializados en soluciones metalúrgicas de precisión
+            METSIM Solutions — especializados en soluciones metalúrgicas de precisión
           </p>
 
           <p className="about-description">

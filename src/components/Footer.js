@@ -168,13 +168,13 @@ const Footer = () => {
             </div>
 
             <div className="footer-legal">
-              <a href="#" className="legal-link">
+              <Link to="/privacidad" className="legal-link">
                 Política de Privacidad
-              </a>
+              </Link>
               <span className="separator">•</span>
-              <a href="#" className="legal-link">
+              <Link to="/terminos" className="legal-link">
                 Términos de Servicio
-              </a>
+              </Link>
             </div>
           </div>
         </div>

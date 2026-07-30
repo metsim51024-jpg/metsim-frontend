@@ -107,8 +107,9 @@ function ProjectsShowcase() {
                     <img
                       key={imgIdx}
                       src={img}
-                      alt={project.title}
+                      alt={`${project.title} — imagen ${imgIdx + 1} de ${project.images.length}`}
                       className={`project-image${imgIdx === currentImageIdx ? " active" : ""}`}
+                      loading="lazy"
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/400x300/1a1f3a/22d3ee?text=" + encodeURIComponent(project.title);
                       }}

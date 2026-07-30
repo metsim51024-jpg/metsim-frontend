@@ -49,16 +49,6 @@ const ProductPage = () => {
       name: "METSIM Solutions",
       url: "https://www.metsim.com.py",
     },
-    offers: {
-      "@type": "Offer",
-      url: productUrl,
-      priceCurrency: "PYG",
-      availability: "https://schema.org/InStock",
-      seller: {
-        "@type": "Organization",
-        name: "METSIM Solutions",
-      },
-    },
   };
 
   const schemaBreadcrumb = {
@@ -68,6 +58,37 @@ const ProductPage = () => {
       { "@type": "ListItem", position: 1, name: "Inicio", item: "https://www.metsim.com.py" },
       { "@type": "ListItem", position: 2, name: "Productos", item: "https://www.metsim.com.py/productos" },
       { "@type": "ListItem", position: 3, name: product.name, item: productUrl },
+    ],
+  };
+
+  const schemaFaq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `¿Dónde fabrican ${product.name.toLowerCase()} en Paraguay?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `METSIM Solutions fabrica ${product.name.toLowerCase()} en Paraguay, con planta en Cordillera. Realizamos proyectos en todo el territorio nacional.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿Cuál es el tiempo de entrega?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "El tiempo de entrega varía según la complejidad y cantidad del pedido. Para proyectos estándar, típicamente entre 2 y 6 semanas. Contactanos para una estimación precisa según tu proyecto.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "¿Ofrecen servicio de instalación?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Sí. METSIM ofrece servicio integral que incluye fabricación, transporte e instalación con equipo técnico especializado.",
+        },
+      },
     ],
   };
 
@@ -91,6 +112,7 @@ const ProductPage = () => {
         <meta name="twitter:image" content={productImage} />
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaBreadcrumb)}</script>
+        <script type="application/ld+json">{JSON.stringify(schemaFaq)}</script>
       </Helmet>
 
       <Navbar />

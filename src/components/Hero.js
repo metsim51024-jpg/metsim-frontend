@@ -36,8 +36,8 @@ function Hero() {
           </div>
 
           <h1 className="hero-title">
-            Fabricación Industrial de
-            <span className="hero-highlight"> Excelencia</span>
+            Estructuras Metálicas y Equipos Industriales en
+            <span className="hero-highlight"> Paraguay</span>
           </h1>
 
           <p className="hero-description">

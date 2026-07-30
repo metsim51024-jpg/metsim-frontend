@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Zap, Shield, Cpu, Wrench } from "lucide-react";
 import "./Services.css";
 
 function Services() {
+  const navigate = useNavigate();
   const services = [
     {
       icon: <Zap size={32} />,
@@ -62,7 +64,7 @@ function Services() {
                 ))}
               </ul>
 
-              <button className="service-btn">Conocer más</button>
+              <button className="service-btn" onClick={() => navigate("/productos")}>Conocer más</button>
             </div>
           ))}
         </div>

@@ -34,23 +34,6 @@ const ProductPage = () => {
   const productImage = product.images?.[0] || "https://www.metsim.com.py/logo512.png";
   const productUrl = `https://www.metsim.com.py/productos/${product.id}`;
 
-  const schemaProduct = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: product.metaDescription,
-    image: productImage,
-    brand: {
-      "@type": "Brand",
-      name: "METSIM Solutions",
-    },
-    manufacturer: {
-      "@type": "Organization",
-      name: "METSIM Solutions",
-      url: "https://www.metsim.com.py",
-    },
-  };
-
   const schemaBreadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -99,7 +82,7 @@ const ProductPage = () => {
         <meta name="description" content={product.metaDescription} />
         <meta name="keywords" content={product.keywords.join(", ")} />
         <link rel="canonical" href={productUrl} />
-        <meta property="og:type" content="product" />
+        <meta property="og:type" content="website" />
         <meta property="og:url" content={productUrl} />
         <meta property="og:title" content={`${product.name} | METSIM Solutions Paraguay`} />
         <meta property="og:description" content={product.metaDescription} />
@@ -110,7 +93,6 @@ const ProductPage = () => {
         <meta name="twitter:title" content={`${product.name} | METSIM Solutions Paraguay`} />
         <meta name="twitter:description" content={product.metaDescription} />
         <meta name="twitter:image" content={productImage} />
-        <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaBreadcrumb)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFaq)}</script>
       </Helmet>

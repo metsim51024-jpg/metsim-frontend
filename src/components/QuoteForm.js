@@ -9,7 +9,7 @@ import "./QuoteForm.css";
 const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API_URL = `${BACKEND_URL}/api`;
 
-const QuoteForm = () => {
+const QuoteForm = ({ standalone = false }) => {
   const [formData, setFormData] = useState({
     description: "",
     client_name: "",
@@ -145,14 +145,16 @@ const QuoteForm = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Solicitar Cotización | METSIM Solutions Paraguay</title>
-        <meta name="description" content="Solicite su cotización gratuita en METSIM Solutions. Proyectos de ingeniería, automatización y tecnología en Paraguay. Respuesta en menos de 24 horas." />
-        <link rel="canonical" href="https://www.metsim.com.py/cotizacion" />
-        <meta property="og:url" content="https://www.metsim.com.py/cotizacion" />
-        <meta property="og:title" content="Solicitar Cotización | METSIM Solutions" />
-        <meta property="og:description" content="Solicite cotización de ingeniería gratuita en Paraguay." />
-      </Helmet>
+      {standalone && (
+        <Helmet>
+          <title>Solicitar Cotización | METSIM Solutions Paraguay</title>
+          <meta name="description" content="Solicite su cotización gratuita en METSIM Solutions. Proyectos de ingeniería, automatización y tecnología en Paraguay. Respuesta en menos de 24 horas." />
+          <link rel="canonical" href="https://www.metsim.com.py/cotizacion" />
+          <meta property="og:url" content="https://www.metsim.com.py/cotizacion" />
+          <meta property="og:title" content="Solicitar Cotización | METSIM Solutions" />
+          <meta property="og:description" content="Solicite cotización de ingeniería gratuita en Paraguay." />
+        </Helmet>
+      )}
     <section id="quotes" className="quote-section">
       <div className="quote-container">
         {/* FORMULARIO */}

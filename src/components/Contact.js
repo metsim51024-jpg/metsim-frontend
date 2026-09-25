@@ -8,7 +8,7 @@ import "./Contact.css";
 const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
-export default function Contact() {
+export default function Contact({ standalone = false }) {
   const [formData, setFormData] = useState({
     client_name: "",
     client_email: "",
@@ -111,14 +111,16 @@ export default function Contact() {
 
   return (
     <>
-      <Helmet>
-        <title>Contacto | METSIM Solutions Paraguay</title>
-        <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Llame al +595 972 834-336 o escriba por WhatsApp para consultas de ingeniería y tecnología." />
-        <link rel="canonical" href="https://www.metsim.com.py/contacto" />
-        <meta property="og:url" content="https://www.metsim.com.py/contacto" />
-        <meta property="og:title" content="Contacto | METSIM Solutions" />
-        <meta property="og:description" content="Contáctenos para consultas de ingeniería en Paraguay." />
-      </Helmet>
+      {standalone && (
+        <Helmet>
+          <title>Contacto | METSIM Solutions Paraguay</title>
+          <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Llame al +595 972 834-336 o escriba por WhatsApp para consultas de ingeniería y tecnología." />
+          <link rel="canonical" href="https://www.metsim.com.py/contacto" />
+          <meta property="og:url" content="https://www.metsim.com.py/contacto" />
+          <meta property="og:title" content="Contacto | METSIM Solutions" />
+          <meta property="og:description" content="Contáctenos para consultas de ingeniería en Paraguay." />
+        </Helmet>
+      )}
     <section id="contacto" className="contact">
       <div className="contact-container">
         {/* Left: Contact Info */}

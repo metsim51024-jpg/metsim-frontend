@@ -42,8 +42,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/productos" element={<Catalog />} />
         <Route path="/productos/:slug" element={<ProductPage />} />
-        <Route path="/contacto" element={<Contact />} />
-        <Route path="/cotizacion" element={<QuoteForm />} />
+        <Route path="/contacto" element={<Contact standalone />} />
+        <Route path="/cotizacion" element={<QuoteForm standalone />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route 
           path="/admin/dashboard" 

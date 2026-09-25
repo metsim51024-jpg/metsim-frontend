@@ -35,7 +35,7 @@ const ProductPage = () => {
   const rawImg = product.images?.[0]?.src;
   const productImage = rawImg
     ? (rawImg.startsWith("http") ? rawImg : BASE_URL + rawImg)
-    : BASE_URL + "/og-metsim.png";
+    : BASE_URL + "/og-metsim.jpg";
   const productUrl = `https://www.metsim.com.py/productos/${product.id}`;
 
   const schemaBreadcrumb = {

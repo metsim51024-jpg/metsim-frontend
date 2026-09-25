@@ -8,6 +8,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Privacidad from "./pages/Privacidad";
 import Terminos from "./pages/Terminos";
+import QuoteTracking from "./pages/QuoteTracking";
 import Contact from "./components/Contact";
 import QuoteForm from "./components/QuoteForm";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -44,6 +45,7 @@ function App() {
         <Route path="/productos/:slug" element={<ProductPage />} />
         <Route path="/contacto" element={<Contact standalone />} />
         <Route path="/cotizacion" element={<QuoteForm standalone />} />
+        <Route path="/seguimiento/:token" element={<QuoteTracking />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route 
           path="/admin/dashboard" 

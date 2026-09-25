@@ -340,3 +340,55 @@
     padding: 1.5rem;
   }
 }
+
+/* ===== Enlace de seguimiento en el panel de exito ===== */
+.success-tracking {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(34, 211, 238, 0.07);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.success-tracking-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #22d3ee;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.success-tracking p {
+  margin: 0 0 1.1rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.success-tracking-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #22d3ee;
+  color: #0f1523;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.success-tracking-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-tracking-btn:hover {
+    transform: none;
+  }
+}

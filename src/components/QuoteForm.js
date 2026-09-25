@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { toast } from "sonner";
-import { FileText, CheckCircle, Upload, Clock3, Receipt, Calculator, HardHat } from "lucide-react";
+import { FileText, CheckCircle, Upload, Clock3, Receipt, Calculator, HardHat, ExternalLink } from "lucide-react";
 import "./QuoteForm.css";
 
 const BACKEND_URL = "https://metsim-backend.onrender.com";
@@ -42,6 +42,7 @@ const QuoteForm = ({ standalone = false }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [trackingUrl, setTrackingUrl] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,8 +118,14 @@ const QuoteForm = ({ standalone = false }) => {
       console.log("✅ Presupuesto enviado exitosamente:", response.status);
 
       // Mostrar mensaje de éxito
+      const url = response.data?.data?.tracking_url || null;
+      setTrackingUrl(url);
       setSubmitted(true);
       toast.success("¡Presupuesto enviado exitosamente! Revisa tu correo.");
+
+      // Con enlace de seguimiento el panel queda abierto: si se cerrara solo a
+      // los 3 segundos el cliente no llegaría a guardarlo.
+      if (url) return;
 
       // Limpiar después de 3 segundos
       setTimeout(() => {
@@ -307,6 +314,19 @@ const QuoteForm = ({ standalone = false }) => {
                 <p><strong>Teléfono:</strong> {formData.client_phone}</p>
                 <p><strong>Archivos:</strong> {formData.files.length} adjuntos</p>
               </div>
+
+              {trackingUrl && (
+                <div className="success-tracking">
+                  <span className="success-tracking-label">Seguimiento en línea</span>
+                  <p>
+                    Guardá este enlace para ver en qué etapa está tu pedido cuando quieras.
+                    También te lo mandamos por correo.
+                  </p>
+                  <a href={trackingUrl} className="success-tracking-btn" target="_blank" rel="noreferrer">
+                    Ver estado de mi presupuesto <ExternalLink size={16} />
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </div>

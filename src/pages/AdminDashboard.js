@@ -25,12 +25,21 @@ const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
 // Estados de cotización: valor backend -> etiqueta y color
+// Mismo orden y mismas claves que backend/utils/quoteStatus.js
 const QUOTE_STATUS = {
-  pending:   { label: "Pendiente",  className: "st-pending" },
-  responded: { label: "Respondido", className: "st-responded" },
-  accepted:  { label: "Ganado",     className: "st-accepted" },
-  rejected:  { label: "Perdido",    className: "st-rejected" }
+  received:      { label: "Recibida",       className: "st-pending" },
+  analyzing:     { label: "En análisis",    className: "st-pending" },
+  quoted:        { label: "Presupuestado",  className: "st-responded" },
+  approved:      { label: "Aprobado",       className: "st-accepted" },
+  drawings:      { label: "Planos",         className: "st-responded" },
+  manufacturing: { label: "Fabricación",    className: "st-responded" },
+  delivered:     { label: "Entregado",      className: "st-accepted" },
+  rejected:      { label: "No continuó",    className: "st-rejected" }
 };
+
+// Cotizaciones anteriores al seguimiento: se muestran con su equivalente nuevo.
+const LEGACY_QUOTE_STATUS = { pending: "received", responded: "quoted", accepted: "approved" };
+const quoteStatusKey = (status) => LEGACY_QUOTE_STATUS[status] || status || "received";
 
 const CONTACT_STATUS = {
   nuevo:      { label: "Nuevo",      className: "st-pending" },
@@ -164,7 +173,7 @@ const AdminDashboard = () => {
         (q.client_name || "").toLowerCase().includes(term) ||
         (q.client_email || "").toLowerCase().includes(term) ||
         (q.description || "").toLowerCase().includes(term);
-      const matchStatus = statusFilter === "all" || (q.status || "pending") === statusFilter;
+      const matchStatus = statusFilter === "all" || quoteStatusKey(q.status) === statusFilter;
       return matchTerm && matchStatus;
     });
   }, [quotes, search, statusFilter]);
@@ -183,7 +192,7 @@ const AdminDashboard = () => {
         q.client_name,
         q.client_email,
         q.client_phone,
-        QUOTE_STATUS[q.status || "pending"]?.label || q.status,
+        QUOTE_STATUS[quoteStatusKey(q.status)]?.label || q.status,
         (q.description || "").replace(/\n/g, " ")
       ].map(escape).join(",")
     );
@@ -316,7 +325,7 @@ const AdminDashboard = () => {
                       <h3>Resumen Rápido</h3>
                       <div className="summary-item"><span>Visitas últimos 7 días</span><strong>{visits.last7days}</strong></div>
                       <div className="summary-item"><span>Cotizaciones hoy</span><strong>{quotesToday}</strong></div>
-                      <div className="summary-item"><span>Cotizaciones ganadas</span><strong>{quotes.filter(q => q.status === "accepted").length}</strong></div>
+                      <div className="summary-item"><span>Cotizaciones ganadas</span><strong>{quotes.filter(q => ["approved", "drawings", "manufacturing", "delivered"].includes(quoteStatusKey(q.status))).length}</strong></div>
                       <div className="summary-item"><span>Mensajes nuevos</span><strong>{contacts.filter(c => (c.status || "nuevo") === "nuevo").length}</strong></div>
                     </div>
                   </div>
@@ -339,10 +348,9 @@ const AdminDashboard = () => {
                     </div>
                     <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                       <option value="all">Todos los estados</option>
-                      <option value="pending">Pendiente</option>
-                      <option value="responded">Respondido</option>
-                      <option value="accepted">Ganado</option>
-                      <option value="rejected">Perdido</option>
+                      {Object.entries(QUOTE_STATUS).map(([key, val]) => (
+                        <option key={key} value={key}>{val.label}</option>
+                      ))}
                     </select>
                     <button className="export-btn" onClick={exportCSV}>
                       <Download size={16} /> Exportar CSV
@@ -358,7 +366,7 @@ const AdminDashboard = () => {
                     <div className="items-list">
                       {filteredQuotes.map((quote) => {
                         const id = quote._id || quote.id;
-                        const st = QUOTE_STATUS[quote.status || "pending"] || QUOTE_STATUS.pending;
+                        const st = QUOTE_STATUS[quoteStatusKey(quote.status)] || QUOTE_STATUS.received;
                         return (
                           <div key={id} className={`item-card ${expandedId === id ? "expanded" : ""}`}>
                             <div className="item-header" onClick={() => setExpandedId(expandedId === id ? null : id)}>
@@ -405,7 +413,7 @@ const AdminDashboard = () => {
                                     {Object.entries(QUOTE_STATUS).map(([key, val]) => (
                                       <button
                                         key={key}
-                                        className={`status-pill ${val.className} ${(quote.status || "pending") === key ? "active" : ""}`}
+                                        className={`status-pill ${val.className} ${quoteStatusKey(quote.status) === key ? "active" : ""}`}
                                         onClick={() => updateQuoteStatus(id, key)}
                                       >
                                         {val.label}

@@ -1,0 +1,309 @@
+/* src/pages/QuoteTracking.css */
+
+.tracking-page {
+  background: #0f1523;
+  min-height: 100vh;
+}
+
+.tracking-main {
+  padding: 140px 1.5rem 100px;
+}
+
+.tracking-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ===== Cabecera ===== */
+.tracking-header {
+  margin-bottom: 2.5rem;
+}
+
+.tracking-header h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0.75rem 0 0.75rem;
+  color: #fff;
+}
+
+.tracking-current {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.tracking-current strong {
+  color: #22d3ee;
+}
+
+/* ===== Resumen ===== */
+.tracking-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.tracking-request {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 8px;
+  margin-bottom: 2.5rem;
+}
+
+.summary-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 0.4rem;
+}
+
+.tracking-summary p,
+.tracking-request p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.tracking-request p {
+  white-space: pre-wrap;
+}
+
+/* ===== Línea de tiempo ===== */
+.tracking-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+/* El hilo que une los pasos; el último no lo lleva. */
+.timeline-step::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-step:last-child::before {
+  display: none;
+}
+
+.timeline-step.is-done::before {
+  background: rgba(34, 211, 238, 0.45);
+}
+
+.step-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: #0f1523;
+  color: #0f1523;
+  z-index: 1;
+}
+
+.is-done .step-marker {
+  background: #22d3ee;
+  border-color: #22d3ee;
+}
+
+.is-current .step-marker {
+  border-color: #22d3ee;
+  color: #22d3ee;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.15);
+}
+
+.is-rejected .step-marker {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.step-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+}
+
+.step-body h2 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.6;
+}
+
+.is-done .step-body h2 {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.is-current .step-body h2 {
+  color: #22d3ee;
+}
+
+.is-rejected .step-body h2 {
+  color: #fca5a5;
+}
+
+.step-head time {
+  font-size: 0.78rem;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+.step-body p {
+  margin: 0.4rem 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===== Pie y acciones ===== */
+.tracking-footer {
+  margin-top: 1rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.tracking-footer p {
+  margin: 0 0 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.tracking-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.tracking-btn.primary {
+  background: #25d366;
+  color: #06231a;
+}
+
+.tracking-btn.primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.tracking-btn.ghost {
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  color: #22d3ee;
+}
+
+.tracking-btn.ghost:hover {
+  background: rgba(34, 211, 238, 0.1);
+}
+
+/* ===== Estados de carga y error ===== */
+.tracking-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.tracking-state h1 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin: 1rem 0 0.75rem;
+}
+
+.tracking-state p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.tracking-state span {
+  display: block;
+  margin-top: 0.6rem;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.tracking-state-icon {
+  color: #22d3ee;
+}
+
+.tracking-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+.tracking-spinner {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto;
+  border: 3px solid rgba(34, 211, 238, 0.2);
+  border-top-color: #22d3ee;
+  border-radius: 50%;
+  animation: tracking-spin 0.9s linear infinite;
+}
+
+@keyframes tracking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tracking-spinner {
+    animation-duration: 3s;
+  }
+  .tracking-btn:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .tracking-main {
+    padding: 110px 1rem 70px;
+  }
+
+  .tracking-summary {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+}

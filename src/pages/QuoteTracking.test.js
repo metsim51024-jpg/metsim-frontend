@@ -15,16 +15,16 @@ const respuesta = {
   description: "Galpon de 20x40 con entrepiso",
   files: 2,
   status: "manufacturing",
-  status_label: "En fabricacion",
+  status_label: "En fabricación",
   created_at: "2026-09-01T12:00:00.000Z",
   updated_at: "2026-09-12T12:00:00.000Z",
   timeline: [
     { key: "received", label: "Solicitud recibida", description: "", state: "done", at: "2026-09-01T12:00:00.000Z" },
-    { key: "analyzing", label: "En analisis tecnico", description: "", state: "done", at: "2026-09-02T12:00:00.000Z" },
+    { key: "analyzing", label: "En análisis técnico", description: "", state: "done", at: "2026-09-02T12:00:00.000Z" },
     { key: "quoted", label: "Presupuesto enviado", description: "", state: "done", at: "2026-09-03T12:00:00.000Z" },
     { key: "approved", label: "Aprobado por el cliente", description: "", state: "done", at: "2026-09-05T12:00:00.000Z" },
-    { key: "drawings", label: "Planos en aprobacion", description: "", state: "done", at: "2026-09-08T12:00:00.000Z" },
-    { key: "manufacturing", label: "En fabricacion", description: "Tu pedido esta en planta.", state: "current", at: "2026-09-12T12:00:00.000Z" },
+    { key: "drawings", label: "Planos en aprobación", description: "", state: "done", at: "2026-09-08T12:00:00.000Z" },
+    { key: "manufacturing", label: "En fabricación", description: "Tu pedido está en planta.", state: "current", at: "2026-09-12T12:00:00.000Z" },
     { key: "delivered", label: "Entregado", description: "", state: "pending", at: null },
   ],
 };
@@ -62,7 +62,7 @@ test("muestra el recorrido completo y la etapa actual", async () => {
   // La etapa en curso es la unica marcada como actual
   const actuales = document.querySelectorAll(".timeline-step.is-current");
   expect(actuales).toHaveLength(1);
-  expect(actuales[0]).toHaveTextContent("En fabricacion");
+  expect(actuales[0]).toHaveTextContent("En fabricación");
 });
 
 test("un token inexistente no se reporta como error de red", async () => {

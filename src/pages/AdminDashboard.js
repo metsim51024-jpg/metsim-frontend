@@ -17,7 +17,9 @@ import {
   AlertCircle,
   MessageSquare,
   Search,
-  BarChart3
+  BarChart3,
+  Link2,
+  Copy
 } from "lucide-react";
 import "../styles/AdminDashboard.css";
 
@@ -39,6 +41,18 @@ const QUOTE_STATUS = {
 
 // Cotizaciones anteriores al seguimiento: se muestran con su equivalente nuevo.
 const LEGACY_QUOTE_STATUS = { pending: "received", responded: "quoted", accepted: "approved" };
+
+const SITE_URL = "https://www.metsim.com.py";
+const trackingUrlOf = (quote) =>
+  quote.tracking_token ? `${SITE_URL}/seguimiento/${quote.tracking_token}` : null;
+
+// wa.me necesita el numero con codigo de pais y sin signos: 0994685767 -> 595994685767
+const waNumber = (phone) => {
+  const d = String(phone || "").replace(/\D/g, "");
+  if (!d) return null;
+  if (d.startsWith("595")) return d;
+  return "595" + d.replace(/^0+/, "");
+};
 const quoteStatusKey = (status) => LEGACY_QUOTE_STATUS[status] || status || "received";
 
 const CONTACT_STATUS = {
@@ -402,6 +416,47 @@ const AdminDashboard = () => {
                                           <Download size={16} /> {file.filename || `Archivo ${idx + 1}`}
                                         </a>
                                       ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Enlace de seguimiento del cliente */}
+                                {trackingUrlOf(quote) && (
+                                  <div className="tracking-share">
+                                    <p className="section-title">Enlace de seguimiento del cliente</p>
+                                    <code className="tracking-share-url">{trackingUrlOf(quote)}</code>
+                                    <div className="tracking-share-actions">
+                                      <button
+                                        type="button"
+                                        className="tracking-share-btn"
+                                        onClick={() => {
+                                          navigator.clipboard.writeText(trackingUrlOf(quote))
+                                            .then(() => toast.success("Enlace copiado"))
+                                            .catch(() => toast.error("No se pudo copiar"));
+                                        }}
+                                      >
+                                        <Copy size={15} /> Copiar
+                                      </button>
+                                      {waNumber(quote.client_phone) && (
+                                        <a
+                                          className="tracking-share-btn wa"
+                                          href={`https://wa.me/${waNumber(quote.client_phone)}?text=${encodeURIComponent(
+                                            `Hola ${quote.client_name || ""}, seguí el estado de tu presupuesto en METSIM desde acá: ${trackingUrlOf(quote)}`
+                                          )}`}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                        >
+                                          <MessageSquare size={15} /> Enviar por WhatsApp
+                                        </a>
+                                      )}
+                                      <a
+                                        className="tracking-share-btn ghost"
+                                        href={trackingUrlOf(quote)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                      >
+                                        <Link2 size={15} /> Abrir
+                                      </a>
                                     </div>
                                   </div>
                                 )}

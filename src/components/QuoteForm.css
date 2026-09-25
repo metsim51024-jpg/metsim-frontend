@@ -241,15 +241,18 @@
 .quote-benefits {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .benefits-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(34, 211, 238, 0.2);
-  padding: 2rem;
+  padding: 1.35rem 1.5rem;
   border-radius: 8px;
-  text-align: center;
+  text-align: left;
   transition: all 0.3s ease;
 }
 
@@ -259,22 +262,44 @@
   transform: translateY(-4px);
 }
 
-.benefit-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+/* Mismo contenedor de icono que las tarjetas de Servicios, para que las dos
+   secciones se lean como el mismo sistema. */
+.benefit-icon-container {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(6, 182, 212, 0.2));
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #22d3ee;
+  transition: all 0.3s ease;
+}
+
+.benefits-card:hover .benefit-icon-container {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.4), rgba(6, 182, 212, 0.4));
+  border-color: #22d3ee;
+}
+
+.benefit-body {
+  min-width: 0;
 }
 
 .benefits-card h4 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.01em;
   font-family: "Barlow Condensed", sans-serif;
 }
 
 .benefits-card p {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
 }
 
 @media (max-width: 1024px) {

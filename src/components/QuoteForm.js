@@ -3,11 +3,34 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { toast } from "sonner";
-import { FileText, CheckCircle, Upload } from "lucide-react";
+import { FileText, CheckCircle, Upload, Clock3, Receipt, Calculator, HardHat } from "lucide-react";
 import "./QuoteForm.css";
 
 const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API_URL = `${BACKEND_URL}/api`;
+
+const benefits = [
+  {
+    Icon: Clock3,
+    title: "Respuesta en 24 horas",
+    text: "Analizamos tu proyecto y te contestamos al día hábil siguiente.",
+  },
+  {
+    Icon: Receipt,
+    title: "Presupuesto sin cargo",
+    text: "Cotizamos sin costo ni compromiso, con detalle de materiales y plazos.",
+  },
+  {
+    Icon: Calculator,
+    title: "Cálculo, no estimación",
+    text: "Dimensionamos según AISC 360 o API 650, con simulación en SolidWorks.",
+  },
+  {
+    Icon: HardHat,
+    title: "Planta propia",
+    text: "Fabricamos, transportamos e instalamos en todo Paraguay con equipo propio.",
+  },
+];
 
 const QuoteForm = ({ standalone = false }) => {
   const [formData, setFormData] = useState({
@@ -290,29 +313,17 @@ const QuoteForm = ({ standalone = false }) => {
 
         {/* BENEFICIOS */}
         <div className="quote-benefits">
-          <div className="benefits-card">
-            <div className="benefit-icon">⚡</div>
-            <h4>Respuesta Rápida</h4>
-            <p>Análisis en menos de 24 horas</p>
-          </div>
-
-          <div className="benefits-card">
-            <div className="benefit-icon">💰</div>
-            <h4>Sin Costo</h4>
-            <p>Presupuestos gratuitos</p>
-          </div>
-
-          <div className="benefits-card">
-            <div className="benefit-icon">🎯</div>
-            <h4>Exactitud</h4>
-            <p>Cotizaciones detalladas</p>
-          </div>
-
-          <div className="benefits-card">
-            <div className="benefit-icon">👥</div>
-            <h4>Expertos</h4>
-            <p>Equipo especializado</p>
-          </div>
+          {benefits.map(({ Icon, title, text }) => (
+            <div className="benefits-card" key={title}>
+              <div className="benefit-icon-container">
+                <Icon size={22} strokeWidth={1.75} aria-hidden="true" />
+              </div>
+              <div className="benefit-body">
+                <h4>{title}</h4>
+                <p>{text}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

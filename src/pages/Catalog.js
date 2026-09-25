@@ -45,7 +45,7 @@ const Catalog = () => {
         <section className="catalog-hero">
           <div className="catalog-hero-content">
             <span className="section-badge">[ CATÁLOGO ]</span>
-            <h1 className="catalog-title">Productos Metálicos</h1>
+            <h1 className="catalog-title">Productos Metálicos en Paraguay</h1>
             <p className="catalog-subtitle">
               Fabricación industrial de alta resistencia diseñada y simulada en SolidWorks.
               Cada producto cumple normas internacionales con cálculo estructural avanzado.

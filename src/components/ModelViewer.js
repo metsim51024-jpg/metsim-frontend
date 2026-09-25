@@ -170,6 +170,9 @@ function ModelViewer({ models = [], alt, poster, pdfSrc, images = [] }) {
               src={images[imageIndex].src}
               alt={images[imageIndex].label}
               className="mv-gallery-img"
+              width="800"
+              height="600"
+              loading="lazy"
             />
             <div className="mv-image-label">{images[imageIndex].label}</div>
           </div>

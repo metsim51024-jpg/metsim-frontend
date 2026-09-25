@@ -87,22 +87,46 @@ export const products = [
     id: "estructuras-metalicas",
     name: "Estructuras Metálicas",
     shortDescription:
-      "Diseño y fabricación de estructuras metálicas industriales: galpones, naves industriales, entrepisos metálicos y cobertizos.",
+      "Diseño y fabricación de estructuras metálicas en Paraguay: galpones industriales, naves de acero, entrepisos y cobertizos con cálculo estructural AISC, planos y montaje incluido.",
     description:
-      "METSIM diseña y fabrica estructuras metálicas para la industria de la construcción en Paraguay. Desde galpones industriales hasta edificios metálicos completos y entrepisos estructurales, cada proyecto incluye cálculo estructural, planos de fabricación y montaje. Trabajamos con acero A36 y A572, con uniones soldadas y bulonadas según norma AISC.",
+      "METSIM Solutions diseña y fabrica estructuras metálicas industriales para proyectos en todo Paraguay. Somos especialistas en galpones metálicos, naves industriales, entrepisos estructurales y cobertizos de acero, con planta de fabricación propia y entrega e instalación en Asunción y todo el interior del país.\n\nCada proyecto de estructura metálica incluye cálculo estructural con simulación en SolidWorks, planos de fabricación y montaje firmados por ingeniero matriculado, fabricación con acero A36 y A572 Gr50, montaje con equipo técnico especializado y cumplimiento de normas AISC 360 y CIRSOC.\n\nFabricamos desde pequeñas estructuras metálicas hasta galpones con luz libre de hasta 60 metros sin columnas intermedias. Cubiertas en chapa acanalada galvanizada, panel sándwich térmico o policarbonato. Trabajamos para industria logística, agroindustria, sector comercial e infraestructura pública en Paraguay.",
     category: "Construcción Industrial",
     badge: "Norma AISC",
     icon: "🏭",
     keywords: [
       "estructuras metálicas Paraguay",
-      "galpones metálicos Asunción",
-      "naves industriales acero",
+      "galpones metálicos Paraguay",
+      "naves industriales acero Paraguay",
       "construcción metálica Paraguay",
       "galpones prefabricados Paraguay",
       "entrepiso metálico Paraguay",
+      "fabricante estructuras metálicas Paraguay",
+      "construcción galpones industriales Asunción",
+      "precio estructura metálica Paraguay",
+      "cobertizo metálico Paraguay",
+      "nave industrial acero Asunción",
+      "estructura metálica galpón Paraguay",
     ],
     metaDescription:
-      "Estructuras metálicas en Paraguay. METSIM diseña y fabrica galpones, naves industriales, entrepisos y estructuras de acero con cálculo estructural, planos y montaje incluido.",
+      "Estructuras metálicas en Paraguay. METSIM fabrica galpones, naves industriales y entrepisos de acero en Asunción con cálculo AISC, planos y montaje incluido. Cotizá gratis en 24 hs.",
+    faq: [
+      {
+        q: "¿Cuánto cuesta fabricar una estructura metálica en Paraguay?",
+        a: "El costo depende de las dimensiones, tipo de acero, cubierta y acabados requeridos. METSIM ofrece cotización detallada sin cargo en 24 horas, con cálculo estructural preliminar y planos de referencia incluidos.",
+      },
+      {
+        q: "¿Cuánto tiempo tarda en fabricarse un galpón metálico?",
+        a: "Para proyectos estándar, el plazo típico es de 6 a 12 semanas desde la aprobación del diseño hasta la entrega montada. Proyectos de mayor envergadura se acuerdan según cronograma con el cliente.",
+      },
+      {
+        q: "¿Los planos son aptos para gestión de permisos municipales en Paraguay?",
+        a: "Sí. Cada proyecto de estructura metálica incluye planos de fabricación y estructura firmados por ingeniero matriculado, aptos para la gestión de permisos municipales en Paraguay.",
+      },
+      {
+        q: "¿Fabrican estructuras metálicas en todo Paraguay o solo en Asunción?",
+        a: "METSIM fabrica en planta propia y entrega e instala en todo el territorio paraguayo: Asunción, Gran Asunción, departamentos del interior y proyectos en la región del Chaco.",
+      },
+    ],
     specs: [
       { label: "Material", value: "Acero A36 / A572 Gr50" },
       { label: "Norma de diseño", value: "AISC 360 / CIRSOC" },

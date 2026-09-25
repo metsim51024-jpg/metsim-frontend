@@ -31,7 +31,11 @@ const ProductPage = () => {
 
   if (!product) return <Navigate to="/productos" replace />;
 
-  const productImage = product.images?.[0] || "https://www.metsim.com.py/logo512.png";
+  const BASE_URL = "https://www.metsim.com.py";
+  const rawImg = product.images?.[0]?.src;
+  const productImage = rawImg
+    ? (rawImg.startsWith("http") ? rawImg : BASE_URL + rawImg)
+    : BASE_URL + "/og-metsim.png";
   const productUrl = `https://www.metsim.com.py/productos/${product.id}`;
 
   const schemaBreadcrumb = {
@@ -44,35 +48,29 @@ const ProductPage = () => {
     ],
   };
 
+  const defaultFaq = [
+    {
+      q: `¿Dónde fabrican ${product.name.toLowerCase()} en Paraguay?`,
+      a: `METSIM Solutions fabrica ${product.name.toLowerCase()} en Paraguay, con planta en Cordillera. Realizamos proyectos en todo el territorio nacional.`,
+    },
+    {
+      q: "¿Cuál es el tiempo de entrega?",
+      a: "El tiempo de entrega varía según la complejidad y cantidad del pedido. Para proyectos estándar, típicamente entre 2 y 6 semanas. Contactanos para una estimación precisa según tu proyecto.",
+    },
+    {
+      q: "¿Ofrecen servicio de instalación?",
+      a: "Sí. METSIM ofrece servicio integral que incluye fabricación, transporte e instalación con equipo técnico especializado.",
+    },
+  ];
+
   const schemaFaq = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `¿Dónde fabrican ${product.name.toLowerCase()} en Paraguay?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: `METSIM Solutions fabrica ${product.name.toLowerCase()} en Paraguay, con planta en Cordillera. Realizamos proyectos en todo el territorio nacional.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: "¿Cuál es el tiempo de entrega?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "El tiempo de entrega varía según la complejidad y cantidad del pedido. Para proyectos estándar, típicamente entre 2 y 6 semanas. Contactanos para una estimación precisa según tu proyecto.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "¿Ofrecen servicio de instalación?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Sí. METSIM ofrece servicio integral que incluye fabricación, transporte e instalación con equipo técnico especializado.",
-        },
-      },
-    ],
+    mainEntity: (product.faq || defaultFaq).map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
   };
 
   return (
@@ -234,18 +232,12 @@ const ProductPage = () => {
           <section className="product-seo-section">
             <h2 className="section-heading">Preguntas frecuentes</h2>
             <div className="faq-list">
-              <div className="faq-item">
-                <h3>¿Dónde fabrican {product.name.toLowerCase()} en Paraguay?</h3>
-                <p>METSIM Solutions fabrica {product.name.toLowerCase()} en Paraguay, con planta en Cordillera. Realizamos proyectos en todo el territorio nacional.</p>
-              </div>
-              <div className="faq-item">
-                <h3>¿Cuál es el tiempo de entrega?</h3>
-                <p>El tiempo de entrega varía según la complejidad y cantidad del pedido. Para proyectos estándar, típicamente entre 2 y 6 semanas. Contactanos para una estimación precisa según tu proyecto.</p>
-              </div>
-              <div className="faq-item">
-                <h3>¿Ofrecen servicio de instalación?</h3>
-                <p>Sí. METSIM ofrece servicio integral que incluye fabricación, transporte e instalación con equipo técnico especializado.</p>
-              </div>
+              {(product.faq || defaultFaq).map((item, i) => (
+                <div key={i} className="faq-item">
+                  <h3>{item.q}</h3>
+                  <p>{item.a}</p>
+                </div>
+              ))}
             </div>
           </section>
         </div>

@@ -14,7 +14,7 @@ const Home = () => {
     <div className="home-page">
       <Helmet>
         <title>METSIM Solutions | Ingeniería y Tecnología en Paraguay</title>
-        <meta name="description" content="METSIM Solutions ofrece servicios de ingeniería, automatización y tecnología en Paraguay. Consulte proyectos, solicite cotización y contáctenos hoy." />
+        <meta name="description" content="METSIM Solutions — fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." />
         <link rel="canonical" href="https://www.metsim.com.py/" />
         <meta property="og:url" content="https://www.metsim.com.py/" />
         <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" />

@@ -9,27 +9,31 @@ function Services() {
     {
       icon: <Zap size={32} />,
       title: "Estructuras Metálicas",
-      description: "Fabricación industrial de alta resistencia para proyectos de envergadura.",
-      features: ["Diseño personalizado", "Acero de calidad", "Entrega rápida"]
+      description: "Galpones, naves industriales y entrepisos de acero diseñados con cálculo estructural AISC para proyectos en todo Paraguay.",
+      features: ["Cálculo estructural AISC", "Acero A36 / A572", "Montaje incluido"],
+      to: "/productos/estructuras-metalicas",
     },
     {
       icon: <Shield size={32} />,
       title: "Tanques Industriales",
-      description: "Construcción especializada para líquidos, gases y materiales peligrosos.",
-      features: ["Certificaciones", "Durabilidad", "Seguridad garantizada"]
+      description: "Tanques metálicos para almacenamiento de agua, combustibles y líquidos industriales según norma API 650.",
+      features: ["Norma API 650 / ASME", "500 L – 500.000 L", "Acero al carbono / Inox"],
+      to: "/productos/tanques-metalicos",
     },
     {
       icon: <Cpu size={32} />,
-      title: "Piezas Metálicas",
-      description: "Manufactura de precisión para maquinaria y equipos industriales.",
-      features: ["Tolerancias estrictas", "CNC moderno", "Control de calidad"]
+      title: "Tratamiento de Aguas",
+      description: "Sistemas DAF, floculadores tubulares y tamices rotativos para tratamiento de aguas industriales en Paraguay.",
+      features: ["Sistema DAF integrado", "Floculador tubular", "Sin partes móviles"],
+      to: "/productos/flotador-aire-disuelto",
     },
     {
       icon: <Wrench size={32} />,
-      title: "Instalaciones",
-      description: "Montaje y servicio técnico con profesionales especializados.",
-      features: ["Equipo capacitado", "Garantía", "Soporte técnico"]
-    }
+      title: "Columnas e Iluminación",
+      description: "Columnas metálicas telescópicas de 7 a 16m y brazos de alumbrado para proyectos MOPC, ANDE y municipalidades.",
+      features: ["Norma IEC / ITAIPÚ / ANDE", "7 m a 16 m de altura", "Galvanizadas"],
+      to: "/productos/columnas-metalicas",
+    },
   ];
 
   return (
@@ -64,7 +68,7 @@ function Services() {
                 ))}
               </ul>
 
-              <button className="service-btn" onClick={() => navigate("/productos")}>Conocer más</button>
+              <button className="service-btn" onClick={() => navigate(service.to || "/productos")}>Conocer más</button>
             </div>
           ))}
         </div>

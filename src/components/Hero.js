@@ -6,11 +6,19 @@ function Hero() {
   const [offsetY, setOffsetY] = useState(0);
 
   useEffect(() => {
+    let rafId = null;
     const handleScroll = () => {
-      setOffsetY(window.scrollY);
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        setOffsetY(window.scrollY);
+        rafId = null;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const scrollToQuotes = () => {
@@ -76,7 +84,7 @@ function Hero() {
           <div className="hero-image-container">
             <img
               src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
-              alt="Logo METSIM Solutions"
+              alt="METSIM Solutions — Fabricación de estructuras metálicas y equipos industriales en Paraguay"
               className="hero-image logo-image"
               onError={(e) => {
                 console.error("Error cargando logo hero:", e);

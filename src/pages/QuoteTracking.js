@@ -99,6 +99,11 @@ const QuoteTracking = () => {
                 <a href={WHATSAPP} className="tracking-btn primary" target="_blank" rel="noreferrer">
                   <MessageCircle size={18} /> Consultar por WhatsApp
                 </a>
+                {error === "notfound" && (
+                  <Link to="/seguimiento" className="tracking-btn ghost">
+                    Recuperar mi enlace
+                  </Link>
+                )}
                 <Link to="/" className="tracking-btn ghost">
                   Volver al inicio
                 </Link>

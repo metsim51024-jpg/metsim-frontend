@@ -55,6 +55,14 @@ const waNumber = (phone) => {
 };
 const quoteStatusKey = (status) => LEGACY_QUOTE_STATUS[status] || status || "received";
 
+// Mismo orden que backend/utils/quoteStatus.js. "rejected" queda afuera porque
+// no es un paso del recorrido, es una salida.
+const ETAPAS = ["received", "analyzing", "quoted", "approved", "drawings", "manufacturing", "delivered"];
+const siguienteEtapa = (status) => {
+  const i = ETAPAS.indexOf(quoteStatusKey(status));
+  return i >= 0 && i < ETAPAS.length - 1 ? ETAPAS[i + 1] : null;
+};
+
 const CONTACT_STATUS = {
   nuevo:      { label: "Nuevo",      className: "st-pending" },
   revisado:   { label: "Revisado",   className: "st-responded" },
@@ -72,8 +80,15 @@ const unwrap = (res) => {
 
 const AdminDashboard = () => {
   const [quotes, setQuotes] = useState([]);
+  // El endpoint devuelve hasta 100 cotizaciones pero informa el total real:
+  // usar quotes.length como total dejaba el numero clavado en 100.
+  const [totalQuotes, setTotalQuotes] = useState(0);
   const [contacts, setContacts] = useState([]);
-  const [visits, setVisits] = useState({ total: 0, today: 0, last7days: 0, topPages: [] });
+  const [visits, setVisits] = useState({
+    total: 0, today: 0, last7days: 0,
+    visitors: 0, visitorsToday: 0, visitors7days: 0,
+    topPages: []
+  });
   const [activeTab, setActiveTab] = useState("dashboard");
   const [expandedId, setExpandedId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -116,7 +131,9 @@ const AdminDashboard = () => {
           .catch((e) => { console.warn("visits:", e.message); return { data: { data: {} } }; })
       ]);
 
-      setQuotes(unwrap(quotesRes));
+      const listaQuotes = unwrap(quotesRes);
+      setQuotes(listaQuotes);
+      setTotalQuotes(quotesRes?.data?.total ?? listaQuotes.length);
       setContacts(unwrap(contactsRes));
 
       const v = visitsRes?.data?.data || {};
@@ -289,30 +306,40 @@ const AdminDashboard = () => {
                     <div className="stat-card">
                       <div className="stat-icon visits"><Eye size={32} /></div>
                       <div className="stat-info">
-                        <p className="stat-label">Visitas Totales</p>
-                        <p className="stat-value">{visits.total}</p>
+                        <p className="stat-label">Visitantes</p>
+                        <p className="stat-value">{visits.visitors ?? 0}</p>
+                        <p className="stat-sub">{visits.total ?? 0} páginas vistas</p>
                       </div>
                     </div>
                     <div className="stat-card">
                       <div className="stat-icon today"><Calendar size={32} /></div>
                       <div className="stat-info">
-                        <p className="stat-label">Visitas Hoy</p>
-                        <p className="stat-value">{visits.today}</p>
+                        <p className="stat-label">Visitantes hoy</p>
+                        <p className="stat-value">{visits.visitorsToday ?? 0}</p>
+                        <p className="stat-sub">{visits.today ?? 0} páginas vistas</p>
                       </div>
                     </div>
                     <div className="stat-card">
                       <div className="stat-icon quotes"><FileText size={32} /></div>
                       <div className="stat-info">
                         <p className="stat-label">Cotizaciones</p>
-                        <p className="stat-value">{quotes.length}</p>
+                        <p className="stat-value">{totalQuotes}</p>
+                        <p className="stat-sub">{quotesToday} hoy</p>
                       </div>
                     </div>
                     <div className="stat-card">
                       <div className="stat-icon conversion"><TrendingUp size={32} /></div>
                       <div className="stat-info">
-                        <p className="stat-label">Conversión (visitas→cot.)</p>
+                        <p className="stat-label">Conversión</p>
                         <p className="stat-value">
-                          {visits.total > 0 ? Math.round((quotes.length / visits.total) * 100) : 0}%
+                          {visits.visitors > 0
+                            ? Math.round((totalQuotes / visits.visitors) * 100) + "%"
+                            : "—"}
+                        </p>
+                        <p className="stat-sub">
+                          {visits.visitors > 0
+                            ? "cotizaciones por visitante"
+                            : "sin datos de visitantes todavía"}
                         </p>
                       </div>
                     </div>
@@ -337,7 +364,8 @@ const AdminDashboard = () => {
                     {/* Resumen */}
                     <div className="summary-section">
                       <h3>Resumen Rápido</h3>
-                      <div className="summary-item"><span>Visitas últimos 7 días</span><strong>{visits.last7days}</strong></div>
+                      <div className="summary-item"><span>Visitantes últimos 7 días</span><strong>{visits.visitors7days ?? 0}</strong></div>
+                      <div className="summary-item"><span>Páginas vistas últimos 7 días</span><strong>{visits.last7days ?? 0}</strong></div>
                       <div className="summary-item"><span>Cotizaciones hoy</span><strong>{quotesToday}</strong></div>
                       <div className="summary-item"><span>Cotizaciones ganadas</span><strong>{quotes.filter(q => ["approved", "drawings", "manufacturing", "delivered"].includes(quoteStatusKey(q.status))).length}</strong></div>
                       <div className="summary-item"><span>Mensajes nuevos</span><strong>{contacts.filter(c => (c.status || "nuevo") === "nuevo").length}</strong></div>
@@ -463,7 +491,41 @@ const AdminDashboard = () => {
 
                                 {/* Estado (CRM) */}
                                 <div className="status-control">
-                                  <span className="section-title">Cambiar estado:</span>
+                                  {(() => {
+                                    const actual = quoteStatusKey(quote.status);
+                                    const sig = siguienteEtapa(actual);
+                                    const paso = ETAPAS.indexOf(actual);
+                                    return (
+                                      <div className="avance">
+                                        <div className="avance-info">
+                                          <span className="avance-paso">
+                                            {paso >= 0 ? `Paso ${paso + 1} de ${ETAPAS.length}` : "Fuera del recorrido"}
+                                          </span>
+                                          <div className="avance-barra">
+                                            <div
+                                              className="avance-relleno"
+                                              style={{ width: `${paso >= 0 ? ((paso + 1) / ETAPAS.length) * 100 : 0}%` }}
+                                            />
+                                          </div>
+                                        </div>
+                                        {sig ? (
+                                          <button
+                                            type="button"
+                                            className="avance-btn"
+                                            onClick={() => updateQuoteStatus(id, sig)}
+                                          >
+                                            Avanzar a: {QUOTE_STATUS[sig].label}
+                                          </button>
+                                        ) : (
+                                          <span className="avance-fin">
+                                            {actual === "delivered" ? "Recorrido completo" : "Sin pasos siguientes"}
+                                          </span>
+                                        )}
+                                      </div>
+                                    );
+                                  })()}
+
+                                  <span className="section-title">O ir directo a un estado:</span>
                                   <div className="status-options">
                                     {Object.entries(QUOTE_STATUS).map(([key, val]) => (
                                       <button

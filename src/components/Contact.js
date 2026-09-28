@@ -9,6 +9,7 @@ const BACKEND_URL = "https://metsim-backend.onrender.com";
 const API = `${BACKEND_URL}/api`;
 
 export default function Contact({ standalone = false }) {
+  const Sub = standalone ? "h2" : "h3";
   const [formData, setFormData] = useState({
     client_name: "",
     client_email: "",
@@ -156,7 +157,7 @@ export default function Contact({ standalone = false }) {
           </div>
 
           <div className="contact-hours">
-            <h3>Horarios de Atención</h3>
+            <Sub>Horarios de Atención</Sub>
             <p>Lunes a Viernes: 7:30 AM - 5:00 PM</p>
             <p>Sábado: 8:00 AM - 12:00 PM</p>
             <p className="closed">Domingo: Cerrado</p>

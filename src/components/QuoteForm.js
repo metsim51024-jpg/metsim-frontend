@@ -33,6 +33,7 @@ const benefits = [
 ];
 
 const QuoteForm = ({ standalone = false }) => {
+  const Sub = standalone ? "h2" : "h3";
   const [formData, setFormData] = useState({
     description: "",
     client_name: "",
@@ -342,7 +343,7 @@ const QuoteForm = ({ standalone = false }) => {
                 <Icon size={22} strokeWidth={1.75} aria-hidden="true" />
               </div>
               <div className="benefit-body">
-                <h3>{title}</h3>
+                <Sub>{title}</Sub>
                 <p>{text}</p>
               </div>
             </div>

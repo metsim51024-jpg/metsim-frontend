@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import "./ProjectsShowcase.css";
 
+// Fotos del portafolio, optimizadas en public/images/proyectos/ (WebP, 640 y
+// 1200 px de ancho). Las originales pesaban 127 MB en total y el carrusel las
+// carga todas juntas; en WebP son 0,9 MB. Cada tarjeta se ve a ~600 px como
+// maximo, asi que 1200 alcanza para pantallas de alta densidad.
+const FOTOS = "/images/proyectos";
+// la unica original mas angosta que 1200 px
+const ANCHO_REAL = { "instalacion-de-paneles-solares-2": 900 };
+const fotoSrcSet = (base) =>
+  `${FOTOS}/${base}-640.webp 640w, ${FOTOS}/${base}-1200.webp ${ANCHO_REAL[base] || 1200}w`;
+
 function ProjectsShowcase() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState({});
@@ -12,12 +22,12 @@ function ProjectsShowcase() {
       title: "Instalaciones Industriales",
       description: "Montaje y puesta en marcha de equipos electromecanicos de última tecnología",
       images: [
-        "https://i.ibb.co/DHP1zkn7/INSTALACION-INDUSTRIAL-13.jpg",
-        "https://i.ibb.co/pvKY7yMg/INSTALACION-INDUSTRIAL-14.jpg",
-        "https://i.ibb.co/j9qHrfNF/INSTALACION-INDUSTRIAL-15.jpg",
-        "https://i.ibb.co/GfBLPGsT/INSTALACION-INDUSTRIAL-16.jpg",
+        "instalacion-industrial-13",
+        "instalacion-industrial-14",
+        "instalacion-industrial-15",
+        "instalacion-industrial-16",
       ],
-      video: "https://res.cloudinary.com/dk6wclcew/video/upload/v1774546766/INSTALACION_INDUSTRIAL_VIDEO_c4aduh.mov",
+      video: "https://res.cloudinary.com/dk6wclcew/video/upload/f_mp4,vc_h264,q_auto,w_1280/v1774546766/INSTALACION_INDUSTRIAL_VIDEO_c4aduh.mp4",
       icon: "⚙️",
       features: ["Montaje profesional", "Equipos de calidad", "Certificación internacional"]
     },
@@ -26,10 +36,10 @@ function ProjectsShowcase() {
       title: "Fabricación de Piezas Metálicas",
       description: "Piezas con precisión milimétrica para maquinaria industrial",
       images: [
-        "https://i.ibb.co/tPbpcsCQ/piezas-metalicas.jpg",
-        "https://i.ibb.co/JWysvcpP/piezas-metalicas-2.jpg",
-        "https://i.ibb.co/QsKQm3X/piezas-metalicas-3.jpg",
-        "https://i.ibb.co/k2PDwfD6/piezas-metalicas-4.jpg"
+        "piezas-metalicas",
+        "piezas-metalicas-2",
+        "piezas-metalicas-3",
+        "piezas-metalicas-4"
       ],
       video: null,
       icon: "🔧",
@@ -40,8 +50,8 @@ function ProjectsShowcase() {
       title: "Fabricación de Estructuras Metálicas",
       description: "Estructuras de acero de alta resistencia para construcciones complejas",
       images: [
-        "https://i.ibb.co/q3rww74X/instalacion-de-paneles-solares-2.jpg",
-        "https://i.ibb.co/prKYRfpc/instalaciones-de-paneles-solares.jpg"
+        "instalacion-de-paneles-solares-2",
+        "instalaciones-de-paneles-solares"
       ],
       video: null,
       icon: "🏗️",
@@ -52,10 +62,10 @@ function ProjectsShowcase() {
       title: "Fabricación de Tamiz Rotativo de Finos",
       description: "Equipos especializados para separación y clasificación de materiales",
       images: [
-        "https://i.ibb.co/3ZDn63c/TAMIZ-5.avif",
-        "https://i.ibb.co/DfyB479c/TAMIZ-2.avif",
-        "https://i.ibb.co/39P2fmcz/TAMIZ-3.avif",
-        "https://i.ibb.co/Xr77g7Zq/TAMIZ-7.avif"
+        "tamiz-5",
+        "tamiz-2",
+        "tamiz-3",
+        "tamiz-7"
       ],
       video: null,
       icon: "🔄",
@@ -105,8 +115,11 @@ function ProjectsShowcase() {
                 <div className="project-image-wrapper">
                   {project.images.map((img, imgIdx) => (
                     <img
-                      key={imgIdx}
-                      src={img}
+                      key={img}
+                      src={`${FOTOS}/${img}-640.webp`}
+                      srcSet={fotoSrcSet(img)}
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      decoding="async"
                       alt={`${project.title} — imagen ${imgIdx + 1} de ${project.images.length}`}
                       className={`project-image${imgIdx === currentImageIdx ? " active" : ""}`}
                       loading="lazy"
@@ -206,7 +219,6 @@ function ProjectsShowcase() {
               className="modal-video"
             >
               <source src={selectedVideo} type="video/mp4" />
-              <source src={selectedVideo} type="video/quicktime" />
               Tu navegador no soporta videos HTML5
             </video>
           </div>

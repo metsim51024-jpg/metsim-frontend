@@ -94,7 +94,7 @@ const AdminLogin = () => {
         <div className="login-card">
           <div className="login-header">
             <img
-              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
+              src="https://res.cloudinary.com/dk6wclcew/image/upload/f_auto,q_auto,w_900/v1775063931/metsim_logo-1_wrsnco.png"
               alt="METSIM"
               className="login-logo"
             />

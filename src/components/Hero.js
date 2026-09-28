@@ -83,7 +83,7 @@ function Hero() {
         <div className="hero-visual">
           <div className="hero-image-container">
             <img
-              src="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png"
+              src="https://res.cloudinary.com/dk6wclcew/image/upload/f_auto,q_auto,w_900/v1775063931/metsim_logo-1_wrsnco.png"
               alt="METSIM Solutions — Fabricación de estructuras metálicas y equipos industriales en Paraguay"
               className="hero-image logo-image"
               onError={(e) => {

@@ -91,9 +91,15 @@ export default function Contact({ standalone = false }) {
   const contactInfo = [
     {
       icon: <Phone size={24} />,
-      label: "Teléfono",
-      value: "+595 (994) 685-767",
+      label: "Presupuestos · WhatsApp",
+      value: "+595 994 685 767",
       link: "tel:+595994685767"
+    },
+    {
+      icon: <Phone size={24} />,
+      label: "Dirección · CEO",
+      value: "+595 972 834 336",
+      link: "tel:+595972834336"
     },
     {
       icon: <Mail size={24} />,
@@ -114,7 +120,7 @@ export default function Contact({ standalone = false }) {
       {standalone && (
         <Helmet>
           <title>Contacto | METSIM Solutions Paraguay</title>
-          <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Llame al +595 972 834-336 o escriba por WhatsApp para consultas de ingeniería y tecnología." />
+          <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Presupuestos y WhatsApp: +595 994 685 767. Dirección: +595 972 834 336." />
           <link rel="canonical" href="https://www.metsim.com.py/contacto" />
           <meta property="og:url" content="https://www.metsim.com.py/contacto" />
           <meta property="og:title" content="Contacto | METSIM Solutions" />

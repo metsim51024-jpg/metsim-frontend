@@ -35,7 +35,7 @@ const Privacidad = () => (
           <ul>
             <li>Dirección: {COMPANY_CONFIG.address}</li>
             <li>Email: {COMPANY_CONFIG.email}</li>
-            <li>Teléfono: {COMPANY_CONFIG.phone}</li>
+            {COMPANY_CONFIG.phones.map((p) => <li key={p.tel}>{p.label}: {p.display}</li>)}
           </ul>
         </section>
 

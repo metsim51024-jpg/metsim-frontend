@@ -120,15 +120,18 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="contact-item">
-              <Phone size={20} />
-              <div>
-                <p className="contact-label">Teléfono</p>
-                <a href={`tel:${COMPANY_CONFIG.whatsapp}`} className="contact-value">
-                  {COMPANY_CONFIG.phone}
-                </a>
+            {/* Antes mostraba el 0972 pero el enlace marcaba el 0994. */}
+            {COMPANY_CONFIG.phones.map((p) => (
+              <div className="contact-item" key={p.tel}>
+                <Phone size={20} />
+                <div>
+                  <p className="contact-label">{p.label}</p>
+                  <a href={`tel:${p.tel}`} className="contact-value">
+                    {p.display}
+                  </a>
+                </div>
               </div>
-            </div>
+            ))}
 
             <div className="contact-item">
               <Mail size={20} />

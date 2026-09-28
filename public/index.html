@@ -4,34 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ===== SEO BÁSICO ===== -->
+    <!-- ===== SEO BÁSICO =====
+         Las etiquetas con data-rh="true" las reemplaza cada página desde su
+         <Helmet>. Sin esa marca, Helmet agregaba una segunda copia y quedaban
+         dos canonical: el de la home primero. Ver src/canonical.test.js. -->
     <title>METSIM Solutions | Ingeniería y Tecnología en Paraguay</title>
-    <meta name="description" content="METSIM Solutions — fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." />
-    <meta name="keywords" content="ingeniería Paraguay, automatización, tecnología, METSIM, Asunción, proyectos industriales, cotización" />
-    <meta name="robots" content="index, follow" />
+    <meta name="description" content="METSIM Solutions — fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." data-rh="true" />
+    <meta name="keywords" content="ingeniería Paraguay, automatización, tecnología, METSIM, Asunción, proyectos industriales, cotización" data-rh="true" />
+    <meta name="robots" content="index, follow" data-rh="true" />
     <meta name="author" content="METSIM Solutions" />
     <meta name="theme-color" content="#1a1d27" />
-    <link rel="canonical" href="https://www.metsim.com.py/" />
+    <link rel="canonical" href="https://www.metsim.com.py/" data-rh="true" />
     <link rel="preload" as="image" href="https://res.cloudinary.com/dk6wclcew/image/upload/v1775063931/metsim_logo-1_wrsnco.png" />
 
     <!-- ===== OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ===== -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.metsim.com.py/" />
-    <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" />
-    <meta property="og:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay. Solicite su cotización gratuita." />
-    <meta property="og:image" content="https://www.metsim.com.py/og-metsim.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:alt" content="METSIM Solutions — Fabricación de Estructuras Metálicas en Paraguay" />
+    <meta property="og:type" content="website" data-rh="true" />
+    <meta property="og:url" content="https://www.metsim.com.py/" data-rh="true" />
+    <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" data-rh="true" />
+    <meta property="og:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay. Solicite su cotización gratuita." data-rh="true" />
+    <meta property="og:image" content="https://www.metsim.com.py/og-metsim.jpg" data-rh="true" />
+    <meta property="og:image:width" content="1200" data-rh="true" />
+    <meta property="og:image:height" content="630" data-rh="true" />
+    <meta property="og:image:type" content="image/jpeg" data-rh="true" />
+    <meta property="og:image:alt" content="METSIM Solutions — Fabricación de Estructuras Metálicas en Paraguay" data-rh="true" />
     <meta property="og:locale" content="es_PY" />
     <meta property="og:site_name" content="METSIM Solutions" />
 
     <!-- ===== TWITTER CARD ===== -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="METSIM Solutions | Ingeniería en Paraguay" />
-    <meta name="twitter:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay." />
-    <meta name="twitter:image" content="https://www.metsim.com.py/og-metsim.jpg" />
+    <meta name="twitter:card" content="summary_large_image" data-rh="true" />
+    <meta name="twitter:title" content="METSIM Solutions | Ingeniería en Paraguay" data-rh="true" />
+    <meta name="twitter:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay." data-rh="true" />
+    <meta name="twitter:image" content="https://www.metsim.com.py/og-metsim.jpg" data-rh="true" />
 
     <!-- ===== SCHEMA JSON-LD: LocalBusiness ===== -->
     <script type="application/ld+json">

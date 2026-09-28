@@ -96,7 +96,7 @@ function About() {
               <div key={idx} className="feature-item">
                 <div className="feature-icon">{feature.icon}</div>
                 <div className="feature-text">
-                  <h4>{feature.title}</h4>
+                  <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
                 </div>
               </div>

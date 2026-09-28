@@ -92,7 +92,7 @@ const Footer = () => {
           {/* Column 2: Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title} className="footer-column">
-              <h4 className="footer-column-title">{title}</h4>
+              <h2 className="footer-column-title">{title}</h2>
               <ul className="footer-links">
                 {links.map((link, idx) => (
                   <li key={idx}>
@@ -108,7 +108,7 @@ const Footer = () => {
 
           {/* Column 3: Contact */}
           <div className="footer-column footer-contact">
-            <h4 className="footer-column-title">Contacto</h4>
+            <h2 className="footer-column-title">Contacto</h2>
 
             <div className="contact-item">
               <MapPin size={20} />

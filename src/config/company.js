@@ -11,7 +11,8 @@ export const COMPANY_CONFIG = {
   ],
   phone: "+595 994 685 767",
   whatsapp: "+595994685767",
-  address: "Avda. Carlos Morphi casi Concepción, Paraguay",
+  address: "Avda. Carlos Morphi esq. Concepción, Caacupé, Paraguay",
+  mapsUrl: "https://maps.app.goo.gl/yLnLMH6MDa8UvfqC8",
   instagram: "https://www.instagram.com/metsim_solutions/",
   facebook: "https://www.facebook.com/metsim.solutions/",
   whatsappNumber: "595994685767", // Sin formato

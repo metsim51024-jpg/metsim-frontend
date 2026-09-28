@@ -157,7 +157,7 @@
   justify-content: center;
 }
 
-.feature-text h4 {
+.feature-text h3 {
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
@@ -287,7 +287,7 @@
     font-size: 0.9rem;
   }
 
-  .feature-text h4 {
+  .feature-text h3 {
     font-size: 1rem;
   }
 

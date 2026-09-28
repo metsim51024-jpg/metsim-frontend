@@ -110,8 +110,8 @@ export default function Contact({ standalone = false }) {
     {
       icon: <MapPin size={24} />,
       label: "Ubicación",
-      value: "Avda. Carlos Morphi casi Concepción",
-      link: "#"
+      value: "Avda. Carlos Morphi esq. Concepción, Caacupé",
+      link: "https://maps.app.goo.gl/yLnLMH6MDa8UvfqC8"
     }
   ];
 
@@ -120,7 +120,7 @@ export default function Contact({ standalone = false }) {
       {standalone && (
         <Helmet>
           <title>Contacto | METSIM Solutions Paraguay</title>
-          <meta name="description" content="Contáctenos en METSIM Solutions, Asunción, Paraguay. Presupuestos y WhatsApp: +595 994 685 767. Dirección: +595 972 834 336." />
+          <meta name="description" content="Contacto de METSIM Solutions en Caacupé, Paraguay. Presupuestos y WhatsApp: +595 994 685 767. Dirección: +595 972 834 336." />
           <link rel="canonical" href="https://www.metsim.com.py/contacto" />
           <meta property="og:url" content="https://www.metsim.com.py/contacto" />
           <meta property="og:title" content="Contacto | METSIM Solutions" />
@@ -131,7 +131,10 @@ export default function Contact({ standalone = false }) {
       <div className="contact-container">
         {/* Left: Contact Info */}
         <div className="contact-info-wrapper">
-          <h2 className="section-title">Ponte en Contacto</h2>
+          {/* Standalone es la pagina /contacto: su titulo es el H1. En la home, una seccion mas. */}
+          {standalone
+            ? <h1 className="section-title">Ponte en Contacto</h1>
+            : <h2 className="section-title">Ponte en Contacto</h2>}
           <p className="section-description">
             ¿Tienes preguntas o necesitas más información? Nuestro equipo está listo para ayudarte.
           </p>
@@ -153,7 +156,7 @@ export default function Contact({ standalone = false }) {
           </div>
 
           <div className="contact-hours">
-            <h4>Horarios de Atención</h4>
+            <h3>Horarios de Atención</h3>
             <p>Lunes a Viernes: 7:30 AM - 5:00 PM</p>
             <p>Sábado: 8:00 AM - 12:00 PM</p>
             <p className="closed">Domingo: Cerrado</p>

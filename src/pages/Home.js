@@ -13,12 +13,12 @@ const Home = () => {
   return (
     <div className="home-page">
       <Helmet>
-        <title>METSIM Solutions | Ingeniería y Tecnología en Paraguay</title>
+        <title>Estructuras Metálicas y Equipos Industriales en Paraguay | METSIM</title>
         <meta name="description" content="METSIM Solutions — fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." />
         <link rel="canonical" href="https://www.metsim.com.py/" />
         <meta property="og:url" content="https://www.metsim.com.py/" />
-        <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" />
-        <meta property="og:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay. Solicite su cotización gratuita." />
+        <meta property="og:title" content="Estructuras Metálicas y Equipos Industriales en Paraguay | METSIM" />
+        <meta property="og:description" content="Fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." />
       </Helmet>
       <Navbar />
       <main>

@@ -10,6 +10,7 @@ import Privacidad from "./pages/Privacidad";
 import Terminos from "./pages/Terminos";
 import QuoteTracking from "./pages/QuoteTracking";
 import TrackingRecovery from "./pages/TrackingRecovery";
+import NotFound from "./pages/NotFound";
 import Contact from "./components/Contact";
 import QuoteForm from "./components/QuoteForm";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -60,7 +61,7 @@ function App() {
         <Route path="/privacidad" element={<Privacidad />} />
         <Route path="/terminos" element={<Terminos />} />
         {/* Ruta catch-all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
     </HelmetProvider>

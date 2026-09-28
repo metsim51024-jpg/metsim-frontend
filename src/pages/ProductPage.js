@@ -1,6 +1,6 @@
 // src/pages/ProductPage.js
 import React from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   Settings, Lightbulb, Factory, Droplets, Sun,
@@ -9,6 +9,7 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ModelViewer from "../components/ModelViewer";
+import NotFound from "./NotFound";
 import { getProductBySlug } from "../data/products";
 import "./ProductPage.css";
 
@@ -29,7 +30,7 @@ const ProductPage = () => {
   const product = getProductBySlug(slug);
   const HeroIcon = PRODUCT_ICONS[slug] || Settings;
 
-  if (!product) return <Navigate to="/productos" replace />;
+  if (!product) return <NotFound />;
 
   const BASE_URL = "https://www.metsim.com.py";
   const rawImg = product.images?.[0]?.src;

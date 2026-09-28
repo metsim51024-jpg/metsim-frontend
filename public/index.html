@@ -4,13 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Fuentes: antes eran 4 @import dentro del CSS, que el navegador recien
+         descubria despues de bajarlo y que bloqueaban el primer render en cadena. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" />
+
     <!-- ===== SEO BÁSICO =====
          Las etiquetas con data-rh="true" las reemplaza cada página desde su
          <Helmet>. Sin esa marca, Helmet agregaba una segunda copia y quedaban
          dos canonical: el de la home primero. Ver src/canonical.test.js. -->
-    <title>METSIM Solutions | Ingeniería y Tecnología en Paraguay</title>
+    <title>Estructuras Metálicas y Equipos Industriales en Paraguay | METSIM</title>
     <meta name="description" content="METSIM Solutions — fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." data-rh="true" />
-    <meta name="keywords" content="ingeniería Paraguay, automatización, tecnología, METSIM, Asunción, proyectos industriales, cotización" data-rh="true" />
+    <meta name="keywords" content="estructuras metálicas Paraguay, galpones industriales, columnas metálicas, tanques metálicos, tratamiento de aguas, flotador DAF, METSIM Solutions, Caacupé" data-rh="true" />
     <meta name="robots" content="index, follow" data-rh="true" />
     <meta name="author" content="METSIM Solutions" />
     <meta name="theme-color" content="#1a1d27" />
@@ -20,8 +26,8 @@
     <!-- ===== OPEN GRAPH (Facebook, WhatsApp, LinkedIn) ===== -->
     <meta property="og:type" content="website" data-rh="true" />
     <meta property="og:url" content="https://www.metsim.com.py/" data-rh="true" />
-    <meta property="og:title" content="METSIM Solutions | Ingeniería y Tecnología en Paraguay" data-rh="true" />
-    <meta property="og:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay. Solicite su cotización gratuita." data-rh="true" />
+    <meta property="og:title" content="Estructuras Metálicas y Equipos Industriales en Paraguay | METSIM" data-rh="true" />
+    <meta property="og:description" content="Fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." data-rh="true" />
     <meta property="og:image" content="https://www.metsim.com.py/og-metsim.jpg" data-rh="true" />
     <meta property="og:image:width" content="1200" data-rh="true" />
     <meta property="og:image:height" content="630" data-rh="true" />
@@ -32,8 +38,8 @@
 
     <!-- ===== TWITTER CARD ===== -->
     <meta name="twitter:card" content="summary_large_image" data-rh="true" />
-    <meta name="twitter:title" content="METSIM Solutions | Ingeniería en Paraguay" data-rh="true" />
-    <meta name="twitter:description" content="Servicios de ingeniería, automatización y tecnología en Paraguay." data-rh="true" />
+    <meta name="twitter:title" content="Estructuras Metálicas y Equipos Industriales en Paraguay | METSIM" data-rh="true" />
+    <meta name="twitter:description" content="Fabricación de estructuras metálicas, galpones industriales y equipos de tratamiento de aguas en Paraguay. Cotización sin cargo en 24 horas." data-rh="true" />
     <meta name="twitter:image" content="https://www.metsim.com.py/og-metsim.jpg" data-rh="true" />
 
     <!-- ===== SCHEMA JSON-LD: LocalBusiness ===== -->
@@ -58,10 +64,12 @@
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Avda. Carlos Morphi casi Concepción",
-        "addressLocality": "Asunción",
+        "streetAddress": "Avda. Carlos Morphi esq. Concepción",
+        "addressLocality": "Caacupé",
+        "addressRegion": "Cordillera",
         "addressCountry": "PY"
       },
+      "geo": { "@type": "GeoCoordinates", "latitude": -25.3833784, "longitude": -57.1347885 },
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",

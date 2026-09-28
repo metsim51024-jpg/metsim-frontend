@@ -191,7 +191,10 @@ const QuoteForm = ({ standalone = false }) => {
         <div className="quote-form-wrapper">
           <div className="quote-header">
             <span className="section-badge">[ PRESUPUESTO ]</span>
-            <h2 className="section-title">Solicita tu Presupuesto</h2>
+            {/* Standalone es la pagina /cotizacion: su titulo es el H1. En la home, una seccion mas. */}
+            {standalone
+              ? <h1 className="section-title">Solicita tu Presupuesto</h1>
+              : <h2 className="section-title">Solicita tu Presupuesto</h2>}
             <p className="section-description">
               Describe tu proyecto. Nuestros expertos te enviarán un presupuesto sin costo.
             </p>
@@ -339,7 +342,7 @@ const QuoteForm = ({ standalone = false }) => {
                 <Icon size={22} strokeWidth={1.75} aria-hidden="true" />
               </div>
               <div className="benefit-body">
-                <h4>{title}</h4>
+                <h3>{title}</h3>
                 <p>{text}</p>
               </div>
             </div>

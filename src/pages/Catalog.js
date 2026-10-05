@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
-  Columns, Lightbulb, Factory, Package, Filter,
+  Columns, Lightbulb, Factory, Warehouse, Package, Filter,
   Sun, Droplets, Wind, RefreshCw, Settings,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -15,6 +15,7 @@ const CATALOG_ICONS = {
   "columnas-metalicas":     Columns,
   "brazos-alumbrado":       Lightbulb,
   "estructuras-metalicas":  Factory,
+  "techos-metalicos":       Warehouse,
   "tanques-metalicos":      Package,
   "tamiz-rotativo":         Filter,
   "soporte-panel-solar":    Sun,

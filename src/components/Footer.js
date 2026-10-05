@@ -20,6 +20,7 @@ const Footer = () => {
       { label: "Brazos para Iluminación",  to: "/productos/brazos-alumbrado" },
       { label: "Columnas Telescópicas",     to: "/productos/columnas-metalicas" },
       { label: "Estructuras Metálicas",     to: "/productos/estructuras-metalicas" },
+      { label: "Techos Metálicos",          to: "/productos/techos-metalicos" },
       { label: "Flotador DAF",              to: "/productos/flotador-aire-disuelto" },
     ],
     Servicios: [

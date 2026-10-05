@@ -154,6 +154,72 @@ export const products = [
     modelPoster: null,
   },
   {
+    id: "techos-metalicos",
+    name: "Techos Metálicos",
+    shortDescription:
+      "Techos metálicos en Paraguay: tinglados parabólicos, techos a dos aguas y a un agua para galpones, cocheras, quinchos, canchas y comercios. Cálculo de viento, planos y montaje incluidos.",
+    description:
+      "METSIM Solutions diseña, fabrica y monta techos metálicos en todo Paraguay: tinglados parabólicos, techos a dos aguas y a un agua para galpones, cocheras, quinchos, canchas deportivas, depósitos, comercios y viviendas. Cada techo sale de nuestra planta en Caacupé con la estructura calculada para el lugar donde se instala, no copiada de una tabla genérica.\n\nEl cálculo es lo que separa un techo que dura de uno que se vuela en el primer temporal. Dimensionamos cerchas, vigas y correas según AISC 360 y CIRSOC, y verificamos la acción del viento con la norma paraguaya NP 30:1-001, teniendo en cuenta la ubicación, la altura y la forma de la cubierta. Las bases y los anclajes se dimensionan con esas mismas cargas, porque es ahí donde fallan la mayoría de los techos improvisados.\n\nLa estructura se fabrica en acero A36, con tubo estructural o perfiles laminados y correas de perfil C galvanizado. La cubierta se elige según el uso:\n\n• Chapa trapezoidal o acanalada galvanizada: la opción más económica y rápida para tinglados, depósitos y cocheras.\n• Chapa prepintada: la misma estructura, con color y mejor terminación para comercios y viviendas.\n• Panel sándwich (termopanel): chapa con aislación térmica y acústica para quinchos, oficinas y depósitos que necesitan temperatura estable.\n• Policarbonato o chapas traslúcidas: franjas de luz natural que reducen el uso de iluminación durante el día.\n\nEntregamos el techo terminado: relevamiento en obra, cálculo y planos firmados por ingeniero matriculado, fabricación en planta propia, transporte y montaje con equipo especializado. Los planos sirven para la gestión de permisos municipales.\n\nPedí tu cotización sin cargo: con las medidas aproximadas y la ubicación del techo te enviamos una propuesta con el tipo de estructura, la cubierta recomendada y el plazo de entrega.",
+    category: "Construcción Industrial",
+    badge: "Cálculo de viento",
+    icon: "🏠",
+    keywords: [
+      "techos metálicos Paraguay",
+      "techo metálico precio Paraguay",
+      "tinglado metálico",
+      "tinglado parabólico Paraguay",
+      "techo parabólico",
+      "techo de chapa",
+      "techo para cochera",
+      "quincho techo metálico",
+      "panel sándwich techo",
+      "cobertizo metálico",
+      "techo para galpón",
+      "techos metálicos Caacupé",
+    ],
+    metaDescription:
+      "Techos metálicos en Paraguay: tinglados parabólicos, cocheras y quinchos con chapa o panel sándwich. Cálculo de viento y montaje incluidos. Cotizá gratis.",
+    faq: [
+      {
+        q: "¿Cuánto cuesta un techo metálico en Paraguay?",
+        a: "Depende de la superficie, la forma (parabólico, a dos aguas o a un agua), la altura y el tipo de cubierta: chapa galvanizada, prepintada o panel sándwich. METSIM envía una cotización detallada sin cargo en 24 horas, con el tipo de estructura recomendado y el plazo de entrega.",
+      },
+      {
+        q: "¿Qué conviene más, chapa o panel sándwich?",
+        a: "La chapa galvanizada es la opción más económica y rápida, ideal para tinglados, cocheras y depósitos. El panel sándwich cuesta más pero aísla del calor y del ruido, por eso conviene en quinchos, oficinas, viviendas y depósitos que necesitan temperatura estable.",
+      },
+      {
+        q: "¿Un techo metálico resiste los temporales?",
+        a: "Sí, si está calculado. METSIM verifica la acción del viento según la norma paraguaya NP 30:1-001 y dimensiona la estructura, las correas y los anclajes con esas cargas. En los techos que se vuelan, lo que suele fallar son los anclajes o las uniones de las correas, no la chapa.",
+      },
+      {
+        q: "¿Hacen el montaje? ¿En qué zonas trabajan?",
+        a: "Sí. Fabricamos en nuestra planta de Caacupé y montamos con equipo propio en todo Paraguay: Asunción y Gran Asunción, Central, Cordillera y el interior del país.",
+      },
+    ],
+    specs: [
+      { label: "Estructura", value: "Acero A36 · tubo estructural o perfil laminado" },
+      { label: "Correas", value: "Perfil C galvanizado" },
+      { label: "Cubierta", value: "Chapa galvanizada, prepintada o panel sándwich" },
+      { label: "Formas", value: "Parabólico, dos aguas, un agua" },
+      { label: "Cálculo de viento", value: "NP 30:1-001 (norma paraguaya)" },
+      { label: "Norma de diseño", value: "AISC 360 / CIRSOC" },
+    ],
+    applications: [
+      "Tinglados para canchas y escuelas",
+      "Cocheras y estacionamientos techados",
+      "Quinchos y áreas de eventos",
+      "Galpones agrícolas y depósitos",
+      "Techos para comercios y viviendas",
+      "Cobertizos para maquinaria",
+    ],
+    // Sin fotos ni modelo 3D todavia: la ficha muestra "Disponible proximamente".
+    // Lo primero a sumar son fotos de obras reales.
+    models: [],
+    softwareImage: null,
+    modelPoster: null,
+  },
+  {
     id: "tanques-metalicos",
     name: "Tanques Metálicos",
     shortDescription:
